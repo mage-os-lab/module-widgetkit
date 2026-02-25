@@ -1,0 +1,59 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slider;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Slider $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+
+$visibility = $params['mageos_slider_slidenav_visibility'] ?? 'show';
+$position   = $params['mageos_slider_slidenav_position'] ?? 'top-right';
+$justifyClass = str_contains($position, '-left') ? 'justify-start' : 'justify-end';
+$slidenavContainer = [
+    'class' => $this->resolveExpression([
+        'justify-end {@mageos_slider_slidenav_position: top-right}',
+        'justify-end {@mageos_slider_slidenav_position: bottom-right}',
+        'justify-start {@mageos_slider_slidenav_position: top-left}',
+        'justify-start {@mageos_slider_slidenav_position: bottom-left}',
+        'justify-center {@mageos_slider_slidenav_position: top-center}',
+        'justify-center {@mageos_slider_slidenav_position: bottom-center}',
+    ], $params),
+];
+
+if ($visibility === 'hide') {
+    return;
+}
+?>
+
+<div class="flex shrink-0 gap-2 <?= $slidenavContainer['class'] ?>">
+    <button
+        class="btn btn-secondary p-2"
+        aria-label="<?= $escaper->escapeHtml(__('Previous Slide')) ?>"
+        @click="prev()"
+        data-prev
+        disabled
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+             stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+             class="rtl:-rotate-180" aria-hidden="true">
+            <path d="m12 19-7-7 7-7M19 12H5"></path>
+        </svg>
+    </button>
+    <button
+        class="btn btn-secondary p-2"
+        aria-label="<?= $escaper->escapeHtml(__('Next Slide')) ?>"
+        @click="next()"
+        data-next
+        disabled
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+             stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+             class="rtl:-rotate-180" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+    </button>
+</div>

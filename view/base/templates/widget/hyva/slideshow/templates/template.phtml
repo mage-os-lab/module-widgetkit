@@ -28,12 +28,13 @@ $itemsSettings = [
     'class' => $this->resolveExpression([
         'snap-track',
         'h-auto {@mageos_slideshow_height: auto}',
-        'h-screen {@mageos_slideshow_height: viewport}'
+        'h-screen {@mageos_slideshow_height: viewport}',
+        'relative mx-auto {@mageos_slideshow_max_height}'
     ], $params),
     'style' => $this->resolveExpression([
         'min-height: {0}; {@mageos_slideshow_height: viewport}' => '100vh',
         'min-height: {0}; {@mageos_slideshow_height: auto}' => $params['mageos_slideshow_min_height'] . 'px',
-        'max-height: {0}; {@mageos_slideshow_max_height}' => isset($params['mageos_slideshow_max_height']) ? $params['mageos_slideshow_max_height'] . 'px' : '',
+        'max-height: {0}; overflow: hidden; {@mageos_slideshow_max_height}' => isset($params['mageos_slideshow_max_height']) ? $params['mageos_slideshow_max_height'] . 'px' : '',
         'aspect-ratio: {0}; {@mageos_slideshow_ratio}' => $params['mageos_slideshow_ratio']
     ], $params)
 ];
@@ -47,14 +48,21 @@ $slideshowContainerSettings = [
         'relative {@mageos_slideshow_navigation_position: center-right}',
         'relative {@mageos_slideshow_navigation_position: bottom-left}',
         'relative {@mageos_slideshow_navigation_position: bottom-right}',
-        'relative {@mageos_slideshow_navigation_position: bottom-center}'
+        'relative {@mageos_slideshow_navigation_position: bottom-center}',
+        'mx-auto {@mageos_slideshow_max_height}'
     ], $params),
+    'style' => $this->resolveExpression([
+        'min-height: {0}; {@mageos_slideshow_height: viewport}' => '100vh',
+        'min-height: {0}; {@mageos_slideshow_height: auto}' => $params['mageos_slideshow_min_height'] . 'px',
+        'max-height: {0}; {@mageos_slideshow_max_height}' => isset($params['mageos_slideshow_max_height']) ? $params['mageos_slideshow_max_height'] . 'px' : ''
+    ], $params)
 ];
 ?>
 
 <div
     x-data="initSlideshow<?= $uniqId; ?>"
-    class="mx-auto w-full <?= $slideshowContainerSettings['class']; ?>"
+    class="<?= $slideshowContainerSettings['class']; ?>"
+    style="<?= $slideshowContainerSettings['style']; ?>"
     x-on:keyup.right="next('button')"
     x-on:keyup.left="prev('button')"
 >

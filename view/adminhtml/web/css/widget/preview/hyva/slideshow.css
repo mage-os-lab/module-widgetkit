@@ -1,0 +1,108 @@
+.pagebuilder-stage-wrapper .slideshow-widget {
+    background: oklch(0.984 0.003 247.858);
+}
+.pagebuilder-stage-wrapper .slideshow-widget .snap-pager {
+    align-items: center;
+    gap: .75rem;
+    min-block-size: 2.75rem;
+    padding-block: 1.5rem;
+    flex-wrap: wrap;
+    display: flex;
+}
+.pagebuilder-stage-wrapper .slideshow-widget .snap-marker {
+    block-size: 1rem;
+    inline-size: 1rem;
+    border-width: 1px;
+    border-color: oklch(44.6% .043 257.281);
+    border-radius: 1rem;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: .3s;
+}
+.pagebuilder-stage-wrapper .slideshow-widget .snap-marker[aria-current=true] {
+    inline-size: 1.75rem;
+    background-color: oklch(46% .2 265);
+    border-color: #0000;
+}
+
+.pagebuilder-stage-wrapper .slideshow-widget .btn {
+    --btn-color: oklch(12.9% .042 264.695);
+    --spacing: .25rem;
+    --radius-lg: .5rem;
+    --btn-stroke: oklch(52% .2 265);
+    --btn-bg: #fff;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--spacing) * 1.5);
+    padding-block: calc(var(--spacing) * 2);
+    padding-inline: calc(var(--spacing) * 4);
+    border-radius: var(--radius-lg);
+    border-width: 2px;
+    border-color: var(--btn-stroke);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    -webkit-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    transition-property: color, background-color, border-color, outline-color;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    font-weight: 500;
+    display: inline-flex;
+}
+.pagebuilder-stage-wrapper .slideshow-widget .btn:hover {
+    border-color: oklch(52% .2 265);
+    background-color: #fff;
+    color: oklch(28% .2 265);
+    text-decoration: none;
+}
+.pagebuilder-stage-wrapper .slideshow-widget .btn-secondary {
+    --btn-stroke: oklch(52% .2 265);
+    --btn-bg: #fff;
+    --btn-color: oklch(28% .2 265);
+    --btn-hover-stroke: oklch(52% .2 265);
+    --btn-hover-bg: #fff;
+    --btn-hover-color: oklch(52% .2 265);
+    --btn-active-stroke: #0000;
+    --btn-active-bg: oklch(46% .2 265);
+    --btn-active-color: #fff;
+}
+.pagebuilder-stage-wrapper .slideshow-widget .btn-primary {
+    --btn-stroke: #0000;
+    --btn-bg: oklch(46% .2 265);
+    --btn-color: #fff;
+    --btn-hover-stroke: #0000;
+    --btn-hover-bg: oklch(52% .2 265);
+    --btn-hover-color: #fff;
+    --btn-active-stroke: #0000;
+    --btn-active-bg: oklch(46% .2 265);
+    --btn-active-color: #fff;
+}
+
+.pagebuilder-stage-wrapper .slideshow-widget .card {
+    border-radius: .5rem;
+    padding-block: 2rem;
+    padding-inline: 2rem;
+    border-width: 1px;
+    border-color: oklch(87.2% .01 258.338);
+    background-color: #fff;
+    color: oklch(12.9% .042 264.695);
+    transition-property: color, background-color, border-color, box-shadow, outline-color;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .15s;
+}
+
+.pagebuilder-stage-wrapper.mobile-viewport .slideshow-widget .md\:flex.hidden,
+.pagebuilder-stage-wrapper.mobile-viewport .slideshow-widget .lg\:flex.hidden,
+.pagebuilder-stage-wrapper.mobile-viewport .slideshow-widget .xl\:flex.hidden
+{
+    display: none;
+    visibility: hidden;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slideshow-widget .md\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slideshow-widget .lg\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slideshow-widget .xl\:flex.hidden
+{
+    display: flex;
+    visibility: visible;
+}

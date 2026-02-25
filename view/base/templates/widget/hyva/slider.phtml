@@ -1,0 +1,22 @@
+<?php
+/**
+ * Render slider component for Hyvä theme
+ */
+$titleType = $this->getData('mageos_slider_title_type');
+$titleCssClasses = $this->getData('mageos_slider_title_classes');
+$descriptionCssClasses = $this->getData('mageos_slider_description_classes');
+?>
+
+<?php if (!empty($this->getData('mageos_slider_title'))): ?>
+<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
+    <?= $this->getData('mageos_slider_title'); ?>
+</<?= $this->getData('mageos_slider_title_type'); ?>>
+<?php endif; ?>
+
+<?php if (!empty($this->getData('mageos_slider_description'))): ?>
+<div class="<?= $descriptionCssClasses; ?>">
+    <?= $this->getData('mageos_slider_description'); ?>
+</div>
+<?php endif; ?>
+
+<?= $this->renderMainTemplate(); ?>

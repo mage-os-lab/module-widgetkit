@@ -10,16 +10,22 @@ use Magento\Framework\Escaper;
  */
 
 $uniqId = uniqid();
+$titleCssClasses = $this->getData('mageos_slideshow_title_classes');
+$descriptionCssClasses = $this->getData('mageos_slideshow_description_classes');
 ?>
-<?= $this->addTwindManagement($uniqId, 'slideshow-widget'); ?>
-<?= $this->getChildHtml("previewAssets"); ?>
-<?php if (!empty($this->getData('mageos_slideshow_title'))): ?>
-    <<?= $this->getData('mageos_slideshow_title_type'); ?>><?= $this->getData('mageos_slideshow_title'); ?></<?= $this->getData('mageos_slideshow_title_type'); ?>>
-<?php endif; ?>
-<?php if (!empty($this->getData('mageos_slideshow_description'))): ?>
-    <div><?= $this->getData('mageos_slideshow_description'); ?></div>
-<?php endif; ?>
+<div class="slideshow-widget">
+    <?= $this->addTwindManagement($uniqId, 'slideshow-widget'); ?>
+    <?= $this->getChildHtml("previewAssets"); ?>
+    <?php if (!empty($this->getData('mageos_slideshow_title'))): ?>
+        <<?= $this->getData('mageos_slideshow_title_type'); ?> class="<?= $titleCssClasses; ?>">
+            <?= $this->getData('mageos_slideshow_title'); ?>
+        </<?= $this->getData('mageos_slideshow_title_type'); ?>>
+    <?php endif; ?>
+    <?php if (!empty($this->getData('mageos_slideshow_description'))): ?>
+        <div class="<?= $descriptionCssClasses; ?>"><?= $this->getData('mageos_slideshow_description'); ?></div>
+    <?php endif; ?>
 
-<div id="widget<?= $uniqId; ?>" class="slideshow-widget">
-<?= $this->renderMainTemplate(); ?>
+    <div id="widget<?= $uniqId; ?>">
+    <?= $this->renderMainTemplate(); ?>
+    </div>
 </div>

@@ -21,7 +21,7 @@
     ],
     "autoload": {
         "files": [
-            "registration.php"
+          "registration.php"
         ],
         "psr-4": {
             "MageOS\\Widgetkit\\": ""

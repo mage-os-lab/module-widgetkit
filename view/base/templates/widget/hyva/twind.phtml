@@ -14,10 +14,18 @@ $uniqId = $block->getData('uid');
 ?>
 <?php
 $scriptString = '
-    const { create } = window.twind;
+    const { create, define } = window.twind;
     const { virtualSheet } = window.TwindSheets;
     const sheet = virtualSheet();
-    const { tw } = create({ sheet });
+    const { tw } = create({
+        sheet,
+         rules: [
+            [
+              /^\[--snap-cols:(.+)\]$/,
+              (match) => ({ \'--snap-cols\': match[1] }),
+            ],
+         ],
+    });
 
     const targetSelector = \'widget' . $uniqId . '\';
     const target = document.querySelector(\'#\' + targetSelector);

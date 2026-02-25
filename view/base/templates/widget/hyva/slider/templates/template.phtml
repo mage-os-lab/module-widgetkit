@@ -1,0 +1,189 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slider;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Slider $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params  = $this->getData('params');
+$items   = $this->getData('items');
+$uniqId  = uniqid();
+$sliderId = 'slider-' . $uniqId;
+
+$snapColumns = $params['mageos_slider_columns'] ?? 3;
+$snapColsClasses = 'md:[--snap-cols:' . $snapColumns . ']';
+
+// Height
+$heightClass = $params['mageos_slider_height'] === 'viewport' ? 'h-screen' : '';
+
+// Autoplay & loop
+$autoplay = (int)($params['mageos_slider_autoplay'] ?? 0);
+$loop     = (int)($params['mageos_slider_loop'] ?? 0);
+
+// Slidenav (prev/next buttons) position
+$slidenavPosition = $params['mageos_slider_slidenav_position'] ?? 'top-right';
+$isSlidenavTop    = str_contains($slidenavPosition, 'top-');
+$isSlidenavBottom = !$isSlidenavTop;
+
+// Navigation (dots pager) position
+$navPosition = $params['mageos_slider_navigation_position'] ?? 'bottom-center';
+$isNavTop    = str_contains($navPosition, 'top-');
+$isNavBottom = !$isNavTop;
+?>
+
+<section
+    id="<?= $sliderId ?>"
+    class="snap-slider relative <?= $escaper->escapeHtmlAttr($heightClass) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_slider_title'] ?? '') ?>"
+    data-slider-type="generic"
+    x-data="initSlider<?= $uniqId ?>()"
+    x-snap-slider.group-pager
+    @resize.window.debounce="calcPageSize"
+>
+    <a
+        href="#<?= $sliderId ?>-slider-end"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+    ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
+
+    <?php if ($isNavTop || $isSlidenavTop): ?>
+    <div class="items-center gap-4 mb-2">
+        <?php if ($isNavTop): ?>
+            <?= $this->renderNavTemplate(); ?>
+        <?php endif; ?>
+        <?php if ($isSlidenavTop): ?>
+            <?= $this->renderSlideNavTemplate(); ?>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+    <?= $this->renderItems(['snapColsClasses' => $snapColsClasses, 'heightClass' => $heightClass]); ?>
+
+    <?php if ($isNavBottom || $isSlidenavBottom): ?>
+    <div class="items-center gap-4 mt-2">
+        <?php if ($isNavBottom): ?>
+            <?= $this->renderNavTemplate(); ?>
+        <?php endif; ?>
+        <?php if ($isSlidenavBottom): ?>
+            <?= $this->renderSlideNavTemplate(); ?>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+    <span id="<?= $sliderId ?>-slider-end" tabindex="-1"></span>
+</section>
+
+<script>
+    function initSlider<?= $uniqId ?>() {
+        return {
+            images: [
+                <?php foreach ($this->getData('items') as $index => $item): ?>
+                '<?= isset($item['image']) ? $escaper->escapeUrl($item['image']) : ''; ?>',
+                <?php endforeach; ?>
+            ],
+            slider: null,
+            autoplay: <?= $autoplay ? 'true' : 'false' ?>,
+            loop: <?= $loop ? 'true' : 'false' ?>,
+            dotsNavigation: true,
+            autoplayTimer: null,
+            currentIndex: 0,
+            pageSize: <?= $snapColumns ?>,
+            autoplayInterval: <?= isset($params['mageos_slider_speed']) ? $params['mageos_slider_speed'] * 1000: 0; ?>,
+            init() {
+                this.$nextTick(() => {
+                    this.calcPageSize();
+                    if (this.autoplay) {
+                        this.startAutoplay();
+                    }
+                    this.slider = this.$el;
+                    let slideChangeTimer = null;
+                    this.$el.addEventListener('slideChange', () => {
+                        clearTimeout(slideChangeTimer);
+                        slideChangeTimer = setTimeout(() => {
+                            const track = this.$el.querySelector('[data-track]');
+                            if (!track || !track.children.length) return;
+                            const firstSlide = track.children[0];
+                            if (!firstSlide || firstSlide.offsetWidth === 0) return;
+                            const lastPageIndex = Math.ceil(track.children.length / this.pageSize) - 1;
+                            this.currentIndex = Math.min(
+                                Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                                lastPageIndex
+                            );
+                            if (this.loop) {
+                                this.$el.querySelector('[data-prev]')?.removeAttribute('disabled');
+                                this.$el.querySelector('[data-next]')?.removeAttribute('disabled');
+                            }
+                        }, 50);
+                    });
+                });
+            },
+            calcPageSize() {
+                const track = this.$el.querySelector('[data-track]');
+                if (track) {
+                    const firstItem = track.querySelector('.slider-item');
+                    if (firstItem && firstItem.clientWidth > 0) {
+                        this.pageSize = Math.round(track.clientWidth / firstItem.clientWidth);
+                    }
+                }
+            },
+            startAutoplay() {
+                this.autoplayTimer = setInterval(() => {
+                    const next = this.slider.querySelector('[data-next]');
+                    if (next && !next.disabled) {
+                        next.click();
+                    } else if (this.loop) {
+                        const track = this.slider.querySelector('[data-track]');
+                        if (track) track.scrollLeft = 0;
+                    }
+                }, this.autoplayInterval);
+            },
+            set(index) {
+                this.currentIndex = index;
+                this.resetAutoplayInterval(true);
+                const track = this.slider.querySelector('[data-track]');
+                if (track) {
+                    const targetSlide = track.children[index * this.pageSize];
+                    if (targetSlide) {
+                        targetSlide.scrollIntoView({ block: 'nearest', inline: 'start' });
+                    }
+                }
+            },
+            next() {
+                this.resetAutoplayInterval(true);
+                if (this.loop) {
+                    const track = this.slider.querySelector('[data-track]');
+                    if (track && track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
+                        track.children[0]?.scrollIntoView({ block: 'nearest', inline: 'start' });
+                    }
+                }
+            },
+            prev() {
+                this.resetAutoplayInterval(true);
+                if (this.loop) {
+                    const track = this.slider.querySelector('[data-track]');
+                    if (track && track.scrollLeft < 1) {
+                        track.children[track.children.length - 1]
+                            ?.scrollIntoView({ block: 'nearest', inline: 'end' });
+                    }
+                }
+            },
+            resetAutoplayInterval(restart) {
+                if (this.autoplay) {
+                    clearInterval(this.autoplayTimer);
+                    if (restart) {
+                        this.startAutoplay();
+                    }
+                }
+            },
+            destroy() {
+                if (this.autoplayTimer) clearInterval(this.autoplayTimer);
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initSlider<?= $uniqId ?>', initSlider<?= $uniqId ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

@@ -4,7 +4,7 @@ module.exports = {
             '../../base/templates/**/*.phtml',
         ],
         options: {
-            safelist: [/^aspect-/, /^duration-/],
+            safelist: [/^aspect-/, /^duration-/, /^\[--snap-cols/, /^snap-/, /^slider-/, 'object-cover'],
         },
     }
 }

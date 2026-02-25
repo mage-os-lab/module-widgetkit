@@ -1,0 +1,29 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slider;
+
+/**
+ * @var Slider $this
+ */
+
+$params   = $this->getData('params');
+$settings = $this->getData('settings');
+
+$snapColsClasses = $settings['snapColsClasses'] ?? '';
+$heightClass     = $settings['heightClass'] ?? '';
+?>
+<div
+    class="snap-track <?= $snapColsClasses ?> <?= $heightClass ?>"
+    data-track
+    tabindex="0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="<?= __('Image Slider') ?>"
+>
+    <?php foreach ($this->getData('items') as $index => $item): ?>
+        <?php $item['count'] = $index; ?>
+        <div class="slider-item card card-interactive grow flex flex-col w-full">
+            <?= $this->renderItemMedia($item); ?>
+        </div>
+    <?php endforeach; ?>
+</div>

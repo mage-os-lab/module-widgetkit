@@ -27,11 +27,11 @@ $srcset = !empty($item['mobile_image']) ? $item['mobile_image'] . ' 768w, ' . $i
 ?>
 <picture
     x-data="{ index: <?= (int)$item['count'] ?> }"
-    class="absolute start-0 top-0 h-full w-full object-cover">
-    <source class="w-full" type="image/jpeg" srcset="<?= $srcset; ?>" />
+    class="absolute inset-0">
+    <source class="absolute inset-0 h-full w-full object-cover" type="image/jpeg" srcset="<?= $srcset; ?>" />
     <img
         src="<?= $image['src']; ?>"
-        class="absolute left-1/2 top-0 -translate-x-1/2 top-0 h-full w-full object-cover"
+        class="absolute inset-0 h-full w-full object-cover"
         <?php if ($image['loading'] === 'eager'): ?>
             fetchpriority="high"
             loading="eager"

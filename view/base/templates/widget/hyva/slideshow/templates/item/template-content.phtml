@@ -14,14 +14,14 @@ $title = [
     'type' => $item['title_tag'],
     'class' => $this->resolveExpression([
         'el-title',
-        '',
+        '{0} {@mageos_slideshow_overlay_title_classes}' => $params['mageos_slideshow_overlay_title_classes']
     ], $params)
 ];
 
 // Content
 $content = [
     'class' => $this->resolveExpression([
-        ''
+        '{0} {@mageos_slideshow_overlay_description_classes}' => $params['mageos_slideshow_overlay_description_classes']
     ], $params)
 ];
 

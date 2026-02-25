@@ -1,0 +1,98 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slider;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Slider $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$item   = $this->getData('item');
+
+if (empty($item['image'])) {
+    return;
+}
+
+$loading = $item['count'] === 0
+    ? 'eager'
+    : ($params['mageos_slider_image_loading'] ?? 'lazy');
+
+$srcset  = !empty($item['mobile_image'])
+    ? $item['mobile_image'] . ' 768w, ' . $item['image'] . ' 2000w'
+    : null;
+
+$hasLink    = !empty($item['link']);
+$linkTarget = $item['link_target'] ?? '_self';
+
+$itemTitleClasses =  [
+    'class' => $this->resolveExpression([
+        'text-{0} {@mageos_slider_item_title_alignment}' => $params['mageos_slider_item_title_alignment'],
+        'p-2 text-lg font-semibold {@mageos_slider_title_classes: null}' => $params['mageos_slider_item_title_classes'] ?? null,
+        '{0} {@mageos_slider_item_title_classes}' => $params['mageos_slider_item_title_classes'] ?? null
+    ], $params)
+];
+
+$itemContentClasses =  [
+    'class' => $this->resolveExpression([
+        'text-{0} {@mageos_slider_item_title_alignment}' => $params['mageos_slider_item_content_alignment'] ?? null,
+        'p-2 text-lg font-semibold {@mageos_slider_item_content_classes: null}' => $params['mageos_slider_item_content_classes'] ?? null,
+        '{0} {@mageos_slider_item_content_classes}' => $params['mageos_slider_item_content_classes'] ?? null
+    ], $params)
+];
+?>
+
+<?php if ($hasLink): ?>
+<a
+    href="<?= $escaper->escapeUrl($item['link']) ?>"
+    target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+    class="block"
+    <?php if ($linkTarget === '_blank'): ?>
+    rel="noopener noreferrer"
+    <?php endif; ?>
+>
+<?php else: ?>
+<div class="block">
+<?php endif; ?>
+
+    <picture class="block w-full">
+        <?php if ($srcset): ?>
+        <source
+            type="image/jpeg"
+            srcset="<?= $escaper->escapeHtmlAttr($srcset) ?>"
+            sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        <?php endif; ?>
+        <img
+            src="<?= $escaper->escapeUrl($item['image']) ?>"
+            alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? '') ?>"
+            class="w-full h-auto object-cover"
+            <?php if ($loading === 'eager'): ?>
+            loading="eager"
+            fetchpriority="high"
+            <?php else: ?>
+            loading="lazy"
+            <?php endif; ?>
+            role="group"
+            aria-roledescription="slide"
+        />
+    </picture>
+
+    <?php if (!empty($item['title'])): ?>
+    <div class="<?= $itemTitleClasses['class']; ?>">
+        <?= $escaper->escapeHtml($item['title']); ?>
+    </div>
+    <?php endif; ?>
+
+    <?php if (!empty($item['content'])): ?>
+        <div class="<?= $itemContentClasses['class']; ?>">
+            <?= $escaper->escapeHtml($item['content']); ?>
+        </div>
+    <?php endif; ?>
+
+<?php if ($hasLink): ?>
+</a>
+<?php else: ?>
+</div>
+<?php endif; ?>

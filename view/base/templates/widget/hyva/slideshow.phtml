@@ -3,14 +3,20 @@
  * Render slideshow component for Hyvä theme
  */
 $titleType = $this->getData('mageos_slideshow_title_type');
+$titleCssClasses = $this->getData('mageos_slideshow_title_classes');
+$descriptionCssClasses = $this->getData('mageos_slideshow_description_classes');
 ?>
 
 <?php if (!empty($this->getData('mageos_slideshow_title'))): ?>
-<<?= $titleType ?>><?= $this->getData('mageos_slideshow_title'); ?></<?= $this->getData('mageos_slideshow_title_type'); ?>>
+<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
+    <?= $this->getData('mageos_slideshow_title'); ?>
+</<?= $this->getData('mageos_slideshow_title_type'); ?>>
 <?php endif; ?>
 
 <?php if (!empty($this->getData('mageos_slideshow_description'))): ?>
-<div><?= $this->getData('mageos_slideshow_description'); ?></div>
+<div class="<?= $descriptionCssClasses; ?>">
+    <?= $this->getData('mageos_slideshow_description'); ?>
+</div>
 <?php endif; ?>
 
 <?= $this->renderMainTemplate(); ?>
