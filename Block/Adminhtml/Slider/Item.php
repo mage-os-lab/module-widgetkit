@@ -12,7 +12,7 @@ class Item extends Rows
             'label' => 'Desktop Image',
             'type' => 'image',
             'description' => 'Image used on desktop, if mobile one is missing this image will be used for both viewports.',
-            'required' => true,
+            'required' => false,
             'preview' => true
         ],
         'image_alt' => [

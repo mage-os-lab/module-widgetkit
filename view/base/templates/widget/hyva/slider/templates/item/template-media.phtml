@@ -11,10 +11,6 @@ use Magento\Framework\Escaper;
 $params = $this->getData('params');
 $item   = $this->getData('item');
 
-if (empty($item['image'])) {
-    return;
-}
-
 $loading = $item['count'] === 0
     ? 'eager'
     : ($params['mageos_slider_image_loading'] ?? 'lazy');

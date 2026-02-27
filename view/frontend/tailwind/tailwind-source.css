@@ -1,0 +1,37 @@
+@utility snap-track {
+    --snap-cols: 1;
+    --snap-gap: 1rem;
+    --snap-size: calc((100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols));
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--snap-size);
+    gap: var(--snap-gap);
+    padding-block: 1.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    & > * {
+        scroll-snap-align: start;
+    }
+}
+
+@utility snap-cols-* {
+    display: grid;
+    grid-template-columns: repeat(--value(integer), minmax(0, 1fr));
+    scroll-snap-type: x mandatory;
+}
+
+/* --------------------------------------------------------------------------
+   Safelist: force-compile classes that are assembled dynamically in PHP and
+   therefore never found by Tailwind's file scanner.
+
+   Template generates:  'md:[--snap-cols:' . $snapColumns . ']'
+   Widget supports 1–6 columns
+   -------------------------------------------------------------------------- */
+
+@source inline("{,md:}[--snap-cols:{1,2,3,4,5,6}]");
+
+@source inline("snap-cols-{1,2,3,4,5,6}");
