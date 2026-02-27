@@ -90,6 +90,7 @@ $isNavBottom = !$isNavTop;
             loop: <?= $loop ? 'true' : 'false' ?>,
             dotsNavigation: true,
             autoplayTimer: null,
+            lastSlidenavClicked: null,
             currentIndex: 0,
             pageSize: <?= $snapColumns ?>,
             autoplayInterval: <?= isset($params['mageos_slider_speed']) ? $params['mageos_slider_speed'] * 1000: 0; ?>,
@@ -109,10 +110,17 @@ $isNavBottom = !$isNavTop;
                             const firstSlide = track.children[0];
                             if (!firstSlide || firstSlide.offsetWidth === 0) return;
                             const lastPageIndex = Math.ceil(track.children.length / this.pageSize) - 1;
-                            this.currentIndex = Math.min(
-                                Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
-                                lastPageIndex
-                            );
+                            if (this.lastSlidenavClicked === 'next') {
+                                this.currentIndex = Math.min(
+                                    Math.ceil(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                                    lastPageIndex
+                                );
+                            } else {
+                                this.currentIndex = Math.min(
+                                    Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                                    lastPageIndex
+                                );
+                            }
                             if (this.loop) {
                                 this.$el.querySelector('[data-prev]')?.removeAttribute('disabled');
                                 this.$el.querySelector('[data-next]')?.removeAttribute('disabled');
@@ -154,20 +162,24 @@ $isNavBottom = !$isNavTop;
             },
             next() {
                 this.resetAutoplayInterval(true);
+                this.lastSlidenavClicked = 'next';
                 if (this.loop) {
                     const track = this.slider.querySelector('[data-track]');
                     if (track && track.scrollLeft + track.clientWidth >= track.scrollWidth - 1) {
                         track.children[0]?.scrollIntoView({ block: 'nearest', inline: 'start' });
+                        this.lastSlidenavClicked = 'prev';
                     }
                 }
             },
             prev() {
                 this.resetAutoplayInterval(true);
+                this.lastSlidenavClicked = 'prev';
                 if (this.loop) {
                     const track = this.slider.querySelector('[data-track]');
                     if (track && track.scrollLeft < 1) {
                         track.children[track.children.length - 1]
                             ?.scrollIntoView({ block: 'nearest', inline: 'end' });
+                        this.lastSlidenavClicked = 'next';
                     }
                 }
             },

@@ -9,6 +9,7 @@ use Magento\Framework\Escaper;
  */
 
 $params = $this->getData('params');
+$visibility = $params['mageos_slider_navigation_visibility'] ?? 'show';
 $pagesize = $params['mageos_slider_columns'] ?? 3;
 $navigationPosition = [
     'class' => $this->resolveExpression([
@@ -24,6 +25,9 @@ $navigationPosition = [
         'hidden xl:flex {@mageos_slider_navigation_display: xl}'
     ], $params)
 ];
+if ($visibility === 'hide') {
+    return;
+}
 ?>
 
 <div x-show="dotsNavigation" class="<?= $navigationPosition['class']; ?> px-2 snap-pager">

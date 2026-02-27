@@ -119,9 +119,7 @@
 }
 
 /* Responsive column overrides for the admin preview */
-.pagebuilder-stage-wrapper.mobile-viewport .slider-widget .snap-track {
-    --snap-cols: 1;
-}
+.pagebuilder-stage-wrapper.mobile-viewport .slider-widget .snap-track,
 .pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track {
     --snap-cols: 1;
 }
@@ -139,4 +137,13 @@
 }
 .pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:6\] {
     --snap-cols: 6;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .sm\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .md\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .lg\:flex.hidden {
+    display: flex;
+    visibility: visible;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .md\:flex-row.flex-col {
+    flex-direction: row;
 }

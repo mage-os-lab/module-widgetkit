@@ -16,9 +16,9 @@ class Item extends Rows
             'preview' => true
         ],
         'image_alt' => [
-            'label' => 'Desktop Image alt',
+            'label' => 'Alt Image',
             'type' => 'text',
-            'description' => 'Desktop image alternative text',
+            'description' => 'Image alternative text',
             'required' => false,
             'preview' => false
         ],
@@ -78,14 +78,7 @@ class Item extends Rows
             ],
             'required' => false,
             'preview' => false
-        ],
-        'navigation_thumb' => [
-            'label' => 'navigation Thumb',
-            'type' => 'image',
-            'description' => 'If specified, thumb image will be used instead of resized desktop image',
-            'required' => false,
-            'preview' => false
-        ],
+        ]
     ];
 
 }

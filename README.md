@@ -15,6 +15,7 @@ As far as this module is full compatible with Hyvä, each preview generates Tail
 
 2) Customizable slideshow widget
 
+3) Customizable slider widget
 
 ## 🔧 Installation
 

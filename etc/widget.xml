@@ -571,6 +571,31 @@
                 <label>Content additional CSS classes</label>
                 <description>Set custom CSS classes for content section</description>
             </parameter>
+            <parameter name="mageos_slider_item_content_position" sort_order="45" visible="true" xsi:type="select">
+                <label>Content position</label>
+                <description>Set where the content (title and text) is placed relative to the image</description>
+                <options>
+                    <option name="below" value="below" selected="true">
+                        <label translate="true">Below</label>
+                    </option>
+                    <option name="left" value="left">
+                        <label translate="true">Left aside</label>
+                    </option>
+                    <option name="top" value="top">
+                        <label translate="true">On top</label>
+                    </option>
+                    <option name="right" value="right">
+                        <label translate="true">Right aside</label>
+                    </option>
+                    <option name="overlay" value="overlay">
+                        <label translate="true">Overlay</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_slider_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
+                <label>Content container additional CSS classes</label>
+                <description>Set custom CSS classes for the container wrapping both title and content</description>
+            </parameter>
 
             <parameter name="mageos_slider_navigation_section_title" xsi:type="block" required="false" visible="true" sort_order="50">
                 <description>
@@ -622,6 +647,18 @@
                     </option>
                     <option name="x-large" value="xl">
                         <label translate="true">X-Large (Big screens)</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_slider_navigation_visibility" sort_order="53" visible="true" xsi:type="select">
+                <label>Visibility</label>
+                <description>By default navigation is visible.</description>
+                <options>
+                    <option name="show" value="show" selected="true">
+                        <label translate="true">Show</label>
+                    </option>
+                    <option name="hide" value="hide">
+                        <label translate="true">Hide</label>
                     </option>
                 </options>
             </parameter>
