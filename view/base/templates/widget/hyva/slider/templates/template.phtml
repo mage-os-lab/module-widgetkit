@@ -110,16 +110,18 @@ $isNavBottom = !$isNavTop;
                             const firstSlide = track.children[0];
                             if (!firstSlide || firstSlide.offsetWidth === 0) return;
                             const lastPageIndex = Math.ceil(track.children.length / this.pageSize) - 1;
-                            if (this.lastSlidenavClicked === 'next') {
-                                this.currentIndex = Math.min(
-                                    Math.ceil(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
-                                    lastPageIndex
-                                );
-                            } else {
-                                this.currentIndex = Math.min(
-                                    Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
-                                    lastPageIndex
-                                );
+                            if (this.lastSlidenavClicked !== null) {
+                                if (this.lastSlidenavClicked === 'next') {
+                                    this.currentIndex = Math.min(
+                                        Math.ceil(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                                        lastPageIndex
+                                    );
+                                } else {
+                                    this.currentIndex = Math.min(
+                                        Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                                        lastPageIndex
+                                    );
+                                }
                             }
                             if (this.loop) {
                                 this.$el.querySelector('[data-prev]')?.removeAttribute('disabled');
@@ -150,6 +152,7 @@ $isNavBottom = !$isNavTop;
                 }, this.autoplayInterval);
             },
             set(index) {
+                this.lastSlidenavClicked = null;
                 this.currentIndex = index;
                 this.resetAutoplayInterval(true);
                 const track = this.slider.querySelector('[data-track]');
