@@ -1,0 +1,26 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+
+/**
+ * @var ProductSlider $this
+ */
+
+$params          = $this->getData('params');
+$settings        = $this->getData('settings');
+$snapColsClasses = $settings['snapColsClasses'] ?? '';
+?>
+<div
+    class="snap-track <?= $snapColsClasses ?>"
+    data-track
+    tabindex="0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="<?= __('Product Slider') ?>"
+>
+    <?php foreach ($this->getData('items') as $item): ?>
+        <div class="slider-item grow w-full">
+            <?= $this->renderProductItem($item); ?>
+        </div>
+    <?php endforeach; ?>
+</div>

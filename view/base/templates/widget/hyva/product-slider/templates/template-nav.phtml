@@ -1,0 +1,47 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+use Magento\Framework\Escaper;
+
+/**
+ * @var ProductSlider $this
+ * @var Escaper $escaper
+ */
+
+$params     = $this->getData('params');
+$visibility = $params['mageos_product_slider_navigation_visibility'] ?? 'show';
+$pagesize   = $params['mageos_product_slider_columns'] ?? 3;
+
+$navigationPosition = [
+    'class' => $this->resolveExpression([
+        'justify-start {@mageos_product_slider_navigation_position: top-left}',
+        'justify-center {@mageos_product_slider_navigation_position: top-center}',
+        'justify-end {@mageos_product_slider_navigation_position: top-right}',
+        'justify-start {@mageos_product_slider_navigation_position: bottom-left}',
+        'justify-center {@mageos_product_slider_navigation_position: bottom-center}',
+        'justify-end {@mageos_product_slider_navigation_position: bottom-right}',
+        'hidden sm:flex {@mageos_product_slider_navigation_display: s}',
+        'hidden md:flex {@mageos_product_slider_navigation_display: m}',
+        'hidden lg:flex {@mageos_product_slider_navigation_display: l}',
+        'hidden xl:flex {@mageos_product_slider_navigation_display: xl}'
+    ], $params)
+];
+
+if ($visibility === 'hide') {
+    return;
+}
+?>
+
+<div x-show="dotsNavigation" class="<?= $navigationPosition['class']; ?> px-2 snap-pager">
+    <?php for ($index = 0; $index < (count($this->getData('items')) / $pagesize); $index++): ?>
+        <div
+            x-on:click="set(<?= $index ?>)"
+            class="snap-marker cursor-pointer"
+            role="tab"
+            x-bind:aria-current="currentIndex === <?= $index ?>"
+            x-cloak
+        >
+            <span class="sr-only"></span>
+        </div>
+    <?php endfor; ?>
+</div>

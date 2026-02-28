@@ -17,6 +17,8 @@ As far as this module is full compatible with Hyvä, each preview generates Tail
 
 3) Customizable slider widget
 
+4) Customizable product slider widget
+
 ## 🔧 Installation
 
 1. Install it into your Mage-OS/Magento 2 project with composer:

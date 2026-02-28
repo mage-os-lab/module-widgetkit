@@ -1,0 +1,181 @@
+<?php
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
+use Hyva\Theme\ViewModel\BlockJsDependencies;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\ProductListItem;
+use Hyva\Theme\ViewModel\ProductPage;
+use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Catalog\Block\Product\View;
+use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+use Magento\Catalog\ViewModel\Product\OptionsData as ProductOptionsData;
+use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\ReviewRenderer;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+// phpcs:disable Generic.Files.LineLength.TooLong
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
+
+/** @var View $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var ProductPage $productViewModel */
+$productViewModel = $viewModels->require(ProductPage::class);
+
+/** @var ProductListItem $productListItemViewModel */
+$productListItemViewModel = $viewModels->require(ProductListItem::class);
+
+/** @var CatalogOutputHelper $catalogOutputHelper */
+$catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
+
+/** @var ProductCompare $compareViewModel */
+$compareViewModel = $viewModels->require(ProductCompare::class);
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$productOptionsViewmodel = $viewModels->require(ProductOptionsData::class);
+
+/** @var Magento\Catalog\Model\Product $product */
+if (! ($product = $block->getData('product'))) {
+    return;
+}
+$imageDisplayArea = $block->getData('image_display_area');
+$templateType = $block->getData('template_type');
+$viewMode = $block->getData('view_mode');
+$showDescription = $block->getData('show_description');
+$showAddToWishlist = $wishlistViewModel->isEnabled();
+$showAddToCompare = $compareViewModel->showInProductList();
+$viewIsGrid = $viewMode === 'grid';
+$productType = $product->getTypeId();
+$isProductGroupedOrBundle = $productType === 'bundle' || $productType === "grouped";
+$productId = $product->getId();
+$options   = $productOptionsViewmodel->getOptionsData($product);
+
+$hideDetails       = $block->getData('hide_details') ?: false;
+$hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
+
+$imageCustomAttributes = $product->getData('image_custom_attributes')
+    ?? $block->getData('image_custom_attributes')
+    ?? [];
+$productName = $catalogOutputHelper->productAttribute($product, $product->getName(), 'name');
+
+?>
+
+<?php if ($product->isSaleable()): ?>
+<div class="item product product-item product_addtocart_form card card-interactive grow flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>">
+<?php else: ?>
+<div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
+     <?php foreach ($block->getData('product_data_attributes')  ?? [] as $attribute => $include): ?>
+         <?php if ($include): ?>
+             <?php /** Append data-* attributes based on layout XML arguments */ ?>
+             <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
+         <?php endif; ?>
+    <?php endforeach; ?>
+>
+    <?php endif; ?>
+    <?php /* Product Image */ ?>
+    <?php if ($blockImage = $block->getImage($product, $imageDisplayArea)): ?>
+        <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+           title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
+           class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:shrink-0' ?>"
+           tabindex="-1"
+        >
+            <?= $blockImage
+                ->setTemplate('MageOS_Widgetkit::product/hyva/list/image.phtml')
+                ->setData('custom_attributes', $imageCustomAttributes)
+                ->setProductId($productId)
+                ->toHtml();
+            ?>
+        </a>
+    <?php endif; ?>
+    <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:pl-5 md:w-4/6' ?>">
+        <div class="mt-2 mb-1 items-center justify-center font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+            <?= /* @noEscape */ $productName ?>
+        </div>
+
+        <?php if (!$hideRatingSummary): ?>
+            <div class="py-1 mx-auto <?= $viewIsGrid ? '' : 'md:mx-0 md:w-auto' ?>">
+                <?= $block->getData('review_summary_block_html'); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($product->isAvailable() && !$hideDetails): ?>
+            <?= $block->getProductDetailsHtml($product) ?>
+        <?php endif; ?>
+
+        <?php if ($showDescription): ?>
+            <div class="mt-2 mb-1 items-center justify-center text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+                <?= /* @noEscape */ $productViewModel->getShortDescriptionForProduct($product) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($isProductGroupedOrBundle): ?>
+            <span class="sr-only">
+                    <?= $escaper->escapeHtml(__('The price depends on the options chosen on the product page')) ?>
+                </span>
+        <?php endif; ?>
+
+        <div class="pt-1">
+            <?= /* @noEscape */ $productListItemViewModel->getProductPriceHtml($product) ?>
+        </div>
+
+        <div class="mt-auto pt-3 flex flex-wrap items-center gap-y-4 gap-x-2
+                <?= $viewIsGrid ? '' : 'md:justify-center' ?>">
+            <?php if ($product->isSaleable()): ?>
+                <?php if ($isProductGroupedOrBundle): ?>
+                    <a
+                        href="#"
+                        class="btn btn-primary text-sm <?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
+                    >
+                        <?= $lucideIcons->pencilHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                        <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
+                            <?= $escaper->escapeHtml(__('Configure')) ?>
+                        </span>
+                    </a>
+                <?php else: ?>
+                    <button
+                        class="btn btn-primary text-sm <?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart') . ' ' . $productName) ?>"
+                        data-addto="cart"
+                    >
+                        <?= $lucideIcons->shoppingCartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
+                        <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
+                            <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                        </span>
+                    </button>
+                <?php endif; ?>
+
+            <?php else: ?>
+                <div class="<?= $viewIsGrid ? 'me-auto' : 'me-auto md:me-0' ?>">
+                    <?= $block->getChildBlock('stockstatus')->setData('product', $product)->toHtml() ?>
+                </div>
+            <?php endif; ?>
+            <div class="flex flex-wrap gap-2">
+                <?php if ($showAddToWishlist && $blockWishlist = $block->getChildBlock('wishlist')): ?>
+                    <?= $blockWishlist->setData('product', $product)->toHtml() ?>
+                <?php endif; ?>
+                <?php if ($showAddToCompare): ?>
+                    <button aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
+                            type="button"
+                            class="btn p-2 rounded-full"
+                            data-addto="compare"
+                    >
+                        <?= $lucideIcons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+                    </button>
+                <?php endif; ?>
+                <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
+                    <?= $addToBlock->setProduct($product)->getChildHtml() ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

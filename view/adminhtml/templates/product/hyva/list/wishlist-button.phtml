@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
+use Hyva\Theme\ViewModel\ProductAttributes as ProductAttributes;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+/** @var Product $product */
+if (! ($product = $block->getData('product'))) {
+    return;
+}
+
+$productId = $product->getId();
+
+$productAttribute = $viewModels->require(ProductAttributes::class);
+$productName = $productAttribute->getValue($product, 'name');
+
+?>
+
+<button aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
+        type="button"
+        class="btn p-2 rounded-full"
+        data-addto="wishlist"
+>
+    <?= $lucideIcons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
+</button>

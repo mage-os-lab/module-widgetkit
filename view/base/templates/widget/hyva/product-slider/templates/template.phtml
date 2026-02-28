@@ -1,33 +1,33 @@
 <?php
 
-use MageOS\Widgetkit\Block\Widgets\Slider;
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 
 /**
- * @var Slider $this
+ * @var ProductSlider $this
  * @var HyvaCsp $hyvaCsp
  * @var Escaper $escaper
  */
 
-$params  = $this->getData('params');
-$items   = $this->getData('items');
-$uniqId  = uniqid();
-$sliderId = 'slider-' . $uniqId;
+$params   = $this->getData('params');
+$items    = $this->getData('items');
+$uniqId   = uniqid();
+$sliderId = 'product-slider-' . $uniqId;
 
-$snapColumns = $params['mageos_slider_columns'] ?? 3;
+$snapColumns     = $params['mageos_product_slider_columns'] ?? 3;
 $snapColsClasses = 'md:[--snap-cols:' . $snapColumns . ']';
 
 // Loop
-$loop = (int)($params['mageos_slider_loop'] ?? 0);
+$loop = (int)($params['mageos_product_slider_loop'] ?? 0);
 
-// Slidenav (prev/next buttons) position
-$slidenavPosition = $params['mageos_slider_slidenav_position'] ?? 'top-right';
+// Slidenav (prev/next) position
+$slidenavPosition = $params['mageos_product_slider_slidenav_position'] ?? 'top-right';
 $isSlidenavTop    = str_contains($slidenavPosition, 'top-');
 $isSlidenavBottom = !$isSlidenavTop;
 
 // Navigation (dots pager) position
-$navPosition = $params['mageos_slider_navigation_position'] ?? 'bottom-center';
+$navPosition = $params['mageos_product_slider_navigation_position'] ?? 'bottom-center';
 $isNavTop    = str_contains($navPosition, 'top-');
 $isNavBottom = !$isNavTop;
 ?>
@@ -35,9 +35,9 @@ $isNavBottom = !$isNavTop;
 <section
     id="<?= $sliderId ?>"
     class="snap-slider relative"
-    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_slider_title'] ?? '') ?>"
-    data-slider-type="generic"
-    x-data="initSlider<?= $uniqId ?>()"
+    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_product_slider_title'] ?? '') ?>"
+    data-slider-type="product"
+    x-data="initProductSlider<?= $uniqId ?>()"
     x-snap-slider.group-pager
     @resize.window.debounce="calcPageSize"
 >
@@ -74,13 +74,8 @@ $isNavBottom = !$isNavTop;
 </section>
 
 <script>
-    function initSlider<?= $uniqId ?>() {
+    function initProductSlider<?= $uniqId ?>() {
         return {
-            images: [
-                <?php foreach ($this->getData('items') as $index => $item): ?>
-                '<?= isset($item['image']) ? $escaper->escapeUrl($item['image']) : ''; ?>',
-                <?php endforeach; ?>
-            ],
             slider: null,
             loop: <?= $loop ? 'true' : 'false' ?>,
             dotsNavigation: true,
@@ -160,6 +155,6 @@ $isNavBottom = !$isNavTop;
             },
         }
     }
-    window.addEventListener('alpine:init', () => Alpine.data('initSlider<?= $uniqId ?>', initSlider<?= $uniqId ?>), {once: true})
+    window.addEventListener('alpine:init', () => Alpine.data('initProductSlider<?= $uniqId ?>', initProductSlider<?= $uniqId ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

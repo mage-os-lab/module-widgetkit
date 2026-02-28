@@ -1,0 +1,199 @@
+.pagebuilder-stage-wrapper .slider-widget {
+    background: oklch(0.984 0.003 247.858);
+}
+.pagebuilder-stage-wrapper .slider-widget .snap-track {
+    --snap-cols: 3;
+    --snap-gap: 1rem;
+    --snap-size: calc((100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols));
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--snap-size);
+    gap: var(--snap-gap);
+    padding-block: 1.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .snap-track > * {
+    scroll-snap-align: start;
+}
+
+/* slider-item */
+.pagebuilder-stage-wrapper .slider-widget .slider-item {
+    min-width: 0;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .btn {
+    --btn-color: oklch(46% .2 265);
+    --btn-bg: #fff;
+    --btn-bg: color-mix(in srgb, var(--btn-color) 10%, #0000);
+    justify-content: center;
+    align-items: center;
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    user-select: none;
+    vertical-align: middle;
+    font-weight: 500;
+    display: inline-flex;
+    gap: calc(.25rem * 1.5);
+    padding-block: calc(.25rem * 2);
+    padding-inline: calc(.25rem * 4);
+    border-radius: .5rem;
+    border-width: 0px;
+    border-color: oklch(46% .2 265);
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .btn.p-2 {
+    padding: .45rem;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .rounded-full {
+    border-radius: 100%;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .btn.btn-primary {
+    --btn-stroke: #0000;
+    --btn-bg: oklch(46% .2 265);
+    --btn-color: #fff;
+    --btn-hover-stroke: #0000;
+    --btn-hover-bg: oklch(52% .2 265);
+    --btn-hover-color: #fff;
+    --btn-active-stroke: #0000;
+    --btn-active-bg: oklch(46% .2 265);
+    --btn-active-color: #fff;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .rating-summary {
+    color: oklch(46% .2 265);
+    display: flex;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item .price-box .price {
+    font-size: var(--price-font-size, var(--text-base));
+    font-weight: var(--price-font-weight, bolder);
+}
+
+.pagebuilder-stage-wrapper .slider-widget .slider-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* snap-pager */
+.pagebuilder-stage-wrapper .slider-widget .snap-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+    min-block-size: 2.75rem;
+    padding-block: .5rem;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .snap-marker {
+    block-size: 1rem;
+    inline-size: 1rem;
+    border-width: 1px;
+    border-color: oklch(44.6% .043 257.281);
+    border-radius: 1rem;
+    flex-shrink: 0;
+    transition-property: border-color, background-color;
+    transition-duration: .3s;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .snap-marker[aria-current=true] {
+    inline-size: 1.75rem;
+    background-color: oklch(46% .2 265);
+    border-color: #0000;
+}
+
+/* Buttons */
+.pagebuilder-stage-wrapper .slider-widget .btn {
+    --btn-color: oklch(12.9% .042 264.695);
+    --spacing: .25rem;
+    --radius-lg: .5rem;
+    --btn-stroke: oklch(52% .2 265);
+    --btn-bg: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--spacing) * 1.5);
+    padding-block: calc(var(--spacing) * 2);
+    padding-inline: calc(var(--spacing) * 4);
+    border-radius: var(--radius-lg);
+    border-width: 2px;
+    border-color: var(--btn-stroke);
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    user-select: none;
+    font-weight: 500;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .btn:hover {
+    border-color: oklch(52% .2 265);
+    background-color: #fff;
+    color: oklch(28% .2 265);
+    text-decoration: none;
+}
+
+.pagebuilder-stage-wrapper .slider-widget .btn-secondary {
+    --btn-stroke: oklch(52% .2 265);
+    --btn-bg: #fff;
+    --btn-color: oklch(28% .2 265);
+}
+
+.pagebuilder-stage-wrapper .slider-widget .card {
+    border-radius: 8px;
+    padding-block: 24px;
+    padding-inline: 24px;
+    border-width: 1px;
+    border-color: oklch(0.872 0.01 258.338);
+    background-color: rgb(255, 255, 255);
+    color: oklch(0.129 0.042 264.695);
+    transition-property: color,background-color,border-color,box-shadow,outline-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.15s;
+    position: relative
+}
+
+.pagebuilder-stage-wrapper .slider-widget .card-interactive:is(:hover,:focus-within) {
+    --card-stroke: #0000;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 5.91739px 8.87608px -1.77522px, rgba(0, 0, 0, 0.06) 0px 2.36696px 3.55043px -2.36696px;
+}
+
+/* Responsive column overrides for the admin preview */
+.pagebuilder-stage-wrapper.mobile-viewport .slider-widget .snap-track,
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track {
+    --snap-cols: 1;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:2\] {
+    --snap-cols: 2;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:3\] {
+    --snap-cols: 3;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:4\] {
+    --snap-cols: 4;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:5\] {
+    --snap-cols: 5;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .snap-track.md\:\[--snap-cols\:6\] {
+    --snap-cols: 6;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .sm\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .md\:flex.hidden,
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .lg\:flex.hidden {
+    display: flex;
+    visibility: visible;
+}
+.pagebuilder-stage-wrapper.desktop-viewport .slider-widget .md\:flex-row.flex-col {
+    flex-direction: row;
+}

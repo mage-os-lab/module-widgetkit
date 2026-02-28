@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Catalog\Block\Product\Image;
+use Magento\Framework\Escaper;
+
+/** @var Image $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+
+$hasLoadingAttribute = ($block->getCustomAttributes() ?: [])['loading'] ?? false;
+
+?>
+<img
+    src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+    height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+    alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
+    class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+    <?php if (!$hasLoadingAttribute): ?>
+        loading="lazy"
+    <?php endif; ?>
+<?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+<?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+<?php endforeach; ?>
+>

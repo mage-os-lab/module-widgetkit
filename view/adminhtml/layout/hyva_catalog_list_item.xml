@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <block class="Magento\Catalog\Block\Product\View" name="product_list_item"
+               template="MageOS_Widgetkit::product/hyva/list-item.phtml">
+            <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
+                <block name="category.product.type.details.renderers.default" as="default"/>
+            </block>
+            <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="catalog.list.item.addto" as="addto">
+            </block>
+            <block name="catalog.list.item.wishlist" as="wishlist"  template="MageOS_Widgetkit::product/hyva/list/wishlist-button.phtml"/>
+            <block name="product.item.stockstatus" as="stockstatus"  template="MageOS_Widgetkit::product/hyva/list/stock-status.phtml"/>
+        </block>
+
+    </body>
+</page>

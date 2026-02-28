@@ -1,0 +1,77 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
+use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\ReviewRenderer;
+
+/** @var ReviewRenderer $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$rating = $block->getRatingSummary();
+$ratingSteps = 5;
+$starsFilled = is_numeric($rating) ? floor($rating / 100 * $ratingSteps) : 0;
+$starFragment = $rating / 100 * $ratingSteps - $starsFilled;
+$starsEmpty = floor($ratingSteps - $starsFilled - $starFragment);
+
+$product = $block->getProduct();
+?>
+<?php if ($block->isReviewEnabled()): ?>
+    <div
+        role="img"
+        class="rating-summary"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $product->getName(), $starsFilled + $starFragment, $ratingSteps))?>"
+    >
+        <?php if ($rating): ?>
+            <?php $i = 0; ?>
+            <?php while ($i < $starsFilled): ?>
+                <?= $lucideIcons->starHtml('fill-current', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?php $i++; ?>
+            <?php endwhile; ?>
+            <?php if ($starFragment): ?>
+                <span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="0"
+                        height="0"
+                        aria-hidden="true"
+                    >
+                        <defs>
+                            <linearGradient id="partialFill<?= /* @noEscape */ $block->getProduct()->getId() ?>">
+                                <stop offset="0%" stop-color="currentColor"/>
+                                <stop offset="<?= $starFragment * 100 ?>%" stop-color="currentColor"/>
+                                <stop offset="<?= $starFragment * 100 ?>%" stop-color="#0000"/>
+                                <stop offset="100%" stop-color="#0000"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <?= $lucideIcons->starHtml('', 24, 24, [
+                        'style' => 'fill: url(#partialFill' . (int)$block->getProduct()->getId() . ')',
+                        'aria-hidden' => 'true'
+                    ]); ?>
+                </span>
+            <?php endif; ?>
+            <?php $i = 0; ?>
+            <?php while ($i < $starsEmpty): ?>
+                <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?php $i++; ?>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <?php $i = 0; ?>
+            <?php while ($i < $ratingSteps): ?>
+                <?= $lucideIcons->starHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                <?php $i++; ?>
+            <?php endwhile; ?>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

@@ -10,10 +10,9 @@ $params   = $this->getData('params');
 $settings = $this->getData('settings');
 
 $snapColsClasses = $settings['snapColsClasses'] ?? '';
-$heightClass     = $settings['heightClass'] ?? '';
 ?>
 <div
-    class="snap-track <?= $snapColsClasses ?> <?= $heightClass ?>"
+    class="snap-track <?= $snapColsClasses ?>"
     data-track
     tabindex="0"
     role="region"

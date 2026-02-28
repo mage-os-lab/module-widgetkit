@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var CurrentProduct $currentProduct */
+$currentProduct = $viewModels->require(CurrentProduct::class);
+
+/** @var Product $product */
+$product = $block->hasData('product')
+    ? $block->getData('product')
+    : $currentProduct->get();
+
+if (!$product || !$product->getId()) {
+    return;
+}
+
+$inStock = $product->getIsSalable();
+?>
+<?php if ($block->getParentBlock()->displayProductStockStatus()): ?>
+    <div class="text-right">
+        <p
+            class="flex items-center justify-end align-middle gap-x-2 stock
+                before:w-3 before:h-3 before:rounded-full before:shrink-0
+                <?= $inStock ? 'available before:bg-green-500' : 'unavailable before:bg-red-500' ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>"
+        ><?= $escaper->escapeHtml($inStock ? __('In stock') : __('Out of stock')) ?></p>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,31 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\Slider\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ */
+
+$uniqId = uniqid();
+$titleCssClasses = $this->getData('mageos_product_slider_title_classes');
+$descriptionCssClasses = $this->getData('mageos_product_slider_description_classes');
+?>
+<div class="slider-widget">
+    <?= $this->addTwindManagement($uniqId, 'slider-widget'); ?>
+    <?= $this->getChildHtml("previewAssets"); ?>
+    <?php if (!empty($this->getData('mageos_product_slider_title'))): ?>
+        <<?= $this->getData('mageos_product_slider_title_type'); ?> class="<?= $titleCssClasses; ?>">
+            <?= $this->getData('mageos_product_slider_title'); ?>
+        </<?= $this->getData('mageos_product_slider_title_type'); ?>>
+    <?php endif; ?>
+    <?php if (!empty($this->getData('mageos_product_slider_description'))): ?>
+        <div class="<?= $descriptionCssClasses; ?>"><?= $this->getData('mageos_product_slider_description'); ?></div>
+    <?php endif; ?>
+
+    <div id="widget<?= $uniqId; ?>">
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>
