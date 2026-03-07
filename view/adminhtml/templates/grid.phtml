@@ -1,0 +1,30 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\Grid\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ */
+$uniqId = uniqid();
+$titleCssClasses = $this->getData('mageos_grid_title_classes');
+$descriptionCssClasses = $this->getData('mageos_grid_description_classes');
+?>
+<div class="grid-widget">
+    <?= $this->addTwindManagement($uniqId, 'grid-widget'); ?>
+    <?= $this->getChildHtml("previewAssets"); ?>
+    <?php if (!empty($this->getData('mageos_grid_title'))): ?>
+        <<?= $this->getData('mageos_grid_title_type'); ?> class="<?= $titleCssClasses; ?>">
+            <?= $this->getData('mageos_grid_title'); ?>
+        </<?= $this->getData('mageos_grid_title_type'); ?>>
+    <?php endif; ?>
+    <?php if (!empty($this->getData('mageos_grid_description'))): ?>
+        <div class="<?= $descriptionCssClasses; ?>"><?= $this->getData('mageos_grid_description'); ?></div>
+    <?php endif; ?>
+
+    <div id="widget<?= $uniqId; ?>">
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
@@ -11,9 +10,7 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
-
 $hasLoadingAttribute = ($block->getCustomAttributes() ?: [])['loading'] ?? false;
-
 ?>
 <img
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"

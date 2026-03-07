@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace MageOS\Widgetkit\Block\Adminhtml\Slider;
+namespace MageOS\Widgetkit\Block\Adminhtml\Grid;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Area;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\App\Emulation;
 use Magento\Widget\Helper\Conditions;
-use MageOS\Widgetkit\Block\Widgets\Slider;
+use MageOS\Widgetkit\Block\Widgets\Grid;
 
-class Preview extends Slider
+class Preview extends Grid
 {
+
     /**
      * @param Emulation $emulation
      * @param Conditions $conditions
@@ -21,23 +22,12 @@ class Preview extends Slider
         protected Conditions $conditions,
         protected Context $context
     ) {
-        return parent::__construct(
-            $conditions,
-            $context
-        );
+        parent::__construct($conditions, $context);
     }
 
-    /**
-     * @return string
-     * @throws LocalizedException
-     */
     public function renderMainTemplate(): string
     {
-        $this->emulation->startEnvironmentEmulation(
-            1,
-            \Magento\Framework\App\Area::AREA_FRONTEND,
-            true
-        );
+        $this->emulation->startEnvironmentEmulation(1, Area::AREA_FRONTEND, true);
         $mainTemplate = parent::renderMainTemplate();
         $this->emulation->stopEnvironmentEmulation();
         return $mainTemplate;

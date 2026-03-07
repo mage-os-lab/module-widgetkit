@@ -1,0 +1,15 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\ProductGrid;
+
+/**
+ * @var ProductGrid $this
+ */
+
+$params = $this->getData('params');
+?>
+<?php foreach ($this->getData('items') as $item): ?>
+    <div class="grid-item w-full">
+        <?= $this->renderProductItem($item); ?>
+    </div>
+<?php endforeach; ?>

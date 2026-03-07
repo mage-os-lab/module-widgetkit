@@ -1,0 +1,31 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Grid;
+
+/**
+ * @var Grid $this
+ */
+
+$params = $this->getData('params');
+?>
+<?php foreach ($this->getData('items') as $index => $item): ?>
+    <?php $item['count'] = $index; ?>
+    <?php
+    $gridCols = [];
+    if (isset($item['col_start_global']) && $item['col_start_global'] !== 'auto')
+        $gridCols[] = $item['col_start_global'];
+    if (isset($item['col_start_tablet']) && $item['col_start_tablet'] !== 'auto')
+        $gridCols[] = $item['col_start_tablet'];
+    if (isset($item['col_start_desktop']) && $item['col_start_desktop'] !== 'auto')
+        $gridCols[] = $item['col_start_desktop'];
+    if (isset($item['col_end_global']) && $item['col_end_global'] !== 'auto')
+        $gridCols[] = $item['col_end_global'];
+    if (isset($item['col_end_tablet']) && $item['col_end_tablet'] !== 'auto')
+        $gridCols[] = $item['col_end_tablet'];
+    if (isset($item['col_end_desktop']) && $item['col_end_desktop'] !== 'auto')
+        $gridCols[] = $item['col_end_desktop'];
+    ?>
+    <div class="grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full <?= implode(' ', $gridCols); ?>">
+        <?= $this->renderItemMedia($item); ?>
+    </div>
+<?php endforeach; ?>

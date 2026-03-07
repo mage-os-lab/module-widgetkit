@@ -16,6 +16,10 @@ class RegisterModuleForHyvaConfig implements ObserverInterface
         readonly private ComponentRegistrar $componentRegistrar
     ) {}
 
+    /**
+     * @param Observer $event
+     * @return void
+     */
     public function execute(Observer $event)
     {
         $config = $event->getData('config');

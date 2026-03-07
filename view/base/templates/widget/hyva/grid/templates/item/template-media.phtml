@@ -1,0 +1,149 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Grid;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Grid $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$item   = $this->getData('item');
+
+$loading = $item['count'] === 0
+    ? 'eager'
+    : ($params['mageos_grid_image_loading'] ?? 'lazy');
+
+$mobileImage = $item['mobile_image'] ?? null;
+
+$hasLink    = !empty($item['button_link']);
+$linkTarget = $item['button_link_target'] ?? '_self';
+
+$itemTitleClasses = [
+    'class' => $this->resolveExpression([
+        'text-{0} {@mageos_grid_item_title_alignment}' => $params['mageos_grid_item_title_alignment'],
+        'p-2 text-lg font-semibold {@mageos_grid_item_title_classes: null}' => $params['mageos_grid_item_title_classes'] ?? null,
+        '{0} {@mageos_grid_item_title_classes}' => $params['mageos_grid_item_title_classes'] ?? null
+    ], $params)
+];
+
+$itemContentClasses = [
+    'class' => $this->resolveExpression([
+        'text-{0} {@mageos_grid_item_content_alignment}' => $params['mageos_grid_item_content_alignment'] ?? null,
+        'p-2 {@mageos_grid_item_content_classes: null}' => $params['mageos_grid_item_content_classes'] ?? null,
+        '{0} {@mageos_grid_item_content_classes}' => $params['mageos_grid_item_content_classes'] ?? null
+    ], $params)
+];
+
+$contentPosition = $params['mageos_grid_item_content_position'] ?? 'below';
+$contentContainerClasses = trim($params['mageos_grid_item_content_container_classes'] ?? '');
+
+$outerWrapperClass = match ($contentPosition) {
+    'left'    => 'flex flex-col md:flex-row',
+    'top'     => 'flex flex-col',
+    'right'   => 'flex flex-col md:flex-row',
+    'overlay' => 'relative',
+    default   => 'flex flex-col', // below
+};
+
+$contentWrapperClass = match ($contentPosition) {
+    'overlay' => 'absolute inset-0 flex flex-col justify-end',
+    default   => '',
+};
+
+if ($contentContainerClasses !== '') {
+    $contentWrapperClass = trim($contentWrapperClass . ' ' . $contentContainerClasses);
+}
+
+$hasContent  = !empty($item['title']) || !empty($item['content']);
+$contentFirst = in_array($contentPosition, ['left', 'top'], true);
+?>
+
+<div class="block h-full">
+    <?php if ($hasLink): ?>
+    <a
+        href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+        target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+        class="<?= $escaper->escapeHtmlAttr($outerWrapperClass) ?> h-full"
+        <?php if ($linkTarget === '_blank'): ?>
+        rel="noopener noreferrer"
+        <?php endif; ?>
+    >
+    <?php else: ?>
+    <div class="<?= $escaper->escapeHtmlAttr($outerWrapperClass) ?> h-full">
+    <?php endif; ?>
+
+        <?php if ($contentFirst && $hasContent): ?>
+        <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+            <?php if (!empty($item['title'])): ?>
+            <div class="<?= $itemTitleClasses['class']; ?>">
+                <?= $escaper->escapeHtml($item['title']); ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['content'])): ?>
+            <div class="<?= $itemContentClasses['class']; ?>">
+                <?= $escaper->escapeHtml($item['content']); ?>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if (!empty($item['image'])): ?>
+        <picture class="block w-full">
+            <?php if ($mobileImage): ?>
+            <source
+                media="(max-width: 768px)"
+                srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                type="image/jpeg"
+            />
+            <?php endif; ?>
+            <img
+                src="<?= $escaper->escapeUrl($item['image']) ?>"
+                alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? '') ?>"
+                class="w-full h-auto object-cover"
+                <?php if ($loading === 'eager'): ?>
+                loading="eager"
+                fetchpriority="high"
+                <?php else: ?>
+                loading="lazy"
+                <?php endif; ?>
+            />
+        </picture>
+        <?php endif; ?>
+
+        <?php if (!$contentFirst && $hasContent): ?>
+        <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+            <?php if (!empty($item['title'])): ?>
+            <div class="<?= $itemTitleClasses['class']; ?>">
+                <?= $escaper->escapeHtml($item['title']); ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['content'])): ?>
+            <div class="<?= $itemContentClasses['class']; ?>">
+                <?= $escaper->escapeHtml($item['content']); ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>
+            <div class="p-2">
+                <a
+                    href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+                    target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+                    class="btn btn-primary"
+                    <?php if ($linkTarget === '_blank'): ?>
+                    rel="noopener noreferrer"
+                    <?php endif; ?>
+                >
+                    <?= $escaper->escapeHtml($item['button']); ?>
+                </a>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+
+    <?php if ($hasLink): ?>
+    </a>
+    <?php else: ?>
+    </div>
+    <?php endif; ?>
+</div>

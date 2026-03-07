@@ -9,7 +9,9 @@ use MageOS\AdvancedWidget\Block\Widgets\AbstractColumns;
 
 class HyvaWidget extends AbstractColumns implements BlockInterface
 {
+
     protected string $_twindManagerTemplate = 'MageOS_Widgetkit::widget/hyva/twind.phtml';
+
 
     /**
      * @param string $uid

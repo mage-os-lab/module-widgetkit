@@ -1,23 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace MageOS\Widgetkit\Block\Adminhtml\ProductSlider;
+namespace MageOS\Widgetkit\Block\Adminhtml\ProductGrid;
 
-use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\App\Emulation;
 use Magento\Widget\Helper\Conditions;
-use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+use MageOS\Widgetkit\Block\Widgets\ProductGrid;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\App\State;
 use Magento\Review\Block\Product\ReviewRenderer;
 use Magento\Review\Model\AppendSummaryDataFactory;
 use MageOS\Widgetkit\Block\Widgets\ProductWidget;
 
-class Preview extends ProductSlider
+class Preview extends ProductGrid
 {
     /**
      * @param State $state
@@ -29,7 +28,6 @@ class Preview extends ProductSlider
      * @param AppendSummaryDataFactory $appendSummaryDataFactory
      * @param ProductWidget $productWidget
      * @param Context $context
-     * @param ImageHelper $imageHelper
      */
     public function __construct(
         protected State $state,
@@ -41,7 +39,6 @@ class Preview extends ProductSlider
         protected AppendSummaryDataFactory $appendSummaryDataFactory,
         protected ProductWidget $productWidget,
         Context $context,
-        protected ImageHelper $imageHelper,
     ) {
         parent::__construct(
             $state,

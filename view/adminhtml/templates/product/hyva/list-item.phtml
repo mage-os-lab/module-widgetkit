@@ -1,10 +1,8 @@
 <?php
-
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\LucideIcons;
-use Hyva\Theme\ViewModel\BlockJsDependencies;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductListItem;
 use Hyva\Theme\ViewModel\ProductPage;
@@ -13,7 +11,6 @@ use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Catalog\ViewModel\Product\OptionsData as ProductOptionsData;
 use Magento\Framework\Escaper;
-use Magento\Review\Block\Product\ReviewRenderer;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -66,7 +63,6 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
     ?? $block->getData('image_custom_attributes')
     ?? [];
 $productName = $catalogOutputHelper->productAttribute($product, $product->getName(), 'name');
-
 ?>
 
 <?php if ($product->isSaleable()): ?>

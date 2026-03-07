@@ -1,0 +1,19 @@
+<?php
+$titleType = $this->getData('mageos_product_grid_title_type');
+$titleCssClasses = $this->getData('mageos_product_grid_title_classes');
+$descriptionCssClasses = $this->getData('mageos_product_grid_description_classes');
+?>
+
+<?php if (!empty($this->getData('mageos_product_grid_title'))): ?>
+<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
+    <?= $this->getData('mageos_product_grid_title'); ?>
+</<?= $this->getData('mageos_product_grid_title_type'); ?>>
+<?php endif; ?>
+
+<?php if (!empty($this->getData('mageos_product_grid_description'))): ?>
+<div class="<?= $descriptionCssClasses; ?>">
+    <?= $this->getData('mageos_product_grid_description'); ?>
+</div>
+<?php endif; ?>
+
+<?= $this->renderMainTemplate(); ?>

@@ -1,0 +1,32 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Grid;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Grid $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+
+$colsMobile  = (int)($params['mageos_grid_columns_mobile'] ?? 1);
+$colsTablet  = (int)($params['mageos_grid_columns_tablet'] ?? 2);
+$colsDesktop = (int)($params['mageos_grid_columns_desktop'] ?? 3);
+$gap         = $params['mageos_grid_gap'] ?? '4';
+
+$gridColsClasses = sprintf(
+    'grid-cols-%d md:grid-cols-%d lg:grid-cols-%d',
+    $colsMobile,
+    $colsTablet,
+    $colsDesktop
+);
+$gapClass = $gap !== '0' ? 'gap-' . $gap : '';
+?>
+
+<div
+    class="grid <?= $escaper->escapeHtmlAttr($gridColsClasses) ?> <?= $escaper->escapeHtmlAttr($gapClass) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_grid_title'] ?? '') ?>"
+>
+    <?= $this->renderItems(['gridColsClasses' => $gridColsClasses]); ?>
+</div>
