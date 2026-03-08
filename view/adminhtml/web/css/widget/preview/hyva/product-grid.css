@@ -1,5 +1,5 @@
 .pagebuilder-stage-wrapper .product-grid-widget {
-    background: oklch(0.984 0.003 247.858);
+    background: #F8FAFC;
 }
 
 /* Grid container */
@@ -37,13 +37,10 @@
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item .btn {
-    --btn-color: oklch(46% .2 265);
-    --btn-bg: #fff;
-    --btn-bg: color-mix(in srgb, var(--btn-color) 10%, #0000);
     justify-content: center;
     align-items: center;
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
+    background-color: #1F48C51A;
+    color: #1F48C5;
     user-select: none;
     vertical-align: middle;
     font-weight: 500;
@@ -53,7 +50,7 @@
     padding-inline: calc(.25rem * 4);
     border-radius: .5rem;
     border-width: 0px;
-    border-color: oklch(46% .2 265);
+    border-color: #1F48C5;
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item .btn.p-2 {
@@ -65,25 +62,18 @@
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item .btn.btn-primary {
-    --btn-stroke: #0000;
-    --btn-bg: oklch(46% .2 265);
-    --btn-color: #fff;
-    --btn-hover-stroke: #0000;
-    --btn-hover-bg: oklch(52% .2 265);
-    --btn-hover-color: #fff;
-    --btn-active-stroke: #0000;
-    --btn-active-bg: oklch(46% .2 265);
-    --btn-active-color: #fff;
+    border-color: #0000;
+    background-color: #1F48C5;
+    color: #fff;
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item .rating-summary {
-    color: oklch(46% .2 265);
+    color: #1F48C5;
     display: flex;
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item .price-box .price {
-    font-size: var(--price-font-size, var(--text-base));
-    font-weight: var(--price-font-weight, bolder);
+    font-weight: bolder;
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .grid-item img {
@@ -99,9 +89,9 @@
     padding-block: 24px;
     padding-inline: 24px;
     border-width: 1px;
-    border-color: oklch(0.872 0.01 258.338);
-    background-color: rgb(255, 255, 255);
-    color: oklch(0.129 0.042 264.695);
+    border-color: #D1D5DC;
+    background-color: #fff;
+    color: #020618;
     transition-property: color, background-color, border-color, box-shadow, outline-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 0.15s;
@@ -115,22 +105,17 @@
 
 /* Navigation buttons (slider controls outside items) */
 .pagebuilder-stage-wrapper .product-grid-widget .btn {
-    --btn-color: oklch(12.9% .042 264.695);
-    --spacing: .25rem;
-    --radius-lg: .5rem;
-    --btn-stroke: oklch(52% .2 265);
-    --btn-bg: #fff;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: calc(var(--spacing) * 1.5);
-    padding-block: calc(var(--spacing) * 2);
-    padding-inline: calc(var(--spacing) * 4);
-    border-radius: var(--radius-lg);
+    gap: 0.375rem;
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border-radius: 0.5rem;
     border-width: 2px;
-    border-color: var(--btn-stroke);
-    background-color: var(--btn-bg);
-    color: var(--btn-color);
+    border-color: #2E5BDA;
+    background-color: #fff;
+    color: #020618;
     user-select: none;
     font-weight: 500;
     transition-property: color, background-color, border-color;
@@ -139,16 +124,16 @@
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .btn:hover {
-    border-color: oklch(52% .2 265);
+    border-color: #2E5BDA;
     background-color: #fff;
-    color: oklch(28% .2 265);
+    color: #040089;
     text-decoration: none;
 }
 
 .pagebuilder-stage-wrapper .product-grid-widget .btn-secondary {
-    --btn-stroke: oklch(52% .2 265);
-    --btn-bg: #fff;
-    --btn-color: oklch(28% .2 265);
+    border-color: #2E5BDA;
+    background-color: #fff;
+    color: #040089;
 }
 
 /* Responsive column overrides for the admin preview viewport switcher.
