@@ -1,0 +1,14 @@
+@source "../../base/templates/**/*.phtml";
+
+@utility snap-cols-* {
+    display: grid;
+    grid-template-columns: repeat(--value(integer), minmax(0, 1fr));
+    scroll-snap-type: x mandatory;
+}
+
+@source inline("{,md:}[--snap-cols:{1,2,3,4,5,6}]");
+@source inline("snap-cols-{1,2,3,4,5,6}");
+@source inline("grid-cols-{1,2,3,4,5,6}");
+@source inline("md:grid-cols-{1,2,3,4,5,6}");
+@source inline("lg:grid-cols-{1,2,3,4,5,6}");
+@source inline("gap-{0,1,2,4,6,8}");
