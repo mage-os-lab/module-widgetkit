@@ -110,10 +110,10 @@ class ProductWidget extends Template implements BlockInterface
 
     /**
      * @param Template $block
-     * @param $repeatableFieldKey
+     * @param string $repeatableFieldKey
      * @return array
      */
-    public function loadProducts(Template $block, $repeatableFieldKey): array
+    public function loadProducts(Template $block, string $repeatableFieldKey): array
     {
         $rawItems = $block->getRepeatableField($repeatableFieldKey);
         if (empty($rawItems)) {

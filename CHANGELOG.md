@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 1.4.6 - 2026-04-21
+### Fixed
+- PHP 8.4 and 8.5 compatibility: add missing parameter type in ProductWidget::loadProducts, add explicit void return type on Observer::execute, guard against null module path before substr(), add missing @throws PHPDoc on Adminhtml\Grid\Preview::renderMainTemplate
+
 ## 1.4.5
 ### Fixed
 - Fix null dereference on product loading in ProductWidget
