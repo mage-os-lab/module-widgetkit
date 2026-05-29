@@ -40,7 +40,15 @@ class Slider extends HyvaWidget implements BlockInterface
     public function renderMainTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_navTemplate' => $this->_navTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_slidenavTemplate' => $this->_slidenavTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_mainTemplate
         )->setData(
@@ -58,7 +66,15 @@ class Slider extends HyvaWidget implements BlockInterface
     public function renderNavTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_navTemplate' => $this->_navTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_slidenavTemplate' => $this->_slidenavTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_navTemplate
         )->setData(
@@ -76,7 +92,15 @@ class Slider extends HyvaWidget implements BlockInterface
     public function renderSlideNavTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_navTemplate' => $this->_navTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_slidenavTemplate' => $this->_slidenavTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_slidenavTemplate
         )->setData(
@@ -95,7 +119,15 @@ class Slider extends HyvaWidget implements BlockInterface
     public function renderItems(array $itemsSettings): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_navTemplate' => $this->_navTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_slidenavTemplate' => $this->_slidenavTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_itemsTemplate
         )->setData(
@@ -115,7 +147,15 @@ class Slider extends HyvaWidget implements BlockInterface
     public function renderItemMedia(array $item): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_navTemplate' => $this->_navTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_slidenavTemplate' => $this->_slidenavTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_itemMediaTemplate
         )->setData(
