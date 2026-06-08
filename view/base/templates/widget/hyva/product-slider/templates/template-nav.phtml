@@ -31,16 +31,17 @@ if ($visibility === 'hide') {
 }
 ?>
 
-<div x-show="dotsNavigation" class="<?= $navigationPosition['class']; ?> px-2 snap-pager">
+<nav x-show="dotsNavigation"
+     class="<?= $navigationPosition['class']; ?> px-2 snap-pager"
+     aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
     <template x-for="index in dotIndices" :key="index">
-        <div
+        <button
+            type="button"
             x-on:click="set(index)"
             class="snap-marker cursor-pointer"
-            role="tab"
-            x-bind:aria-current="currentIndex === index"
+            :aria-current="currentIndex === index ? 'true' : undefined"
+            :aria-label="`<?= $escaper->escapeJs(__('Go to slide')) ?> ${index + 1} <?= $escaper->escapeJs(__('of')) ?> ${pageCount}`"
             x-cloak
-        >
-            <span class="sr-only"></span>
-        </div>
+        ></button>
     </template>
-</div>
+</nav>

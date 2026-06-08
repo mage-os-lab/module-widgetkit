@@ -37,7 +37,9 @@ $navigationPosition = [
 <div
     x-cloak
     x-show="dotsNavigation"
-    class="flex flex-wrap gap-3 cursor-pointer <?= $navigationPosition['class']; ?> py-4 px-2"
+    role="tablist"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>"
+    class="flex flex-wrap gap-3 <?= $navigationPosition['class']; ?> py-4 px-2"
 >
     <?php
     $thumbnavWidth = (int)$params['mageos_slideshow_navigation_thumbnav_width'] ?? 100;
@@ -53,26 +55,31 @@ $navigationPosition = [
             ], $params)
         ];
         ?>
-        <div style="<?= $image['style']; ?>"
-             class="overflow-hidden"
-             x-bind:class="{
-                'ring-2': currentIndex === <?= $index ?>
-            }">
+        <button
+            type="button"
+            style="<?= $image['style']; ?>"
+            class="overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-1"
+            x-bind:class="{'ring-2': currentIndex === <?= $index ?>}"
+            x-on:click="set(<?= $index ?>, 'button')"
+            role="tab"
+            x-bind:aria-selected="currentIndex === <?= $index ?>"
+            aria-label="<?= $escaper->escapeHtmlAttr(__('Go to slide %1', $index + 1)) ?>"
+        >
             <img
                 src="<?= $image['src']; ?>"
-                alt="<?= $image['alt']; ?>"
+                alt=""
                 loading="eager"
-                x-on:click="set(<?= $index ?>, 'button')"
-                type="button"
                 width="<?= $thumbnavWidth; ?>"
                 height="<?= $thumbnavHeight; ?>"
                 class="object-cover"
             />
-        </div>
+        </button>
     <?php $index++; endforeach; ?>
 </div>
 <?php else: ?>
-<div x-show="dotsNavigation" class="<?= $navigationPosition['class']; ?> px-2 snap-pager">
+<div x-show="dotsNavigation" class="<?= $navigationPosition['class']; ?> px-2 snap-pager"
+     role="tablist"
+     aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
     <?php
         $index = 0;
         foreach ($this->getData('items') as $item):
@@ -81,11 +88,15 @@ $navigationPosition = [
             x-on:click="set(<?= $index ?>, 'button')"
             class="snap-marker cursor-pointer"
             role="tab"
+            x-bind:aria-selected="currentIndex === <?= $index ?>"
             x-bind:aria-current="currentIndex === <?= $index ?>"
+            tabindex="0"
+            x-on:keydown.enter="set(<?= $index ?>, 'button')"
+            x-on:keydown.space.prevent="set(<?= $index ?>, 'button')"
             x-cloak
         >
             <span class="sr-only">
-                <?= $escaper->escapeHtmlAttr(__('View more about %1', $item['title'])) ?>
+                <?= $escaper->escapeHtml(__('Go to slide %1: %2', $index + 1, $item['title'])) ?>
             </span>
         </div>
     <?php $index++; endforeach; ?>
