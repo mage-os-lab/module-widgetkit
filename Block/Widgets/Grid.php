@@ -28,7 +28,13 @@ class Grid extends HyvaWidget implements BlockInterface
     public function renderMainTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_mainTemplate
         )->setData(
@@ -47,7 +53,13 @@ class Grid extends HyvaWidget implements BlockInterface
     public function renderItems(array $itemsSettings): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_itemsTemplate
         )->setData(
@@ -67,7 +79,13 @@ class Grid extends HyvaWidget implements BlockInterface
     public function renderItemMedia(array $item): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate,
+                '_itemMediaTemplate' => $this->_itemMediaTemplate
+            ]
         )->setTemplate(
             $this->_itemMediaTemplate
         )->setData(

@@ -83,7 +83,12 @@ class ProductGrid extends HyvaWidget implements BlockInterface
     public function renderMainTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate
+            ]
         )->setTemplate(
             $this->_mainTemplate
         )->setData(
@@ -102,7 +107,12 @@ class ProductGrid extends HyvaWidget implements BlockInterface
     public function renderItems(array $itemsSettings): string
     {
         return $this->getLayout()->createBlock(
-            self::class
+            self::class,
+            '',
+            [
+                '_mainTemplate' => $this->_mainTemplate,
+                '_itemsTemplate' => $this->_itemsTemplate
+            ]
         )->setTemplate(
             $this->_itemsTemplate
         )->setData(

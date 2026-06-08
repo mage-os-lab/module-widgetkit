@@ -8,10 +8,10 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\App\Emulation;
 use Magento\Widget\Helper\Conditions;
 use MageOS\Widgetkit\Block\Widgets\Grid;
+use Magento\Framework\Exception\LocalizedException;
 
 class Preview extends Grid
 {
-
     /**
      * @param Emulation $emulation
      * @param Conditions $conditions
@@ -25,6 +25,10 @@ class Preview extends Grid
         parent::__construct($conditions, $context);
     }
 
+    /**
+     * @return string
+     * @throws LocalizedException
+     */
     public function renderMainTemplate(): string
     {
         $this->emulation->startEnvironmentEmulation(1, Area::AREA_FRONTEND, true);
