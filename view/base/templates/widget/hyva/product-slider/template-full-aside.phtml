@@ -1,0 +1,359 @@
+<?php
+/**
+ * "Full Aside" template variant - same self-contained Alpine.js carousel as
+ * widget/hyva/product-slider/template-full.phtml (see there for the full rationale: no
+ * looping - next()/prev() clamp and the slidenav buttons disable at the first/last page -
+ * trimSpace-equivalent last-page clamping, segmented progress-bar pagination, the
+ * edge-padding peek and why it needs measured pixel widths, the drag threshold), but with
+ * the title/description as the first item IN the scrolling track itself (a "panel" slide)
+ * instead of being printed as a plain heading above the carousel - it slides away together
+ * with the products as you page forward. Direct copy of Slider's own
+ * widget/hyva/slider/template-full-aside.phtml, swapping the inlined item markup for
+ * renderProductItem() (the one thing this module deliberately never inlines). No separate
+ * panel/CTA fields - reuses the ProductSlider widget's existing
+ * mageos_product_slider_title/mageos_product_slider_description fields as the panel slide
+ * content.
+ *
+ * No autoplay: auto-advancing content without a pause control fails WCAG 2.2.2.
+ */
+
+declare(strict_types=1);
+
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var ProductSlider $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params   = $this->getData('params');
+$items    = $this->getData('items');
+$uniqId   = uniqid();
+$sliderId = 'product-slider-' . $uniqId;
+
+$titleType = $params['mageos_product_slider_title_type'] ?? 'h2';
+$titleCssClasses = $params['mageos_product_slider_title_classes'] ?? '';
+$descriptionCssClasses = $params['mageos_product_slider_description_classes'] ?? '';
+
+$hasPanel = !empty($params['mageos_product_slider_title']) || !empty($params['mageos_product_slider_description']);
+$totalItems = count($items) + ($hasPanel ? 1 : 0);
+
+$desktopRealItems = max(1, (int) ($params['mageos_product_slider_columns'] ?? 3));
+$tabletRealItems  = max(1, (int) floor($desktopRealItems / 2));
+$mobileRealItems  = 1;
+
+$navVisibility      = $params['mageos_product_slider_navigation_visibility'] ?? 'show';
+$slidenavVisibility = $params['mageos_product_slider_slidenav_visibility'] ?? 'show';
+
+$gapPx = 8; // 0.5rem
+
+// The static width below is what renders before Alpine mounts and measures anything - if it
+// assumes the full `columns` count while there are actually fewer total slides (panel + items)
+// than that, recalcPerPage() clamps perPage down to totalItems on mount and every slide visibly
+// resizes to its corrected (larger) width. Matching that clamp here up front avoids the jump.
+$effectiveDesktopItems = max(1, min($desktopRealItems, $totalItems));
+$itemBasisCss = 'calc((100% - ' . ($gapPx * ($effectiveDesktopItems - 1)) . 'px) / ' . $effectiveDesktopItems . ')';
+
+// Same reasoning again, one level up: the track's own edge-padding (the peek reservation)
+// reduces the width items actually have to share, so a static item width computed as if 100%
+// were the *unpadded* track width is always wider than what measure() will settle on - a
+// guaranteed shrink on every load, not just a timing race. Giving the track this same padding
+// as a plain CSS fallback (mirroring the JS's own non-last-page, page=0 state, since that's
+// what's always true on first paint) means the item's "100%" already reflects the
+// padding-reduced content box from the start.
+$hideControlsInitially = $effectiveDesktopItems >= $totalItems;
+$rightPeekPercent = 80 / ($effectiveDesktopItems + 0.8);
+$trackPaddingCss = $hideControlsInitially
+    ? 'padding-left: 0; padding-right: 0;'
+    : 'padding-left: 24px; padding-right: ' . round($rightPeekPercent, 4) . '%;';
+?>
+
+<section
+    id="<?= $escaper->escapeHtmlAttr($sliderId) ?>"
+    class="relative"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_product_slider_title'] ?? '')) ?>"
+    aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
+    data-slider-type="product"
+    x-data="initProductSlider<?= $uniqId ?>()"
+    x-defer="intersect"
+>
+    <a
+        href="#<?= $escaper->escapeHtmlAttr($sliderId) ?>-slider-end"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+    ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
+
+    <?php if ($navVisibility !== 'hide' || $slidenavVisibility !== 'hide'): ?>
+    <div class="items-center gap-4 mb-2 flex" x-show="pageCount > 1">
+        <?php if ($navVisibility !== 'hide'): ?>
+        <nav class="flex-1 snap-pager justify-start px-2" aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
+            <template x-for="i in pageCount" :key="i">
+                <button
+                    type="button"
+                    class="snap-marker"
+                    x-on:click="goToPage(i - 1)"
+                    x-bind:aria-current="i - 1 === page ? 'true' : undefined"
+                    x-bind:aria-label="`<?= $escaper->escapeJs(__('Go to slide')) ?> ${i} <?= $escaper->escapeJs(__('of')) ?> ${pageCount}`"
+                ></button>
+            </template>
+        </nav>
+        <?php endif; ?>
+
+        <?php if ($slidenavVisibility !== 'hide'): ?>
+        <div class="flex shrink-0 gap-2 justify-end px-2">
+            <button
+                type="button"
+                class="btn btn-secondary p-2"
+                aria-label="<?= $escaper->escapeHtml(__('Previous Slide')) ?>"
+                @click="prev()"
+                data-prev
+                x-bind:disabled="page === 0"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="m12 19-7-7 7-7M19 12H5"></path>
+                </svg>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary p-2"
+                aria-label="<?= $escaper->escapeHtml(__('Next Slide')) ?>"
+                @click="next()"
+                data-next
+                x-bind:disabled="page >= pageCount - 1"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+
+    <div
+        class="relative overflow-hidden"
+        x-ref="track"
+        style="<?= $trackPaddingCss ?>"
+        x-bind:style="trackWidth ? { paddingLeft: edgePadding.left + 'px', paddingRight: edgePadding.right + 'px' } : {}"
+    >
+        <div
+            class="flex items-center"
+            x-ref="list"
+            x-bind:style="{
+                gap: '<?= $gapPx ?>px',
+                transform: 'translateX(' + (-translateX) + 'px)',
+                transition: dragging ? 'none' : 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), padding 300ms cubic-bezier(0.25, 1, 0.5, 1)'
+            }"
+            x-on:pointerdown="onDragStart($event)"
+            x-on:pointermove="onDragMove($event)"
+            x-on:pointerup="onDragEnd($event)"
+            x-on:pointercancel="onDragEnd($event)"
+            style="touch-action: pan-y;"
+        >
+            <?php if ($hasPanel): ?>
+            <div
+                class="shrink-0"
+                role="group"
+                aria-roledescription="<?= $escaper->escapeHtmlAttr(__('slide')) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Panel')) ?>"
+                x-bind:style="itemWidth ? { width: itemWidth + 'px' } : {}"
+                style="width: <?= $itemBasisCss ?>"
+            >
+                <div class="slider-item grow flex flex-col justify-center h-full">
+                    <?php if (!empty($params['mageos_product_slider_title'])): ?>
+                    <<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses); ?>">
+                        <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_product_slider_title'])); ?>
+                    </<?= $titleType ?>>
+                    <?php endif; ?>
+                    <?php if (!empty($params['mageos_product_slider_description'])): ?>
+                    <div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses); ?>">
+                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_product_slider_description']); ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php $slideIndex = $hasPanel ? 2 : 1; ?>
+            <?php foreach ($items as $product): ?>
+                <div
+                    class="shrink-0"
+                    role="group"
+                    aria-roledescription="<?= $escaper->escapeHtmlAttr(__('slide')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr($slideIndex++ . ' / ' . $totalItems) ?>"
+                    x-bind:style="itemWidth ? { width: itemWidth + 'px' } : {}"
+                    style="width: <?= $itemBasisCss ?>"
+                >
+                    <div class="slider-item grow w-full h-full" x-bind:class="{ 'pointer-events-none': dragging }">
+                        <?= $this->renderProductItem($product); ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <span id="<?= $escaper->escapeHtmlAttr($sliderId) ?>-slider-end" tabindex="-1"></span>
+</section>
+
+<script>
+    function initProductSlider<?= $uniqId ?>() {
+        return {
+            totalItems: <?= (int) $totalItems ?>,
+            perPageByBreakpoint: { desktop: <?= $desktopRealItems ?>, tablet: <?= $tabletRealItems ?>, mobile: <?= $mobileRealItems ?> },
+            edgePeekPxByBreakpoint: { desktop: 24, tablet: 24, mobile: 16 },
+            gap: <?= $gapPx ?>,
+
+            perPage: <?= $desktopRealItems ?>,
+            page: 0,
+            trackWidth: 0,
+            itemWidth: 0,
+            dragging: false,
+            dragStartX: 0,
+            dragDeltaX: 0,
+            pointerDownId: null,
+            resizeHandler: null,
+
+            init() {
+                this.recalcPerPage();
+                <?php /**
+                 * $refs.track (x-ref="track" on a descendant) isn't guaranteed populated yet
+                 * during this component's own init() - measure() silently no-ops without it
+                 * (guarded below), leaving itemWidth stuck at its initial 0 until something
+                 * else triggers a re-measure - see slider/template-full-aside.phtml's own
+                 * comment for the full story (a real, measured layout-shift bug). $nextTick()
+                 * waits until Alpine has flushed the initial DOM walk/bindings, guaranteeing
+                 * the ref exists.
+                 */ ?>
+                this.$nextTick(() => this.measure());
+                this.resizeHandler = () => { this.recalcPerPage(); this.measure(); };
+                window.addEventListener('resize', this.resizeHandler);
+            },
+
+            destroy() {
+                if (this.resizeHandler) {
+                    window.removeEventListener('resize', this.resizeHandler);
+                }
+            },
+
+            currentBreakpoint() {
+                const w = window.innerWidth;
+                if (w < 640) return 'mobile';
+                if (w < 1024) return 'tablet';
+                return 'desktop';
+            },
+
+            recalcPerPage() {
+                const bp = this.currentBreakpoint();
+                const newPerPage = Math.max(1, Math.min(this.perPageByBreakpoint[bp], this.totalItems));
+                this.perPage = newPerPage;
+                this.page = Math.min(this.page, Math.max(0, this.pageCount - 1));
+            },
+
+            get pageCount() {
+                return Math.max(1, Math.ceil(this.totalItems / this.perPage));
+            },
+
+            get hideControls() {
+                return this.perPage >= this.totalItems;
+            },
+
+            get startIndex() {
+                const naive = this.page * this.perPage;
+                const maxStart = Math.max(0, this.totalItems - this.perPage);
+                return Math.min(naive, maxStart);
+            },
+
+            get isLastPage() {
+                return this.startIndex + this.perPage >= this.totalItems;
+            },
+
+            rightPeekPercent() {
+                return 80 / (this.perPage + 0.8);
+            },
+
+            get edgePadding() {
+                if (this.hideControls) {
+                    return { left: 0, right: 0 };
+                }
+                const bp = this.currentBreakpoint();
+                const fixedPeek = this.edgePeekPxByBreakpoint[bp];
+                const percentPeekPx = this.trackWidth * (this.rightPeekPercent() / 100);
+                return this.isLastPage
+                    ? { left: percentPeekPx, right: fixedPeek }
+                    : { left: fixedPeek, right: percentPeekPx };
+            },
+
+            get translateX() {
+                return this.startIndex * (this.itemWidth + this.gap);
+            },
+
+            measure() {
+                if (!this.$refs.track) return;
+                this.trackWidth = this.$refs.track.getBoundingClientRect().width;
+                const padding = this.edgePadding;
+                const contentWidth = Math.max(0, this.trackWidth - padding.left - padding.right);
+                this.itemWidth = (contentWidth - (this.perPage - 1) * this.gap) / this.perPage;
+            },
+
+            goToPage(index) {
+                this.page = Math.max(0, Math.min(index, this.pageCount - 1));
+                this.$nextTick(() => this.measure());
+            },
+
+            next() {
+                if (this.page >= this.pageCount - 1) return;
+                this.page++;
+                this.$nextTick(() => this.measure());
+            },
+
+            prev() {
+                if (this.page <= 0) return;
+                this.page--;
+                this.$nextTick(() => this.measure());
+            },
+
+            onDragStart(event) {
+                if (this.hideControls) return;
+                this.pointerDownId = event.pointerId;
+                this.dragStartX = event.clientX;
+                this.dragDeltaX = 0;
+            },
+
+            onDragMove(event) {
+                if (this.pointerDownId === null || event.pointerId !== this.pointerDownId) return;
+                this.dragDeltaX = event.clientX - this.dragStartX;
+                if (!this.dragging && Math.abs(this.dragDeltaX) > 5) {
+                    // Only now commit to an actual drag - capturing the pointer here (not on
+                    // pointerdown) means a plain tap/click never moves past this threshold, so
+                    // it still reaches the anchor/button underneath instead of being swallowed.
+                    this.dragging = true;
+                    this.$refs.list.setPointerCapture?.(event.pointerId);
+                }
+            },
+
+            onDragEnd(event) {
+                this.pointerDownId = null;
+                if (!this.dragging) return;
+                this.dragging = false;
+                if (event?.pointerId !== undefined) {
+                    this.$refs.list.releasePointerCapture?.(event.pointerId);
+                }
+                const threshold = Math.max(this.itemWidth * 0.2, 50);
+                if (this.dragDeltaX <= -threshold) {
+                    this.next();
+                } else if (this.dragDeltaX >= threshold) {
+                    this.prev();
+                }
+                this.dragDeltaX = 0;
+            },
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initProductSlider<?= $uniqId ?>', initProductSlider<?= $uniqId ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

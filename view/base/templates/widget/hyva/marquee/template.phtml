@@ -1,0 +1,98 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Marquee;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Marquee $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items') ?: [];
+$uniqId = 'mageos-marquee-' . uniqid();
+
+$velocity = (float)($params['mageos_marquee_velocity'] ?? 30);
+$velocity = $velocity > 0 ? $velocity : 30;
+$itemsDesktop = (int)($params['mageos_marquee_items_desktop'] ?? 5);
+$itemsDesktop = $itemsDesktop > 0 ? $itemsDesktop : 5;
+
+// The track is duplicated so the CSS animation can loop seamlessly (translateX(-50%)
+// always lands back on an identical copy of the item set).
+$loop = $items ? [...$items, ...$items] : [];
+?>
+
+<?php if ($items): ?>
+<div
+    class="<?= $escaper->escapeHtmlAttr($uniqId) ?> marquee flex items-center overflow-hidden"
+    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_marquee_title'] ?? __('Marquee')) ?>"
+>
+    <div class="marquee-track flex w-max items-center">
+        <?php foreach ($loop as $item): ?>
+            <?php
+            $titleTag = $item['title_tag'] ?? 'h3';
+            $hasTitle = !empty($item['title']);
+            $hasContent = !empty($item['content']);
+            ?>
+            <div class="marquee-item flex shrink-0 flex-col items-center justify-center text-center" aria-hidden="true">
+                <?php if (!empty($item['image'])): ?>
+                <img
+                    src="<?= $escaper->escapeUrl($item['image']) ?>"
+                    alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? '') ?>"
+                    class="marquee-item__image block h-auto max-w-full object-contain"
+                    loading="lazy"
+                    tabindex="-1"
+                />
+                <?php endif; ?>
+                <?php if ($hasTitle): ?>
+                <<?= $titleTag ?> class="marquee-item__title"><?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])) ?></<?= $titleTag ?>>
+                <?php endif; ?>
+                <?php if ($hasContent): ?>
+                <div class="marquee-item__content"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']) ?></div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<style>
+    .<?= $uniqId ?> {
+        container-type: inline-size;
+    }
+
+    .<?= $uniqId ?> .marquee-track {
+        animation: <?= $uniqId ?>-scroll <?= $escaper->escapeHtmlAttr((string)$velocity) ?>s linear infinite;
+    }
+
+    @keyframes <?= $uniqId ?>-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+    }
+
+    .<?= $uniqId ?>:hover .marquee-track {
+        animation-play-state: paused;
+    }
+
+    .<?= $uniqId ?> .marquee-item {
+        padding-inline: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .<?= $uniqId ?> .marquee-item {
+            flex: 0 0 calc(100cqw / <?= $itemsDesktop ?>);
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .<?= $uniqId ?> .marquee-item__image {
+            max-width: 100cqw;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .<?= $uniqId ?> .marquee-track {
+            animation: none;
+        }
+    }
+</style>
+<?php endif; ?>

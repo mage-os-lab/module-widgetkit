@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var \MageOS\Widgetkit\Block\Widgets\GridStacked $this
+ *
+ * Unlike v1/v2, the title and description are NOT rendered here: template-v3.phtml
+ * renders them itself, inside the sticky left column, alongside the stacked items.
+ */
+$this->setMainTemplate('MageOS_Widgetkit::widget/hyva/grid-stacked/template-v3.phtml');
+?>
+<?= $this->getChildHtml("previewAssets"); ?>
+<?= $this->renderMainTemplate(); ?>

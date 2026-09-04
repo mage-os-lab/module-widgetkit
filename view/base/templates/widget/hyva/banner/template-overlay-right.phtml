@@ -1,0 +1,86 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Banner;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Banner $this
+ * @var Escaper $escaper
+ *
+ * Image spans the left 3/4 of the banner (normal document flow, so its own natural height
+ * becomes the reference frame the card centers against). The card overlays on top, 1/3 width,
+ * pinned to the right edge (right-0) and vertically centered - since 1/3 (~33%) extends from
+ * ~67% to 100% while the image only spans to 75%, the card partially overlaps the image's
+ * right edge and partially extends past it into open space, which is the "partial overlay"
+ * effect.
+ */
+
+$params = $this->getData('params');
+
+$titleTag = $params['mageos_banner_title_type'] ?? 'h2';
+$title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_title'] ?? '');
+$titleClasses = $params['mageos_banner_title_classes'] ?? '';
+$content = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_content'] ?? '');
+$contentClasses = $params['mageos_banner_content_classes'] ?? '';
+$buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_button_text'] ?? '');
+$buttonLink = $params['mageos_banner_button_link'] ?? '';
+$buttonTarget = $params['mageos_banner_button_target'] ?? '_self';
+$hasButton = !empty($buttonText) && !empty($buttonLink);
+$icon = $params['mageos_banner_icon'] ?? '';
+$iconWidth = !empty($params['mageos_banner_icon_width']) ? (int)$params['mageos_banner_icon_width'] : null;
+$iconHeight = !empty($params['mageos_banner_icon_height']) ? (int)$params['mageos_banner_icon_height'] : null;
+$iconHtml = $this->renderIcon($icon, $iconWidth, $iconHeight);
+$image = $params['mageos_banner_image'] ?? '';
+$mobileImage = $params['mageos_banner_mobile_image'] ?? '';
+$imageAlt = $params['mageos_banner_image_alt'] ?? '';
+$imageLoading = $params['mageos_banner_image_loading'] ?? 'lazy';
+?>
+
+<div class="banner banner--overlay-right relative w-full">
+    <?php if (!empty($image)): ?>
+    <div class="w-full md:w-3/4">
+        <picture class="block w-full">
+            <?php if ($mobileImage): ?>
+            <source media="(max-width: 768px)" srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>" type="image/jpeg" />
+            <?php endif; ?>
+            <img
+                src="<?= $escaper->escapeUrl($image) ?>"
+                alt="<?= $escaper->escapeHtmlAttr($imageAlt) ?>"
+                class="block w-full h-auto min-h-[360px] object-cover"
+                <?php if ($imageLoading === 'eager'): ?>
+                loading="eager"
+                fetchpriority="high"
+                <?php else: ?>
+                loading="lazy"
+                <?php endif; ?>
+            />
+        </picture>
+    </div>
+    <?php endif; ?>
+
+    <div class="card border banner__content w-full md:absolute md:top-1/2 md:right-0 md:-translate-y-1/2 md:w-1/3 md:mr-4 text-left">
+        <?php if ($iconHtml): ?>
+        <div class="mb-4"><?= /* @noEscape */ $iconHtml ?></div>
+        <?php endif; ?>
+        <?php if (!empty($title)): ?>
+        <<?= $titleTag ?> class="<?= $escaper->escapeHtmlAttr($titleClasses) ?>"><?= $escaper->escapeHtml($title) ?></<?= $titleTag ?>>
+        <?php endif; ?>
+        <?php if (!empty($content)): ?>
+        <div class="<?= $escaper->escapeHtmlAttr($contentClasses) ?>"><?= /* @noEscape */ $content ?></div>
+        <?php endif; ?>
+        <?php if ($hasButton): ?>
+        <div class="mt-4">
+            <a
+                href="<?= $escaper->escapeUrl($buttonLink) ?>"
+                target="<?= $escaper->escapeHtmlAttr($buttonTarget) ?>"
+                class="btn btn-primary"
+                <?php if ($buttonTarget === '_blank'): ?>
+                rel="noopener noreferrer"
+                <?php endif; ?>
+            >
+                <?= $escaper->escapeHtml($buttonText) ?>
+            </a>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>

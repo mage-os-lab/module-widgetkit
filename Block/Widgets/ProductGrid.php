@@ -29,7 +29,6 @@ class ProductGrid extends HyvaWidget implements BlockInterface
      * @param ProductWidget $productWidget
      * @param Context $context
      * @param string $_mainTemplate
-     * @param string $_itemsTemplate
      * @param array $data
      */
     public function __construct(
@@ -41,11 +40,19 @@ class ProductGrid extends HyvaWidget implements BlockInterface
         protected AppendSummaryDataFactory $appendSummaryDataFactory,
         protected ProductWidget $productWidget,
         Context $context,
-        protected string $_mainTemplate = 'MageOS_Widgetkit::widget/hyva/product-grid/templates/template.phtml',
-        protected string $_itemsTemplate = 'MageOS_Widgetkit::widget/hyva/product-grid/templates/template-items.phtml',
+        protected string $_mainTemplate = 'MageOS_Widgetkit::widget/hyva/product-grid/template.phtml',
         array $data = []
     ) {
         parent::__construct($conditionsHelper, $context, $data);
+    }
+
+    /**
+     * @param string $template
+     * @return void
+     */
+    public function setMainTemplate(string $template): void
+    {
+        $this->_mainTemplate = $template;
     }
 
     /**
@@ -83,11 +90,10 @@ class ProductGrid extends HyvaWidget implements BlockInterface
     public function renderMainTemplate(): string
     {
         return $this->getLayout()->createBlock(
-            self::class,
+            static::class,
             '',
             [
                 '_mainTemplate' => $this->_mainTemplate,
-                '_itemsTemplate' => $this->_itemsTemplate
             ]
         )->setTemplate(
             $this->_mainTemplate
@@ -95,31 +101,6 @@ class ProductGrid extends HyvaWidget implements BlockInterface
             [
                 'params' => $this->getData(),
                 'items'  => $this->loadProducts(),
-            ]
-        )->toHtml();
-    }
-
-    /**
-     * @param array $itemsSettings
-     * @return string
-     * @throws LocalizedException
-     */
-    public function renderItems(array $itemsSettings): string
-    {
-        return $this->getLayout()->createBlock(
-            self::class,
-            '',
-            [
-                '_mainTemplate' => $this->_mainTemplate,
-                '_itemsTemplate' => $this->_itemsTemplate
-            ]
-        )->setTemplate(
-            $this->_itemsTemplate
-        )->setData(
-            [
-                'params'   => $this->getData('params'),
-                'settings' => $itemsSettings,
-                'items'    => $this->getData('items'),
             ]
         )->toHtml();
     }

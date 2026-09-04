@@ -1,0 +1,23 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\GridStacked\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ *
+ * Title/description are rendered by template-v3.phtml itself (sticky aside column),
+ * so this preview does not print them separately like v1/v2 do.
+ */
+$uniqId = uniqid();
+?>
+<div class="grid-stacked-widget">
+    <?= $this->getChildHtml("previewAssets"); ?>
+
+    <?php $this->setMainTemplate('MageOS_Widgetkit::widget/hyva/grid-stacked/template-v3.phtml'); ?>
+    <div id="widget<?= $uniqId; ?>">
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>

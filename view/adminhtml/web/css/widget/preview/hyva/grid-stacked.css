@@ -1,0 +1,76 @@
+.pagebuilder-stage-wrapper .grid-stacked-widget {
+    background: #F8FAFC;
+}
+
+.pagebuilder-stage-wrapper .grid-stacked-widget .grid-stacked-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+/* Card (same look as the Grid widget) */
+.pagebuilder-stage-wrapper .grid-stacked-widget .card {
+    border-radius: 8px;
+    padding-block: 24px;
+    padding-inline: 24px;
+    border-width: 1px;
+    border-color: #D1D5DC;
+    background-color: #fff;
+    color: #020618;
+    transition-property: color, background-color, border-color, box-shadow, outline-color;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 0.15s;
+    position: relative;
+}
+
+.pagebuilder-stage-wrapper .grid-stacked-widget .card-interactive:is(:hover, :focus-within) {
+    --card-stroke: #0000;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 5.91739px 8.87608px -1.77522px, rgba(0, 0, 0, 0.06) 0px 2.36696px 3.55043px -2.36696px;
+}
+
+/* Buttons (same look as the Grid widget) */
+.pagebuilder-stage-wrapper .grid-stacked-widget .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.375rem;
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border-radius: 0.5rem;
+    border-width: 2px;
+    border-color: #2E5BDA;
+    background-color: #fff;
+    color: #020618;
+    user-select: none;
+    font-weight: 500;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .15s;
+}
+
+.pagebuilder-stage-wrapper .grid-stacked-widget .btn-primary {
+    border-color: #0000;
+    background-color: #1F48C5;
+    color: #fff;
+}
+
+/* Responsive overrides for the admin preview viewport switcher.
+   The Twind script breaks @media rules (regex mismatch), so md: classes
+   never apply via Twind. We replicate them here, same approach as grid.css. */
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:flex-row { flex-direction: row; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:flex-row-reverse { flex-direction: row-reverse; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:w-1\/2 { width: 50%; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:w-1\/3 { width: 33.333333%; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:w-2\/3 { width: 66.666667%; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:grid { display: grid; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:items-center { align-items: center; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:items-start { align-items: flex-start; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:order-1 { order: 1; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:order-2 { order: 2; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:order-3 { order: 3; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:sticky { position: sticky; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:top-\[150px\] { top: 150px; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:self-start { align-self: flex-start; }
+.pagebuilder-stage-wrapper.desktop-viewport .grid-stacked-widget .md\:gap-8 { gap: 2rem; }

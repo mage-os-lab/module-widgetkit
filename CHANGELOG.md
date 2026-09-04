@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.0.0
+### Change of main logic
+- Changing the core logic: switching from Twind.js to compiling CSS previews using Sabberworm in PHP. 
+- Reducing the number of templates assigned to widgets: with Tailwind, it is better to avoid generating CSS classes via PHP and instead rely more heavily on PHTML markup.
+
 ## 1.4.8
 ### Fixed
 - A11y fix for slideshow and slider widgets snap-track

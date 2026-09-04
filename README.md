@@ -11,7 +11,7 @@ As far as this module is full compatible with Hyvä, each preview generates Tail
 
 ## 🚀 Features
 
-1) Full support for Hyvä frontend using twind js library to compile tailwind classes at component rendering on pagebuilder stage and alpine initialization on block_cms and page_cms edit controllers.
+1) Full support for Hyvä frontend: PageBuilder previews render each widget's real, already-compiled theme Tailwind CSS (no runtime CSS compilation) and initialize Alpine.js bindings on the `cms_block`/`cms_page` edit controllers. The preview theme is picked automatically per CMS page/block: it uses the Hyvä theme assigned to the entity's own store view when there is one, otherwise falls back to an admin-configurable default (Stores → Configuration → MageOS Widgetkit → PageBuilder Preview), whose theme list only ever offers Hyvä child themes.
 
 2) Customizable slideshow widget
 
@@ -21,7 +21,21 @@ As far as this module is full compatible with Hyvä, each preview generates Tail
 
 5) Customizable grid widget
 
-5) Customizable product grid widget
+6) Customizable product grid widget
+
+7) Customizable information grid widget – icon, title, description and a CTA button per item
+
+8) Customizable accordion widget – collapsible content sections
+
+9) Customizable marquee widget – infinitely scrolling strip of logos/content
+
+10) Customizable tab widget – switchable content panels
+
+11) Customizable stacked grid widget – full-width stacked rows, in 3 layout variants
+
+12) Customizable countdown widget – counts down to a target date
+
+13) Customizable banner widget – image + title/text/CTA, in 5 layout variants
 
 ## 🔧 Installation
 

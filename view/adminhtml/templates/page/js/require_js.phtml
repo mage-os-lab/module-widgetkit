@@ -7,17 +7,9 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 $escaper = $escaper ?? $block;
 $alpineJsPath = $block->getData('alpinejs_path');
-$twindJsPath = $block->getData('twindjs_path');
-$twindJsSheetPath = $block->getData('twindjs-sheet_path');
 ?>
 <?php if ($alpineJsPath): ?>
    <script src="<?php echo $block->getViewFileUrl($alpineJsPath); ?>"></script>
-<?php endif; ?>
-<?php if ($twindJsPath): ?>
-    <script src="<?php echo $block->getViewFileUrl($twindJsPath); ?>"></script>
-<?php endif; ?>
-<?php if ($twindJsSheetPath): ?>
-    <script src="<?php echo $block->getViewFileUrl($twindJsSheetPath); ?>"></script>
 <?php endif; ?>
 
 <?php

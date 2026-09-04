@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="mageos_widgetkit" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>MageOS Widgetkit</label>
+            <tab>general</tab>
+            <resource>MageOS_Widgetkit::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+            </group>
+            <group id="preview" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>PageBuilder Preview</label>
+                <field id="theme" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Preview Theme</label>
+                    <source_model>MageOS\Widgetkit\Model\Config\Source\PreviewTheme</source_model>
+                    <comment><![CDATA[Selects the frontend theme whose already-compiled Tailwind CSS (<code>web/css/styles.css</code>) is used to style widget previews in the PageBuilder stage. The theme's CSS must be built (<code>npm run build</code> in its <code>web/tailwind</code> directory) for this to take effect; previews reflect whatever was last built, not unsaved template edits. Leave unset for unstyled previews.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

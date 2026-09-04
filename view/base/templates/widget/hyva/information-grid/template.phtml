@@ -1,0 +1,100 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\InformationGrid;
+use Magento\Framework\Escaper;
+
+/**
+ * @var InformationGrid $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items');
+
+$colsMobile  = (int)($params['mageos_information_grid_columns_mobile'] ?? 1);
+$colsTablet  = (int)($params['mageos_information_grid_columns_tablet'] ?? 2);
+$colsDesktop = (int)($params['mageos_information_grid_columns_desktop'] ?? 3);
+$gap         = $params['mageos_information_grid_gap'] ?? '4';
+
+$gridColsClasses = sprintf(
+    'grid-cols-%d md:grid-cols-%d lg:grid-cols-%d',
+    $colsMobile,
+    $colsTablet,
+    $colsDesktop
+);
+$gapClass = $gap !== '0' ? 'gap-' . $gap : '';
+$hasTitle = !empty($params['mageos_information_grid_title']);
+?>
+
+<div
+    class="grid <?= $escaper->escapeHtmlAttr($gridColsClasses) ?> <?= $escaper->escapeHtmlAttr($gapClass) ?>"
+    <?php if ($hasTitle): ?>
+    role="region"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_information_grid_title'])) ?>"
+    <?php endif; ?>
+>
+    <?php foreach ($items as $index => $item): ?>
+        <?php $item['count'] = $index; ?>
+        <div class="information-grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full">
+            <?php
+            $linkTarget = $item['button_link_target'] ?? '_self';
+            $titleTag   = $item['title_tag'] ?? 'h3';
+
+            // Title/content/icon are always centered - this widget is meant for a "feature
+            // grid" layout (icon, heading, blurb, CTA - each stacked and centered), not a
+            // left-aligned media card like Grid's own items.
+            $itemTitleClass = trim('text-center ' . ($params['mageos_information_grid_item_title_classes'] ?? ''));
+            $itemContentClass = trim('text-center ' . ($params['mageos_information_grid_item_content_classes'] ?? ''));
+            $contentWrapperClass = trim($params['mageos_information_grid_item_content_container_classes'] ?? '');
+
+            $iconHtml = $this->renderIcon(
+                $item['icon'] ?? null,
+                !empty($item['icon_width']) ? (int)$item['icon_width'] : null,
+                !empty($item['icon_height']) ? (int)$item['icon_height'] : null
+            );
+
+            $hasContent = $iconHtml !== '' || !empty($item['title']) || !empty($item['content']);
+            ?>
+
+            <div class="block h-full">
+                <div class="flex flex-col h-full">
+
+                    <?php if ($hasContent): ?>
+                    <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+                        <?php if ($iconHtml !== ''): ?>
+                        <div class="flex justify-center my-4">
+                            <?= /* @noEscape */ $iconHtml; ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($item['title'])): ?>
+                        <<?= $titleTag; ?> class="<?= $itemTitleClass; ?>">
+                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
+                        </<?= $titleTag; ?>>
+                        <?php endif; ?>
+                        <?php if (!empty($item['content'])): ?>
+                        <div class="<?= $itemContentClass; ?>">
+                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>
+                        <div class="p-2 flex justify-center">
+                            <a
+                                href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+                                target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+                                class="btn btn-primary"
+                                <?php if ($linkTarget === '_blank'): ?>
+                                rel="noopener noreferrer"
+                                <?php endif; ?>
+                            >
+                                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>

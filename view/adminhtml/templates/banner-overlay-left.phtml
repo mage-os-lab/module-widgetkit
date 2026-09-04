@@ -1,0 +1,20 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\Banner\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ */
+$uniqId = uniqid();
+?>
+<div class="banner-widget">
+    <?= $this->getChildHtml("previewAssets"); ?>
+
+    <?php $this->setMainTemplate('MageOS_Widgetkit::widget/hyva/banner/template-overlay-left.phtml'); ?>
+    <div id="widget<?= $uniqId; ?>">
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>

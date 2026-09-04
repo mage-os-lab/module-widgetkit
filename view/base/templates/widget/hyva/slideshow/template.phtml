@@ -1,0 +1,306 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slideshow;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Slideshow $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items = $this->getData('items');
+$uniqId = uniqid();
+
+// Height is always full viewport height.
+$containerStyle = 'min-height: 100vh;';
+
+// Navigation is always positioned below-center, so the outer container never needs
+// a `relative` positioning context for it.
+$navigation = $params['mageos_slideshow_navigation'];
+$navVisibility = $params['mageos_slideshow_navigation_visibility'] ?? 'show';
+$navigationPositionClass = 'justify-center ' . $this->resolveExpression([
+    'flex flex-row {@mageos_slideshow_navigation_direction: horizontal}',
+    'flex flex-col {@mageos_slideshow_navigation_direction: vertical}',
+], $params);
+
+// Slidenav is always positioned top-left; visibility is admin-configurable.
+$slidenavVisibility = $params['mageos_slideshow_slidenav_visibility'] ?? 'show';
+$slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
+?>
+
+<div
+    x-data="initSlideshow<?= $uniqId; ?>"
+    style="<?= $containerStyle; ?>"
+    x-on:keyup.right="next('button')"
+    x-on:keyup.left="prev('button')"
+>
+    <div
+        class="relative overflow-hidden"
+        tabindex="0"
+    >
+        <div
+            class="snap-track h-screen"
+            style="<?= $containerStyle; ?>"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Image Slider"
+            data-track
+        >
+            <?php $itemCount = 0; ?>
+            <?php foreach ($items as $item): ?>
+                <?php $item['count'] = $itemCount; ?>
+                <div class="slide-container absolute start-0 top-0 h-full w-full object-cover"
+                     x-data="{ index: <?= (int)$item['count'] ?> }"
+                     x-bind:class="{
+                        'transition duration-300 ease-in-out will-change-auto': transition,
+                        'z-1': currentIndex === index,
+                        'hidden': !transition && currentIndex !== index,
+                        'opacity-100': (transition === 'fade' || transition === 'blur-sm')  && currentIndex === index,
+                        'opacity-0 invisible': transition === 'fade' && currentIndex !== index,
+                        'translate-x-0': transition === 'slide' && currentIndex === index,
+                        '-translate-x-full': transition === 'slide' && currentIndex > index,
+                        'translate-x-full': transition === 'slide' && currentIndex < index
+                    }">
+                    <?php // Media
+                    if ($item['image']): ?>
+                        <?php
+                        $image = [
+                            'src' => $item['image'],
+                            'alt' => $item['image_alt'],
+                            'loading' => $item['count'] === 0 ? 'eager' : $params['mageos_slideshow_image_loading'],
+                        ];
+                        $mobileImage = $item['mobile_image'] ?? null;
+                        ?>
+                        <picture
+                            x-data="{ index: <?= (int)$item['count'] ?> }"
+                            class="absolute inset-0 w-full h-full">
+                            <?php if ($mobileImage): ?>
+                            <source
+                                media="(max-width: 768px)"
+                                srcset="<?= htmlspecialchars($mobileImage, ENT_QUOTES, 'UTF-8') ?>"
+                                type="image/jpeg"
+                            />
+                            <?php endif; ?>
+                            <img
+                                src="<?= $image['src']; ?>"
+                                alt="<?= htmlspecialchars($image['alt'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                                class="absolute inset-0 h-full w-full object-cover"
+                                <?php if ($image['loading'] === 'eager'): ?>
+                                    fetchpriority="high"
+                                    loading="eager"
+                                <?php else: ?>
+                                    loading="lazy"
+                                <?php endif; ?>
+                                role="group"
+                                aria-roledescription="slide"
+                                x-bind:aria-label="`Image slide ${index + 1} of ${images.length}`"
+                                x-bind:aria-hidden="currentIndex !== index"
+                            />
+                        </picture>
+                    <?php endif; ?>
+
+                    <?php // Content
+                    if (!empty($item['title']) || !empty($item['content'])): ?>
+                        <?php
+                        $titleClasses = $this->resolveExpression([
+                            'el-title',
+                            '{0} {@mageos_slideshow_overlay_title_classes}' => $params['mageos_slideshow_overlay_title_classes'] ?? ''
+                        ], $params);
+                        $contentClasses = $this->resolveExpression([
+                            '{0} {@mageos_slideshow_overlay_description_classes}' => $params['mageos_slideshow_overlay_description_classes'] ?? ''
+                        ], $params);
+                        $hasLink = !empty($item['button_link']) && !empty($item['button']);
+                        $itemTitle = \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title']);
+                        $itemContent = \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']);
+                        if ($hasLink) {
+                            $itemTitle = $this->stripTags($itemTitle);
+                            $itemContent = $this->stripTags($itemContent);
+                        }
+                        // Default is Yes (card shown) - only an explicit "No" turns it off.
+                        $useCard = ($item['use_card'] ?? 'true') !== 'false';
+                        ?>
+                        <div class="slide-content <?= $useCard ? 'card' : ''; ?> absolute left-1/2 -translate-x-1/2 bottom-8 w-full max-w-[80vw] md:top-1/2 md:bottom-auto md:-translate-y-1/2 md:min-w-lg text-left">
+                            <?php if (!empty($itemTitle)): ?>
+                            <<?= $item['title_tag']; ?> class="<?= $titleClasses; ?>"><?= $itemTitle ?></<?= $item['title_tag']; ?>>
+                            <?php endif; ?>
+
+                            <?php if (!empty($itemContent)): ?>
+                            <div class="<?= $contentClasses; ?>"><?= $itemContent; ?></div>
+                            <?php endif; ?>
+
+                            <?php if ($hasLink): ?>
+                            <div>
+                                <a
+                                    class="btn btn-primary"
+                                    href="<?= $item['button_link']; ?>"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>"
+                                    target="<?= $this->resolveExpression(['_blank {@button_link_target}'], $item); ?>"
+                                >
+                                    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php $itemCount++; endforeach; ?>
+        </div>
+
+        <?php if ($slidenavVisibility !== 'hide'): ?>
+        <div class="<?= $slidenavClass; ?> items-center px-4 gap-2">
+            <button type="button" @click="prev('button')" class="btn btn-secondary p-2 z-10"
+                    x-bind:disabled="currentIndex === 0"
+                    aria-label="<?= __('Previous Slide'); ?>" data-prev="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="m12 19-7-7 7-7M19 12H5"></path>
+                </svg>
+            </button>
+            <button type="button" @click="next('button')" class="btn btn-secondary p-2 z-10"
+                    x-bind:disabled="currentIndex + 1 === images.length"
+                    aria-label="<?= __('Next Slide'); ?>" data-next="">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <?php if ($navVisibility !== 'hide'): ?>
+    <?php if ($navigation === 'thumbnav'): ?>
+    <nav
+        x-cloak
+        x-show="dotsNavigation"
+        aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>"
+        class="flex flex-wrap gap-3 <?= $navigationPositionClass; ?> py-4 px-2"
+    >
+        <?php
+        $thumbnavWidth = (int)$params['mageos_slideshow_navigation_thumbnav_width'] ?? 100;
+        $thumbnavHeight = (int)$params['mageos_slideshow_navigation_thumbnav_height'] ?? 67;
+        $index = 0;
+        foreach ($items as $item):
+            $thumbSrc = $item['navigation_thumb'] ?: $item['image'];
+            ?>
+            <button
+                type="button"
+                style="height: <?= $thumbnavHeight; ?>px; width: <?= $thumbnavWidth; ?>px;"
+                class="overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-1"
+                x-bind:class="{'ring-2': currentIndex === <?= $index ?>}"
+                x-on:click="set(<?= $index ?>, 'button')"
+                x-bind:aria-current="currentIndex === <?= $index ?> ? 'true' : undefined"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Go to slide %1', $index + 1)) ?>"
+            >
+                <img
+                    src="<?= $thumbSrc; ?>"
+                    alt=""
+                    loading="eager"
+                    width="<?= $thumbnavWidth; ?>"
+                    height="<?= $thumbnavHeight; ?>"
+                    class="object-cover"
+                />
+            </button>
+        <?php $index++; endforeach; ?>
+    </nav>
+    <?php else: ?>
+    <nav x-show="dotsNavigation" class="<?= $navigationPositionClass; ?> px-2 snap-pager"
+         aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
+        <?php
+            $index = 0;
+            foreach ($items as $item):
+        ?>
+            <button
+                type="button"
+                x-on:click="set(<?= $index ?>, 'button')"
+                class="snap-marker cursor-pointer"
+                x-bind:aria-current="currentIndex === <?= $index ?> ? 'true' : undefined"
+                aria-label="<?= $escaper->escapeHtml(__('Go to slide %1: %2', $index + 1, \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title']))) ?>"
+                x-cloak
+            ></button>
+        <?php $index++; endforeach; ?>
+    </nav>
+    <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<script>
+    function initSlideshow<?= $uniqId; ?>() {
+        return {
+            images: [
+                <?php foreach ($items as $index => $item): ?>
+                '<?= isset($item['image']) ? $escaper->escapeUrl($item['image']) : ''; ?>',
+                <?php endforeach; ?>
+            ],
+            arrowsNavigation: true,
+            dotsNavigation: true,
+            transition: '<?= $params['mageos_slideshow_transition']; ?>',
+            loop: false,
+            autoplay: <?= (int)$params['mageos_slideshow_autoplay'] ? 'true' : 'false'; ?>,
+            autoplayDuration: <?= isset($params['mageos_slideshow_speed']) ? $params['mageos_slideshow_speed'] * 1000: 0; ?>,
+            currentIndex: 0,
+            autoplayInterval: null,
+            autoplayProgress: 0,
+            direction: 'next',
+            init() {
+                this.startAutoplayInterval('all');
+            },
+            set(index, from) {
+                if (index > -1 && index < this.images.length) {
+                    if (index > this.currentIndex) {
+                        this.currentIndex = index;
+                        if (!this.loop && this.currentIndex === this.images.length - 1) {
+                            this.resetAutoplayInterval('all');
+                        } else {
+                            if (from === 'button') {
+                                this.resetAutoplayInterval('all', true);
+                            } else {
+                                this.resetAutoplayInterval('timer', true);
+                            }
+                        }
+                    } else if (index < this.currentIndex) {
+                        this.currentIndex = index;
+                        if (from === 'button') {
+                            this.resetAutoplayInterval('all', true);
+                        } else {
+                            this.resetAutoplayInterval('timer', true);
+                        }
+                    }
+                }
+            },
+            next(from) {
+                this.direction = 'next';
+                if (!this.loop && this.currentIndex === this.images.length - 1) {
+                    return;
+                }
+                this.set((this.currentIndex + 1) % this.images.length, from);
+            },
+            prev(from) {
+                this.direction = 'prev';
+                if (!this.loop && this.currentIndex === 0) {
+                    return;
+                }
+                this.set((this.currentIndex - 1 + this.images.length) % this.images.length, from);
+            },
+            startAutoplayInterval(mode) {
+                if (this.autoplay && (mode === 'all' || mode === 'interval')) {
+                    this.autoplayInterval = setInterval(() => this.next(), this.autoplayDuration);
+                }
+            },
+            resetAutoplayInterval(mode, restart) {
+                if (this.autoplay && (mode === 'all' || mode === 'interval')) {
+                    clearInterval(this.autoplayInterval);
+                    if (restart && mode === 'interval') {
+                        this.startAutoplayInterval('interval');
+                    }
+                }
+                if (restart && mode === 'all') {
+                    this.startAutoplayInterval('all');
+                }
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initSlideshow<?= $uniqId; ?>', initSlideshow<?= $uniqId; ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

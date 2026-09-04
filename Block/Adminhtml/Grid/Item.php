@@ -72,8 +72,8 @@ class Item extends Rows
             'label' => 'Use card around item',
             'type' => 'select',
             'options' => [
-                'true' => 'Yes',
-                'false' => 'No'
+                'false' => 'No',
+                'true' => 'Yes'
             ],
             'required' => false,
             'preview' => false

@@ -1,0 +1,111 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Tab;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Tab $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items') ?: [];
+$uniqId = uniqid();
+
+$defaultActive = (int)($params['mageos_tab_default_active'] ?? 0);
+if ($defaultActive < 0 || $defaultActive >= count($items)) {
+    $defaultActive = 0;
+}
+$orientation = $params['mageos_tab_orientation'] ?? 'horizontal';
+$isVertical  = $orientation === 'vertical';
+
+$hasTitle = !empty($params['mageos_tab_title']);
+?>
+
+<?php if ($items): ?>
+<div
+    x-data="initTab<?= $uniqId; ?>"
+    class="tabs <?= $isVertical ? 'flex flex-col md:flex-row flex-wrap md:flex-nowrap md:gap-6' : 'flex flex-col' ?>"
+    <?php if ($hasTitle): ?>
+    role="region"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_tab_title'])) ?>"
+    <?php endif; ?>
+>
+    <div
+        role="tablist"
+        x-on:keydown.right.prevent="focusNext()"
+        x-on:keydown.down.prevent="focusNext()"
+        x-on:keydown.left.prevent="focusPrev()"
+        x-on:keydown.up.prevent="focusPrev()"
+        aria-orientation="<?= $isVertical ? 'vertical' : 'horizontal' ?>"
+        class="tab-list <?= $isVertical ? 'flex flex-row overflow-x-auto md:flex-col md:overflow-visible md:shrink-0' : 'flex flex-row flex-wrap' ?>"
+    >
+        <?php foreach ($items as $index => $item): ?>
+            <?php
+            $tabId   = 'mageos-tab-trigger-' . $uniqId . '-' . $index;
+            $panelId = 'mageos-tab-panel-' . $uniqId . '-' . $index;
+            ?>
+            <button
+                type="button"
+                role="tab"
+                id="<?= $escaper->escapeHtmlAttr($tabId) ?>"
+                x-ref="tab-<?= (int)$index ?>"
+                class="tab-trigger px-4 py-2 text-left"
+                x-on:click="setActive(<?= (int)$index ?>)"
+                x-bind:aria-selected="active === <?= (int)$index ?> ? 'true' : 'false'"
+                x-bind:tabindex="active === <?= (int)$index ?> ? '0' : '-1'"
+                x-bind:class="{ 'underline': active === <?= (int)$index ?> }"
+                aria-controls="<?= $escaper->escapeHtmlAttr($panelId) ?>"
+            >
+                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'] ?? '')) ?>
+            </button>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="tab-panels flex-1">
+        <?php foreach ($items as $index => $item): ?>
+            <?php
+            $tabId   = 'mageos-tab-trigger-' . $uniqId . '-' . $index;
+            $panelId = 'mageos-tab-panel-' . $uniqId . '-' . $index;
+            ?>
+            <div
+                id="<?= $escaper->escapeHtmlAttr($panelId) ?>"
+                role="tabpanel"
+                aria-labelledby="<?= $escaper->escapeHtmlAttr($tabId) ?>"
+                x-show="active === <?= (int)$index ?>"
+                class="tab-panel py-4"
+            >
+                <?php if (!empty($item['content'])): ?>
+                <div class="tab-panel__content card"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']) ?></div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<script>
+    function initTab<?= $uniqId; ?>() {
+        return {
+            active: <?= $defaultActive; ?>,
+            total: <?= count($items); ?>,
+            setActive(index) {
+                this.active = index;
+            },
+            focusNext() {
+                const next = (this.active + 1) % this.total;
+                this.setActive(next);
+                this.$refs['tab-' + next].focus();
+            },
+            focusPrev() {
+                const prev = (this.active - 1 + this.total) % this.total;
+                this.setActive(prev);
+                this.$refs['tab-' + prev].focus();
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initTab<?= $uniqId; ?>', initTab<?= $uniqId; ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<?php endif; ?>

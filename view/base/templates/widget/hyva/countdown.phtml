@@ -1,0 +1,120 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Countdown;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Countdown $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$titleType = $this->getData('mageos_countdown_title_type') ?: 'h2';
+$titleCssClasses = $this->getData('mageos_countdown_title_classes');
+$title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_title'));
+$description = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_description'));
+$buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_button_text'));
+$buttonLink = $this->getData('mageos_countdown_button_link');
+$buttonTarget = $this->getData('mageos_countdown_button_target') ?: '_self';
+$finishedContent = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_finished_content'));
+
+$isExpiredAtLoad = $this->isExpired();
+$endTimestampMs = (int)$this->getTimestamp('mageos_countdown_end') * 1000;
+$uniqId = uniqid();
+?>
+<?= $this->getChildHtml("previewAssets"); ?>
+<div class="countdown-widget">
+    <?php if ($title): ?>
+    <<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses) ?>"><?= $escaper->escapeHtml($title) ?></<?= $titleType ?>>
+    <?php endif; ?>
+    <?php if ($description): ?>
+    <div class="countdown-widget__description"><?= /* @noEscape */ $description ?></div>
+    <?php endif; ?>
+
+    <?php if ($isExpiredAtLoad): ?>
+        <?php // Server-rendered directly: no client-side flash of a counter that's already at zero. ?>
+        <div class="countdown-widget__finished">
+            <?= /* @noEscape */ $finishedContent ?>
+        </div>
+    <?php else: ?>
+        <div x-data="initCountdown<?= $uniqId; ?>(<?= $endTimestampMs ?>)" x-init="start()">
+            <div class="countdown-widget__timer flex gap-4" x-show="!finished">
+                <div class="countdown-widget__unit flex flex-col items-center">
+                    <span class="countdown-widget__value text-3xl font-semibold" x-text="days"></span>
+                    <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Days')) ?></span>
+                </div>
+                <div class="countdown-widget__unit flex flex-col items-center">
+                    <span class="countdown-widget__value text-3xl font-semibold" x-text="hours"></span>
+                    <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Hours')) ?></span>
+                </div>
+                <div class="countdown-widget__unit flex flex-col items-center">
+                    <span class="countdown-widget__value text-3xl font-semibold" x-text="minutes"></span>
+                    <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Minutes')) ?></span>
+                </div>
+                <div class="countdown-widget__unit flex flex-col items-center">
+                    <span class="countdown-widget__value text-3xl font-semibold" x-text="seconds"></span>
+                    <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Seconds')) ?></span>
+                </div>
+            </div>
+            <div class="countdown-widget__finished" x-show="finished" x-cloak>
+                <?= /* @noEscape */ $finishedContent ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($buttonText && $buttonLink): ?>
+    <div class="countdown-widget__cta pt-4">
+        <a
+            href="<?= $escaper->escapeUrl($buttonLink) ?>"
+            target="<?= $escaper->escapeHtmlAttr($buttonTarget) ?>"
+            class="btn btn-primary"
+            <?php if ($buttonTarget === '_blank'): ?>
+            rel="noopener noreferrer"
+            <?php endif; ?>
+        >
+            <?= $escaper->escapeHtml($buttonText) ?>
+        </a>
+    </div>
+    <?php endif; ?>
+</div>
+
+<?php if (!$isExpiredAtLoad): ?>
+<script>
+    function initCountdown<?= $uniqId; ?>(endTimestampMs) {
+        return {
+            days: '00',
+            hours: '00',
+            minutes: '00',
+            seconds: '00',
+            finished: false,
+            timer: null,
+            pad(value) {
+                return String(value).padStart(2, '0');
+            },
+            tick() {
+                const remainingMs = endTimestampMs - Date.now();
+                if (remainingMs <= 0) {
+                    this.finished = true;
+                    this.days = this.hours = this.minutes = this.seconds = '00';
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                    }
+                    return;
+                }
+                const totalSeconds = Math.floor(remainingMs / 1000);
+                this.days = this.pad(Math.floor(totalSeconds / 86400));
+                this.hours = this.pad(Math.floor((totalSeconds % 86400) / 3600));
+                this.minutes = this.pad(Math.floor((totalSeconds % 3600) / 60));
+                this.seconds = this.pad(totalSeconds % 60);
+            },
+            start() {
+                this.tick();
+                this.timer = setInterval(() => this.tick(), 1000);
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initCountdown<?= $uniqId; ?>', initCountdown<?= $uniqId; ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<?php endif; ?>

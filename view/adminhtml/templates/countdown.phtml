@@ -1,0 +1,60 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\Countdown\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ *
+ * Static preview only: no <script>, no Alpine (PageBuilder stage rule). Always shows
+ * an illustrative, non-ticking mock of the running state so the admin can see the
+ * configured title/description/button styling regardless of the actual dates.
+ */
+$titleType = $block->getData('mageos_countdown_title_type') ?: 'h2';
+$titleCssClasses = $block->getData('mageos_countdown_title_classes');
+$title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_title'));
+$description = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_description'));
+$buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_button_text'));
+$buttonLink = $block->getData('mageos_countdown_button_link');
+?>
+<?= $block->getChildHtml("previewAssets"); ?>
+<div class="countdown-widget countdown-widget--preview">
+    <?php if ($title): ?>
+        <<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses) ?>"><?= $escaper->escapeHtml($title) ?></<?= $titleType ?>>
+    <?php endif; ?>
+    <?php if ($description): ?>
+        <div class="countdown-widget__description"><?= /* @noEscape */ $description ?></div>
+    <?php endif; ?>
+
+    <div class="countdown-widget__timer flex gap-4">
+        <div class="countdown-widget__unit flex flex-col items-center">
+            <span class="countdown-widget__value text-3xl font-semibold">02</span>
+            <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Days')) ?></span>
+        </div>
+        <div class="countdown-widget__unit flex flex-col items-center">
+            <span class="countdown-widget__value text-3xl font-semibold">14</span>
+            <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Hours')) ?></span>
+        </div>
+        <div class="countdown-widget__unit flex flex-col items-center">
+            <span class="countdown-widget__value text-3xl font-semibold">33</span>
+            <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Minutes')) ?></span>
+        </div>
+        <div class="countdown-widget__unit flex flex-col items-center">
+            <span class="countdown-widget__value text-3xl font-semibold">07</span>
+            <span class="countdown-widget__label text-sm"><?= $escaper->escapeHtml(__('Seconds')) ?></span>
+        </div>
+    </div>
+    <p class="countdown-widget__preview-note" style="font-style:italic;opacity:0.6;margin-top:8px;">
+        <?= $escaper->escapeHtml(__('Illustrative preview — the countdown ticks live on the storefront.')) ?>
+    </p>
+
+    <?php if ($buttonText && $buttonLink): ?>
+    <div class="countdown-widget__cta pt-4">
+        <a href="#" class="btn btn-primary">
+            <?= $escaper->escapeHtml($buttonText) ?>
+        </a>
+    </div>
+    <?php endif; ?>
+</div>

@@ -1,0 +1,47 @@
+.pagebuilder-stage-wrapper .tab-widget {
+    background: #F8FAFC;
+}
+
+.pagebuilder-stage-wrapper .tab-widget .tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.pagebuilder-stage-wrapper .tab-widget .tab-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-bottom-width: 1px;
+    border-color: #E2E8F0;
+}
+
+.pagebuilder-stage-wrapper .tab-widget .tab-trigger {
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+}
+
+.pagebuilder-stage-wrapper .tab-widget .tab-trigger--active {
+    border-bottom-color: currentColor;
+    font-weight: 600;
+}
+
+.pagebuilder-stage-wrapper .tab-widget .tab-panel {
+    padding-block: 1rem;
+}
+
+/* Responsive overrides for the admin preview viewport switcher.
+   The Twind script breaks @media rules (regex mismatch), so md: classes
+   never apply via Twind. We replicate the vertical-orientation layout here,
+   same approach as grid.css's lg:grid-cols-* overrides. */
+.pagebuilder-stage-wrapper.desktop-viewport .tab-widget .md\:flex-row { flex-direction: row; }
+.pagebuilder-stage-wrapper.desktop-viewport .tab-widget .md\:flex-col { flex-direction: column; }
+.pagebuilder-stage-wrapper.desktop-viewport .tab-widget .md\:gap-6 { gap: 1.5rem; }
+.pagebuilder-stage-wrapper.desktop-viewport .tab-widget .md\:overflow-visible { overflow: visible; }
+.pagebuilder-stage-wrapper.desktop-viewport .tab-widget .md\:shrink-0 { flex-shrink: 0; }

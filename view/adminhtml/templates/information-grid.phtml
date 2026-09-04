@@ -1,0 +1,29 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\InformationGrid\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ */
+$uniqId = uniqid();
+$titleCssClasses = $this->getData('mageos_information_grid_title_classes');
+$descriptionCssClasses = $this->getData('mageos_information_grid_description_classes');
+?>
+<div class="information-grid-widget">
+    <?= $this->getChildHtml("previewAssets"); ?>
+    <?php if (!empty($this->getData('mageos_information_grid_title'))): ?>
+        <<?= $this->getData('mageos_information_grid_title_type'); ?> class="<?= $titleCssClasses; ?>">
+            <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_information_grid_title')); ?>
+        </<?= $this->getData('mageos_information_grid_title_type'); ?>>
+    <?php endif; ?>
+    <?php if (!empty($this->getData('mageos_information_grid_description'))): ?>
+        <div class="<?= $descriptionCssClasses; ?>"><?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_information_grid_description')); ?></div>
+    <?php endif; ?>
+
+    <div id="widget<?= $uniqId; ?>">
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>

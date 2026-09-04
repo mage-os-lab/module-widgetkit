@@ -1,0 +1,18 @@
+<?php
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+use Magento\Framework\Escaper;
+
+/**
+ * @var ProductSlider $this
+ * @var Escaper $escaper
+ *
+ * "Full Aside" template variant. Unlike the default/full templates, the title and
+ * description are NOT rendered here: template-full-aside.phtml renders them itself, as the
+ * first slide in the carousel track - it slides away together with the products as you page
+ * forward, rather than being printed as a plain heading above the carousel. Same idea as
+ * Slider's own slider-full-aside.phtml, just with products instead of generic slide items.
+ */
+$this->setMainTemplate('MageOS_Widgetkit::widget/hyva/product-slider/template-full-aside.phtml');
+?>
+<?= $this->getChildHtml("previewAssets"); ?>
+<?= $this->renderMainTemplate(); ?>

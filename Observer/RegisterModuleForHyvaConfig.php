@@ -17,12 +17,12 @@ class RegisterModuleForHyvaConfig implements ObserverInterface
     ) {}
 
     /**
-     * @param Observer $event
+     * @param Observer $observer
      * @return void
      */
-    public function execute(Observer $event): void
+    public function execute(Observer $observer): void
     {
-        $config = $event->getData('config');
+        $config = $observer->getData('config');
         $extensions = $config->hasData('extensions') ? $config->getData('extensions') : [];
 
         $moduleName = implode('_', array_slice(explode('\\', __CLASS__), 0, 2));

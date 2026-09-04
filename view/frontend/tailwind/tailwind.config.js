@@ -24,6 +24,9 @@ module.exports = {
       ...[1, 2, 3, 4, 5, 6].map((n) => `lg:col-end-${n}`),
       // Grid gap classes
       ...[0, 1, 2, 4, 6, 8].map((n) => `gap-${n}`),
+      // Grid Stacked v2 column-order classes
+      ...[1, 2, 3].map((n) => `order-${n}`),
+      ...[1, 2, 3].map((n) => `md:order-${n}`),
     ],
   },
   plugins: [

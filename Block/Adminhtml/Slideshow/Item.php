@@ -86,6 +86,17 @@ class Item extends Rows
             'required' => false,
             'preview' => false
         ],
+        'use_card' => [
+            'label' => 'Use card around overlay',
+            'type' => 'select',
+            'description' => 'Default is Yes.',
+            'options' => [
+                'true' => 'Yes',
+                'false' => 'No'
+            ],
+            'required' => false,
+            'preview' => false
+        ],
     ];
 
 }

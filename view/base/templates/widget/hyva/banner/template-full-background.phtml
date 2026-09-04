@@ -1,0 +1,82 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Banner;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Banner $this
+ * @var Escaper $escaper
+ *
+ * Full background image, card panel centered at middle-x/middle-y (same centering trick
+ * used by the Slideshow overlay: absolute + top-1/2/left-1/2 + -translate-x/y-1/2, which
+ * unlike "inset-0 + margin:auto" correctly shrink-wraps to content size regardless of
+ * whether width is otherwise constrained).
+ */
+
+$params = $this->getData('params');
+
+$titleTag = $params['mageos_banner_title_type'] ?? 'h2';
+$title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_title'] ?? '');
+$titleClasses = $params['mageos_banner_title_classes'] ?? '';
+$content = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_content'] ?? '');
+$contentClasses = $params['mageos_banner_content_classes'] ?? '';
+$buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_button_text'] ?? '');
+$buttonLink = $params['mageos_banner_button_link'] ?? '';
+$buttonTarget = $params['mageos_banner_button_target'] ?? '_self';
+$hasButton = !empty($buttonText) && !empty($buttonLink);
+$icon = $params['mageos_banner_icon'] ?? '';
+$iconWidth = !empty($params['mageos_banner_icon_width']) ? (int)$params['mageos_banner_icon_width'] : null;
+$iconHeight = !empty($params['mageos_banner_icon_height']) ? (int)$params['mageos_banner_icon_height'] : null;
+$iconHtml = $this->renderIcon($icon, $iconWidth, $iconHeight);
+$image = $params['mageos_banner_image'] ?? '';
+$mobileImage = $params['mageos_banner_mobile_image'] ?? '';
+$imageAlt = $params['mageos_banner_image_alt'] ?? '';
+$imageLoading = $params['mageos_banner_image_loading'] ?? 'lazy';
+?>
+
+<div class="banner banner--full-background relative w-full">
+    <?php if (!empty($image)): ?>
+        <picture class="block w-full">
+            <?php if ($mobileImage): ?>
+            <source media="(max-width: 768px)" srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>" type="image/jpeg" />
+            <?php endif; ?>
+            <img
+                src="<?= $escaper->escapeUrl($image) ?>"
+                alt="<?= $escaper->escapeHtmlAttr($imageAlt) ?>"
+                class="block w-full h-auto min-h-[420px] object-cover"
+                <?php if ($imageLoading === 'eager'): ?>
+                loading="eager"
+                fetchpriority="high"
+                <?php else: ?>
+                loading="lazy"
+                <?php endif; ?>
+            />
+        </picture>
+    <?php endif; ?>
+
+    <div class="card border banner__content w-full md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-auto md:max-w-lg md:mx-4 text-center">
+        <?php if ($iconHtml): ?>
+        <div class="mb-4 flex justify-center"><?= /* @noEscape */ $iconHtml ?></div>
+        <?php endif; ?>
+        <?php if (!empty($title)): ?>
+        <<?= $titleTag ?> class="<?= $escaper->escapeHtmlAttr($titleClasses) ?>"><?= $escaper->escapeHtml($title) ?></<?= $titleTag ?>>
+        <?php endif; ?>
+        <?php if (!empty($content)): ?>
+        <div class="<?= $escaper->escapeHtmlAttr($contentClasses) ?>"><?= /* @noEscape */ $content ?></div>
+        <?php endif; ?>
+        <?php if ($hasButton): ?>
+        <div class="mt-4">
+            <a
+                href="<?= $escaper->escapeUrl($buttonLink) ?>"
+                target="<?= $escaper->escapeHtmlAttr($buttonTarget) ?>"
+                class="btn btn-primary"
+                <?php if ($buttonTarget === '_blank'): ?>
+                rel="noopener noreferrer"
+                <?php endif; ?>
+            >
+                <?= $escaper->escapeHtml($buttonText) ?>
+            </a>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>

@@ -70,32 +70,6 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_slideshow_height" sort_order="31" visible="true" xsi:type="select">
-                <label>Height</label>
-                <description>The slideshow always takes up full width, and the height will adapt automatically based on the defined ratio. Alternatively, the height can adapt to the height of the viewport.</description>
-                <options>
-                    <option name="auto" value="auto" selected="true">
-                        <label translate="true">Auto</label>
-                    </option>
-                    <option name="viewport" value="viewport">
-                        <label translate="true">Viewport</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slideshow_ratio" sort_order="32" required="true" visible="true" xsi:type="text">
-                <label>Ratio</label>
-                <description>Set the slideshow ratio. It's recommended to use the same ratio as the image or video file. Simply use its width and height, e.g. 1600/1000 (Ignored when 'Viewport' is specified as slideshow height).</description>
-                <value>16/10</value>
-            </parameter>
-            <parameter name="mageos_slideshow_min_height" sort_order="33" visible="true" xsi:type="text" required="true">
-                <label>Min Height</label>
-                <description>Use an optional minimum height to prevent the slideshow from becoming smaller than its content on small devices (specify integer value for height in pixels).</description>
-                <value>100</value>
-            </parameter>
-            <parameter name="mageos_slideshow_max_height" sort_order="34" visible="true" xsi:type="text">
-                <label>Max Height</label>
-                <description>Set the maximum height (specify integer value for height in pixels, Ignored when 'Viewport' is specified as slideshow height).</description>
-            </parameter>
             <parameter name="mageos_slideshow_transition" sort_order="35" visible="true" xsi:type="select">
                 <label>Transition</label>
                 <description>Select the transition between two slides.</description>
@@ -127,17 +101,6 @@
                 <description>Select the velocity seconds for autoplay interval.</description>
                 <value>3</value>
             </parameter>
-            <parameter name="mageos_slideshow_loop" sort_order="38" visible="true" xsi:type="select">
-                <label>Loop</label>
-                <options>
-                    <option name="0" value="0" selected="true">
-                        <label translate="true">No</label>
-                    </option>
-                    <option name="1" value="1">
-                        <label translate="true">Yes</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slideshow_navigation_section_title" xsi:type="block" required="false" visible="true" sort_order="50">
                 <description>
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Navigation</h3>]]></description>
@@ -165,45 +128,6 @@
                 <description>Specify Thumbnav images height in pixels.</description>
                 <value>67</value>
             </parameter>
-            <parameter name="mageos_slideshow_navigation_position" sort_order="54" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set the position of the navigation.</description>
-                <options>
-                    <option name="top-left" value="top-left" selected="true">
-                        <label translate="true">Top left</label>
-                    </option>
-                    <option name="top-right" value="top-right">
-                        <label translate="true">Top right</label>
-                    </option>
-                    <option name="top-center" value="top-center">
-                        <label translate="true">Top center</label>
-                    </option>
-                    <option name="center-left" value="center-left">
-                        <label translate="true">Center left</label>
-                    </option>
-                    <option name="center-right" value="center-right">
-                        <label translate="true">Center right</label>
-                    </option>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom left</label>
-                    </option>
-                    <option name="bottom-center" value="bottom-center">
-                        <label translate="true">Bottom center</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom right</label>
-                    </option>
-                    <option name="below-left" value="below-left">
-                        <label translate="true">Below left</label>
-                    </option>
-                    <option name="below-center" value="below-center">
-                        <label translate="true">Below center</label>
-                    </option>
-                    <option name="below-right" value="below-right">
-                        <label translate="true">Below right</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slideshow_navigation_direction" sort_order="55" visible="true" xsi:type="select">
                 <label>Direction</label>
                 <description>Set the direction of the navigation.</description>
@@ -216,105 +140,27 @@
                     </option>
                 </options>
             </parameter>
-            <parameter name="mageos_slideshow_navigation_display" sort_order="56" visible="true" xsi:type="select">
-                <label>Breaking point</label>
-                <description>Display the navigation only on this device width and larger.</description>
+            <parameter name="mageos_slideshow_navigation_visibility" sort_order="56" visible="true" xsi:type="select">
+                <label>Dotnav visibility</label>
+                <description>By default the dots/thumbnav navigation is visible.</description>
                 <options>
-                    <option name="always" value="never">
-                        <label translate="true">Never</label>
+                    <option name="show" value="show" selected="true">
+                        <label translate="true">Show</label>
                     </option>
-                    <option name="always" value="always" selected="true">
-                        <label translate="true">Always</label>
-                    </option>
-                    <option name="small" value="s">
-                        <label translate="true">Small (Phone in Landscape)</label>
-                    </option>
-                    <option name="medium" value="m">
-                        <label translate="true">Medium (Tablet in Landscape)</label>
-                    </option>
-                    <option name="large" value="l">
-                        <label translate="true">Large (Desktop)</label>
-                    </option>
-                    <option name="x-large" value="xl">
-                        <label translate="true">X-Large (Big screens)</label>
+                    <option name="hide" value="hide">
+                        <label translate="true">Hide</label>
                     </option>
                 </options>
             </parameter>
-
             <parameter name="mageos_slideshow_overlay_section_title" xsi:type="block" required="false" visible="true" sort_order="70">
                 <description>
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Overlay</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_slideshow_overlay_width" sort_order="71" visible="true" xsi:type="select">
-                <label>Container Width</label>
-                <description>Set the maximum content width. Note: The section may already have a maximum width, which you cannot exceed.</description>
-                <options>
-                    <option name="small" value="small">
-                        <label translate="true">Small</label>
-                    </option>
-                    <option name="medium" value="medium">
-                        <label translate="true">Medium</label>
-                    </option>
-                    <option name="large" value="large">
-                        <label translate="true">Large</label>
-                    </option>
-                    <option name="expand" value="expand" selected="true">
-                        <label translate="true">Expand</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slideshow_overlay_position" sort_order="72" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Select the content position.</description>
-                <options>
-                    <option name="top-left" value="top-left">
-                        <label translate="true">Top left</label>
-                    </option>
-                    <option name="top-right" value="top-right">
-                        <label translate="true">Top right</label>
-                    </option>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom left</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom right</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slideshow_overlay_text_alignment" sort_order="73" visible="true" xsi:type="select">
-                <label>Text alignment</label>
-                <description>Select text alignment for the overlay content.</description>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slideshow_overlay_link_type" sort_order="74" visible="true" xsi:type="select">
-                <label>Link Type</label>
-                <description>Select link type for overlay button.</description>
-                <options>
-                    <option name="button-primary" value="button-primary" selected="true">
-                        <label translate="true">Button primary</label>
-                    </option>
-                    <option name="button-secondary" value="button-secondary">
-                        <label translate="true">Button secondary</label>
-                    </option>
-                    <option name="link" value="link">
-                        <label translate="true">Link</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slideshow_overlay_title_classes" sort_order="75" visible="true" xsi:type="text">
                 <label>Title CSS classes</label>
                 <description>Additional CSS classes for item title.</description>
+                <value>text-2xl</value>
             </parameter>
             <parameter name="mageos_slideshow_overlay_description_classes" sort_order="76" visible="true" xsi:type="text">
                 <label>Description CSS classes</label>
@@ -328,46 +174,13 @@
             </parameter>
             <parameter name="mageos_slideshow_slidenav_visibility" sort_order="91" visible="true" xsi:type="select">
                 <label>Visibility</label>
-                <description>By default slidenav is visible.</description>
+                <description>By default slidenav (prev/next buttons) is visible.</description>
                 <options>
                     <option name="show" value="show" selected="true">
                         <label translate="true">Show</label>
                     </option>
                     <option name="hide" value="hide">
                         <label translate="true">Hide</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slideshow_slidenav_position" sort_order="92" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set slidenav position (used if slidenav is visible only).</description>
-                <options>
-                    <option name="default" value="default" selected="true">
-                        <label translate="true">Default</label>
-                    </option>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom Left</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom Right</label>
-                    </option>
-                    <option name="top-left" value="top-left">
-                        <label translate="true">Top Left</label>
-                    </option>
-                    <option name="top-right" value="top-right">
-                        <label translate="true">Top Right</label>
-                    </option>
-                    <option name="above-left" value="above-left">
-                        <label translate="true">Above Left</label>
-                    </option>
-                    <option name="above-right" value="above-right">
-                        <label translate="true">Above Right</label>
-                    </option>
-                    <option name="below-left" value="below-left">
-                        <label translate="true">Below Left</label>
-                    </option>
-                    <option name="below-right" value="below-right">
-                        <label translate="true">Below Right</label>
                     </option>
                 </options>
             </parameter>
@@ -394,7 +207,6 @@
             <previewTemplate name="widget/hyva/slideshow.phtml" xsi:type="string">MageOS_Widgetkit::slideshow.phtml</previewTemplate>
         </previewTemplates>
         <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Slideshow\Preview</previewBlock>
-        <previewCss>MageOS_Widgetkit::css/widget/preview/hyva/slideshow.css</previewCss>
     </widget>
 
     <!-- slider component -->
@@ -407,6 +219,12 @@
                 <options>
                     <option name="default" value="widget/hyva/slider.phtml" selected="true">
                         <label translate="true">MageOS Hyvä Slider Template</label>
+                    </option>
+                    <option name="full" value="widget/hyva/slider-full.phtml">
+                        <label translate="true">MageOS Hyvä Slider Full Template</label>
+                    </option>
+                    <option name="full-aside" value="widget/hyva/slider-full-aside.phtml">
+                        <label translate="true">Slider Full Aside (panel as first slide)</label>
                     </option>
                 </options>
             </parameter>
@@ -464,17 +282,6 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_slider_loop" sort_order="31" visible="true" xsi:type="select">
-                <label>Loop</label>
-                <options>
-                    <option name="0" value="0" selected="true">
-                        <label translate="true">No</label>
-                    </option>
-                    <option name="1" value="1">
-                        <label translate="true">Yes</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slider_columns" sort_order="32" visible="true" xsi:type="select">
                 <label>Visible columns</label>
                 <description>Maximum number of items visible at once.</description>
@@ -505,64 +312,13 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_slider_item_title_alignment" sort_order="41" visible="true" xsi:type="select">
-                <label>Title alignment</label>
-                <description>Set the text-alignment for the item title</description>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slider_item_title_classes" sort_order="42" visible="true" xsi:type="text">
                 <label>Title additional CSS classes</label>
                 <description>Set custom CSS classes for title section</description>
             </parameter>
-            <parameter name="mageos_slider_item_content_alignment" sort_order="43" visible="true" xsi:type="select">
-                <label>Content alignment</label>
-                <description>Set the text-alignment for the item content</description>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slider_item_content_classes" sort_order="44" visible="true" xsi:type="text">
                 <label>Content additional CSS classes</label>
                 <description>Set custom CSS classes for content section</description>
-            </parameter>
-            <parameter name="mageos_slider_item_content_position" sort_order="45" visible="true" xsi:type="select">
-                <label>Content position</label>
-                <description>Set where the content (title and text) is placed relative to the image</description>
-                <options>
-                    <option name="below" value="below" selected="true">
-                        <label translate="true">Below</label>
-                    </option>
-                    <option name="left" value="left">
-                        <label translate="true">Left aside</label>
-                    </option>
-                    <option name="top" value="top">
-                        <label translate="true">On top</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right aside</label>
-                    </option>
-                    <option name="overlay" value="overlay">
-                        <label translate="true">Overlay</label>
-                    </option>
-                </options>
             </parameter>
             <parameter name="mageos_slider_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
                 <label>Content container additional CSS classes</label>
@@ -574,57 +330,9 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Navigation</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_slider_navigation_position" sort_order="51" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set the position of the navigation.</description>
-                <options>
-                    <option name="top-left" value="top-left" selected="true">
-                        <label translate="true">Top left</label>
-                    </option>
-                    <option name="top-right" value="top-right">
-                        <label translate="true">Top right</label>
-                    </option>
-                    <option name="top-center" value="top-center">
-                        <label translate="true">Top center</label>
-                    </option>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom left</label>
-                    </option>
-                    <option name="bottom-center" value="bottom-center">
-                        <label translate="true">Bottom center</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom right</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slider_navigation_display" sort_order="52" visible="true" xsi:type="select">
-                <label>Breaking point</label>
-                <description>Display the navigation only on this device width and larger.</description>
-                <options>
-                    <option name="always" value="never">
-                        <label translate="true">Never</label>
-                    </option>
-                    <option name="always" value="always" selected="true">
-                        <label translate="true">Always</label>
-                    </option>
-                    <option name="small" value="s">
-                        <label translate="true">Small (Phone in Landscape)</label>
-                    </option>
-                    <option name="medium" value="m">
-                        <label translate="true">Medium (Tablet in Landscape)</label>
-                    </option>
-                    <option name="large" value="l">
-                        <label translate="true">Large (Desktop)</label>
-                    </option>
-                    <option name="x-large" value="xl">
-                        <label translate="true">X-Large (Big screens)</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_slider_navigation_visibility" sort_order="53" visible="true" xsi:type="select">
-                <label>Visibility</label>
-                <description>By default navigation is visible.</description>
+                <label>Dotnav visibility</label>
+                <description>By default the dots navigation is visible.</description>
                 <options>
                     <option name="show" value="show" selected="true">
                         <label translate="true">Show</label>
@@ -641,38 +349,14 @@
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
             <parameter name="mageos_slider_slidenav_visibility" sort_order="91" visible="true" xsi:type="select">
-                <label>Visibility</label>
-                <description>By default slidenav is visible.</description>
+                <label>Slidenav visibility</label>
+                <description>By default slidenav (prev/next buttons) is visible.</description>
                 <options>
                     <option name="show" value="show" selected="true">
                         <label translate="true">Show</label>
                     </option>
                     <option name="hide" value="hide">
                         <label translate="true">Hide</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_slider_slidenav_position" sort_order="92" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set slidenav position (used if slidenav is visible only).</description>
-                <options>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom Left</label>
-                    </option>
-                    <option name="bottom-center" value="bottom-center">
-                        <label translate="true">Bottom Center</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom Right</label>
-                    </option>
-                    <option name="top-left" value="top-left">
-                        <label translate="true">Top Left</label>
-                    </option>
-                    <option name="top-center" value="top-center">
-                        <label translate="true">Top Center</label>
-                    </option>
-                    <option name="top-right" value="top-right" selected="true">
-                        <label translate="true">Top Right</label>
                     </option>
                 </options>
             </parameter>
@@ -697,9 +381,10 @@
         </parameters>
         <previewTemplates>
             <previewTemplate name="widget/hyva/slider.phtml" xsi:type="string">MageOS_Widgetkit::slider.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/slider-full.phtml" xsi:type="string">MageOS_Widgetkit::slider-full.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/slider-full-aside.phtml" xsi:type="string">MageOS_Widgetkit::slider-full-aside.phtml</previewTemplate>
         </previewTemplates>
         <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Slider\Preview</previewBlock>
-        <previewCss>MageOS_Widgetkit::css/widget/preview/hyva/slider.css</previewCss>
     </widget>
 
     <!-- product slider component -->
@@ -713,9 +398,14 @@
                     <option name="default" value="widget/hyva/product-slider.phtml" selected="true">
                         <label translate="true">MageOS Hyvä Product Slider Template</label>
                     </option>
+                    <option name="full" value="widget/hyva/product-slider-full.phtml">
+                        <label translate="true">MageOS Hyvä Product Slider Full Template</label>
+                    </option>
+                    <option name="full-aside" value="widget/hyva/product-slider-full-aside.phtml">
+                        <label translate="true">Slider Full Aside (panel as first slide)</label>
+                    </option>
                 </options>
             </parameter>
-
             <parameter name="mageos_product_slider_title" sort_order="10" visible="true" xsi:type="text">
                 <label>Title</label>
                 <description>This field is visible on frontend.</description>
@@ -769,17 +459,6 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_product_slider_loop" sort_order="31" visible="true" xsi:type="select">
-                <label>Loop</label>
-                <options>
-                    <option name="0" value="0" selected="true">
-                        <label translate="true">No</label>
-                    </option>
-                    <option name="1" value="1">
-                        <label translate="true">Yes</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_product_slider_columns" sort_order="32" visible="true" xsi:type="select">
                 <label>Visible columns</label>
                 <description>Maximum number of product cards visible at once on desktop.</description>
@@ -810,62 +489,13 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content Settings</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_product_slider_item_title_alignment" sort_order="41" visible="true" xsi:type="select">
-                <label>Item title alignment</label>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_product_slider_item_title_classes" sort_order="42" visible="true" xsi:type="text">
                 <label>Title additional CSS classes</label>
                 <description>Set custom CSS classes for the item title</description>
             </parameter>
-            <parameter name="mageos_product_slider_item_content_alignment" sort_order="43" visible="true" xsi:type="select">
-                <label>Content alignment</label>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_product_slider_item_content_classes" sort_order="44" visible="true" xsi:type="text">
                 <label>Content additional CSS classes</label>
                 <description>Set custom CSS classes for the item content</description>
-            </parameter>
-            <parameter name="mageos_product_slider_item_content_position" sort_order="45" visible="true" xsi:type="select">
-                <label>Content position</label>
-                <description>Set where the content (title and text) is placed relative to the product image</description>
-                <options>
-                    <option name="below" value="below" selected="true">
-                        <label translate="true">Below</label>
-                    </option>
-                    <option name="left" value="left">
-                        <label translate="true">Left aside</label>
-                    </option>
-                    <option name="top" value="top">
-                        <label translate="true">On top</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right aside</label>
-                    </option>
-                    <option name="overlay" value="overlay">
-                        <label translate="true">Overlay</label>
-                    </option>
-                </options>
             </parameter>
             <parameter name="mageos_product_slider_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
                 <label>Content container additional CSS classes</label>
@@ -877,56 +507,9 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Navigation</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_product_slider_navigation_position" sort_order="51" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set the position of the navigation dots.</description>
-                <options>
-                    <option name="top-left" value="top-left" selected="true">
-                        <label translate="true">Top left</label>
-                    </option>
-                    <option name="top-right" value="top-right">
-                        <label translate="true">Top right</label>
-                    </option>
-                    <option name="top-center" value="top-center">
-                        <label translate="true">Top center</label>
-                    </option>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom left</label>
-                    </option>
-                    <option name="bottom-center" value="bottom-center">
-                        <label translate="true">Bottom center</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom right</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_product_slider_navigation_display" sort_order="52" visible="true" xsi:type="select">
-                <label>Breaking point</label>
-                <description>Display the navigation only on this device width and larger.</description>
-                <options>
-                    <option name="never" value="never">
-                        <label translate="true">Never</label>
-                    </option>
-                    <option name="always" value="always" selected="true">
-                        <label translate="true">Always</label>
-                    </option>
-                    <option name="small" value="s">
-                        <label translate="true">Small (Phone in Landscape)</label>
-                    </option>
-                    <option name="medium" value="m">
-                        <label translate="true">Medium (Tablet in Landscape)</label>
-                    </option>
-                    <option name="large" value="l">
-                        <label translate="true">Large (Desktop)</label>
-                    </option>
-                    <option name="x-large" value="xl">
-                        <label translate="true">X-Large (Big screens)</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_product_slider_navigation_visibility" sort_order="53" visible="true" xsi:type="select">
-                <label>Visibility</label>
+                <label>Dotnav visibility</label>
+                <description>By default the dots navigation is visible.</description>
                 <options>
                     <option name="show" value="show" selected="true">
                         <label translate="true">Show</label>
@@ -943,37 +526,14 @@
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
             <parameter name="mageos_product_slider_slidenav_visibility" sort_order="91" visible="true" xsi:type="select">
-                <label>Visibility</label>
+                <label>Slidenav visibility</label>
+                <description>By default slidenav (prev/next buttons) is visible.</description>
                 <options>
                     <option name="show" value="show" selected="true">
                         <label translate="true">Show</label>
                     </option>
                     <option name="hide" value="hide">
                         <label translate="true">Hide</label>
-                    </option>
-                </options>
-            </parameter>
-            <parameter name="mageos_product_slider_slidenav_position" sort_order="92" visible="true" xsi:type="select">
-                <label>Position</label>
-                <description>Set slidenav position (used if slidenav is visible only).</description>
-                <options>
-                    <option name="bottom-left" value="bottom-left">
-                        <label translate="true">Bottom Left</label>
-                    </option>
-                    <option name="bottom-center" value="bottom-center">
-                        <label translate="true">Bottom Center</label>
-                    </option>
-                    <option name="bottom-right" value="bottom-right">
-                        <label translate="true">Bottom Right</label>
-                    </option>
-                    <option name="top-left" value="top-left">
-                        <label translate="true">Top Left</label>
-                    </option>
-                    <option name="top-center" value="top-center">
-                        <label translate="true">Top Center</label>
-                    </option>
-                    <option name="top-right" value="top-right" selected="true">
-                        <label translate="true">Top Right</label>
                     </option>
                 </options>
             </parameter>
@@ -998,9 +558,10 @@
         </parameters>
         <previewTemplates>
             <previewTemplate name="widget/hyva/product-slider.phtml" xsi:type="string">MageOS_Widgetkit::product-slider.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/product-slider-full.phtml" xsi:type="string">MageOS_Widgetkit::product-slider-full.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/product-slider-full-aside.phtml" xsi:type="string">MageOS_Widgetkit::product-slider-full-aside.phtml</previewTemplate>
         </previewTemplates>
         <previewBlock>MageOS\Widgetkit\Block\Adminhtml\ProductSlider\Preview</previewBlock>
-        <previewCss>MageOS_Widgetkit::css/widget/preview/hyva/product-slider.css</previewCss>
     </widget>
 
     <!-- grid component -->
@@ -1165,64 +726,13 @@
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content Settings</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
             </parameter>
-            <parameter name="mageos_grid_item_title_alignment" sort_order="41" visible="true" xsi:type="select">
-                <label>Title alignment</label>
-                <description>Set the text-alignment for the item title</description>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_grid_item_title_classes" sort_order="42" visible="true" xsi:type="text">
                 <label>Title additional CSS classes</label>
                 <description>Set custom CSS classes for title section</description>
             </parameter>
-            <parameter name="mageos_grid_item_content_alignment" sort_order="43" visible="true" xsi:type="select">
-                <label>Content alignment</label>
-                <description>Set the text-alignment for the item content</description>
-                <options>
-                    <option name="left" value="left" selected="true">
-                        <label translate="true">Left</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right</label>
-                    </option>
-                    <option name="center" value="center">
-                        <label translate="true">Center</label>
-                    </option>
-                </options>
-            </parameter>
             <parameter name="mageos_grid_item_content_classes" sort_order="44" visible="true" xsi:type="text">
                 <label>Content additional CSS classes</label>
                 <description>Set custom CSS classes for content section</description>
-            </parameter>
-            <parameter name="mageos_grid_item_content_position" sort_order="45" visible="true" xsi:type="select">
-                <label>Content position</label>
-                <description>Set where the content (title and text) is placed relative to the image</description>
-                <options>
-                    <option name="below" value="below" selected="true">
-                        <label translate="true">Below</label>
-                    </option>
-                    <option name="left" value="left">
-                        <label translate="true">Left aside</label>
-                    </option>
-                    <option name="top" value="top">
-                        <label translate="true">On top</label>
-                    </option>
-                    <option name="right" value="right">
-                        <label translate="true">Right aside</label>
-                    </option>
-                    <option name="overlay" value="overlay">
-                        <label translate="true">Overlay</label>
-                    </option>
-                </options>
             </parameter>
             <parameter name="mageos_grid_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
                 <label>Content container additional CSS classes</label>
@@ -1251,7 +761,188 @@
             <previewTemplate name="widget/hyva/grid.phtml" xsi:type="string">MageOS_Widgetkit::grid.phtml</previewTemplate>
         </previewTemplates>
         <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Grid\Preview</previewBlock>
-        <previewCss>MageOS_Widgetkit::css/widget/preview/hyva/grid.css</previewCss>
+    </widget>
+
+    <!-- information grid component: same shape as mageos_grid, but each item's image is a
+         Lucide icon (name/width/height, admin-selectable) instead -->
+    <widget id="mageos_information_grid" class="MageOS\Widgetkit\Block\Widgets\InformationGrid">
+        <label translate="true">MageOS Information Grid</label>
+        <description translate="true">MageOS information grid widget – icon, title, description and a CTA button per item, in a responsive CSS grid layout</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/hyva/information-grid.phtml" selected="true">
+                        <label translate="true">MageOS Hyvä Information Grid Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_information_grid_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_information_grid_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_information_grid_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_information_grid_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\TextArea"/>
+            </parameter>
+            <parameter name="mageos_information_grid_description_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Description additional CSS classes</label>
+                <description>Set custom CSS classes for description section</description>
+            </parameter>
+
+            <parameter name="mageos_information_grid_content_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="repeatable_information_grid_items" xsi:type="block" sort_order="21" required="false" visible="true">
+                <label translate="true">Information grid items</label>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\InformationGrid\Item"/>
+            </parameter>
+
+            <parameter name="mageos_information_grid_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Grid Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_information_grid_columns_mobile" sort_order="31" visible="true" xsi:type="select">
+                <label>Columns (mobile, &lt;768px)</label>
+                <description>Number of columns on mobile screens (under 768px).</description>
+                <options>
+                    <option name="1" value="1" selected="true">
+                        <label translate="true">1</label>
+                    </option>
+                    <option name="2" value="2">
+                        <label translate="true">2</label>
+                    </option>
+                    <option name="3" value="3">
+                        <label translate="true">3</label>
+                    </option>
+                    <option name="4" value="4">
+                        <label translate="true">4</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_information_grid_columns_tablet" sort_order="32" visible="true" xsi:type="select">
+                <label>Columns (tablet, 768px–1024px)</label>
+                <description>Number of columns on tablet screens (between 768px and 1024px).</description>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">1</label>
+                    </option>
+                    <option name="2" value="2" selected="true">
+                        <label translate="true">2</label>
+                    </option>
+                    <option name="3" value="3">
+                        <label translate="true">3</label>
+                    </option>
+                    <option name="4" value="4">
+                        <label translate="true">4</label>
+                    </option>
+                    <option name="5" value="5">
+                        <label translate="true">5</label>
+                    </option>
+                    <option name="6" value="6">
+                        <label translate="true">6</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_information_grid_columns_desktop" sort_order="33" visible="true" xsi:type="select">
+                <label>Columns (desktop, &gt;1024px)</label>
+                <description>Number of columns on desktop screens (over 1024px).</description>
+                <options>
+                    <option name="1" value="1">
+                        <label translate="true">1</label>
+                    </option>
+                    <option name="2" value="2">
+                        <label translate="true">2</label>
+                    </option>
+                    <option name="3" value="3" selected="true">
+                        <label translate="true">3</label>
+                    </option>
+                    <option name="4" value="4">
+                        <label translate="true">4</label>
+                    </option>
+                    <option name="5" value="5">
+                        <label translate="true">5</label>
+                    </option>
+                    <option name="6" value="6">
+                        <label translate="true">6</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_information_grid_gap" sort_order="34" visible="true" xsi:type="select">
+                <label>Gap</label>
+                <description>Space between grid items (Tailwind gap utility).</description>
+                <options>
+                    <option name="0" value="0">
+                        <label translate="true">None (0)</label>
+                    </option>
+                    <option name="1" value="1">
+                        <label translate="true">XS (1)</label>
+                    </option>
+                    <option name="2" value="2">
+                        <label translate="true">SM (2)</label>
+                    </option>
+                    <option name="4" value="4" selected="true">
+                        <label translate="true">MD (4)</label>
+                    </option>
+                    <option name="6" value="6">
+                        <label translate="true">LG (6)</label>
+                    </option>
+                    <option name="8" value="8">
+                        <label translate="true">XL (8)</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_information_grid_content_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_information_grid_item_title_classes" sort_order="42" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_information_grid_item_content_classes" sort_order="44" visible="true" xsi:type="text">
+                <label>Content additional CSS classes</label>
+                <description>Set custom CSS classes for content section</description>
+            </parameter>
+            <parameter name="mageos_information_grid_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
+                <label>Content container additional CSS classes</label>
+                <description>Set custom CSS classes for the container wrapping the icon, title and content</description>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/information-grid.phtml" xsi:type="string">MageOS_Widgetkit::information-grid.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\InformationGrid\Preview</previewBlock>
     </widget>
 
     <!-- product grid component -->
@@ -1267,7 +958,6 @@
                     </option>
                 </options>
             </parameter>
-
             <parameter name="mageos_product_grid_title" sort_order="10" visible="true" xsi:type="text">
                 <label>Title</label>
                 <description>This field is visible on frontend.</description>
@@ -1434,7 +1124,688 @@
             <previewTemplate name="widget/hyva/product-grid.phtml" xsi:type="string">MageOS_Widgetkit::product-grid.phtml</previewTemplate>
         </previewTemplates>
         <previewBlock>MageOS\Widgetkit\Block\Adminhtml\ProductGrid\Preview</previewBlock>
-        <previewCss>MageOS_Widgetkit::css/widget/preview/hyva/product-grid.css</previewCss>
+    </widget>
+
+    <!-- accordion component -->
+    <widget id="mageos_accordion" class="MageOS\Widgetkit\Block\Widgets\Accordion">
+        <label translate="true">MageOS Accordion</label>
+        <description translate="true">MageOS accordion widget – collapsible content sections</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/hyva/accordion.phtml" selected="true">
+                        <label translate="true">MageOS Hyvä Accordion Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_accordion_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_accordion_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <description>This field is visible on frontend.</description>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_accordion_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_accordion_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+            <parameter name="mageos_accordion_description_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Description additional CSS classes</label>
+                <description>Set custom CSS classes for description section</description>
+            </parameter>
+
+            <parameter name="mageos_accordion_content_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="repeatable_accordion_items" xsi:type="block" sort_order="21" required="false" visible="true">
+                <label translate="true">Accordion items</label>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\Accordion\Item"/>
+            </parameter>
+
+            <parameter name="mageos_accordion_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_accordion_default_open" sort_order="31" visible="true" xsi:type="select">
+                <label>Default open item</label>
+                <description>Which item, if any, is expanded when the page loads.</description>
+                <options>
+                    <option name="none" value="none" selected="true">
+                        <label translate="true">None</label>
+                    </option>
+                    <option name="first" value="first">
+                        <label translate="true">First item</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_accordion_exclusive" sort_order="32" visible="true" xsi:type="select">
+                <label>Exclusive (close others when one opens)</label>
+                <options>
+                    <option name="0" value="0" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_accordion_icon_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Icon</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_accordion_icon" sort_order="41" visible="true" xsi:type="block">
+                <label>Trigger icon (SVG code)</label>
+                <description>Leave empty to use the default chevron-down icon. The icon rotates 180 degrees when its item opens.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/accordion.phtml" xsi:type="string">MageOS_Widgetkit::accordion.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Accordion\Preview</previewBlock>
+    </widget>
+
+    <!-- marquee component -->
+    <widget id="mageos_marquee" class="MageOS\Widgetkit\Block\Widgets\Marquee">
+        <label translate="true">MageOS Marquee</label>
+        <description translate="true">MageOS marquee widget – an infinitely scrolling strip of logos/content</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/hyva/marquee.phtml" selected="true">
+                        <label translate="true">MageOS Hyvä Marquee Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_marquee_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_marquee_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <description>This field is visible on frontend.</description>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_marquee_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_marquee_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+            <parameter name="mageos_marquee_description_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Description additional CSS classes</label>
+                <description>Set custom CSS classes for description section</description>
+            </parameter>
+
+            <parameter name="mageos_marquee_content_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="repeatable_marquee_items" xsi:type="block" sort_order="21" required="false" visible="true">
+                <label translate="true">Marquee items</label>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\Marquee\Item"/>
+            </parameter>
+
+            <parameter name="mageos_marquee_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_marquee_velocity" sort_order="31" visible="true" xsi:type="text">
+                <label>Scroll velocity (seconds per loop)</label>
+                <description>Lower is faster. Time in seconds for the strip to complete one full loop.</description>
+                <value>30</value>
+            </parameter>
+            <parameter name="mageos_marquee_items_desktop" sort_order="32" visible="true" xsi:type="select">
+                <label>Items visible on desktop</label>
+                <options>
+                    <option name="2" value="2">
+                        <label translate="true">2</label>
+                    </option>
+                    <option name="3" value="3">
+                        <label translate="true">3</label>
+                    </option>
+                    <option name="4" value="4">
+                        <label translate="true">4</label>
+                    </option>
+                    <option name="5" value="5" selected="true">
+                        <label translate="true">5</label>
+                    </option>
+                    <option name="6" value="6">
+                        <label translate="true">6</label>
+                    </option>
+                    <option name="7" value="7">
+                        <label translate="true">7</label>
+                    </option>
+                    <option name="8" value="8">
+                        <label translate="true">8</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/marquee.phtml" xsi:type="string">MageOS_Widgetkit::marquee.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Marquee\Preview</previewBlock>
+    </widget>
+
+    <!-- tab component -->
+    <widget id="mageos_tab" class="MageOS\Widgetkit\Block\Widgets\Tab">
+        <label translate="true">MageOS Tab</label>
+        <description translate="true">MageOS tab widget – switchable content panels</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/hyva/tab.phtml" selected="true">
+                        <label translate="true">MageOS Hyvä Tab Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_tab_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_tab_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <description>This field is visible on frontend.</description>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_tab_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_tab_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+            <parameter name="mageos_tab_description_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Description additional CSS classes</label>
+                <description>Set custom CSS classes for description section</description>
+            </parameter>
+
+            <parameter name="mageos_tab_content_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="repeatable_tab_items" xsi:type="block" sort_order="21" required="false" visible="true">
+                <label translate="true">Tab items</label>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\Tab\Item"/>
+            </parameter>
+
+            <parameter name="mageos_tab_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_tab_default_active" sort_order="31" visible="true" xsi:type="text">
+                <label>Default active tab (index)</label>
+                <description>Zero-based index of the tab active on page load, e.g. 0 for the first tab.</description>
+                <value>0</value>
+            </parameter>
+            <parameter name="mageos_tab_orientation" sort_order="32" visible="true" xsi:type="select">
+                <label>Orientation</label>
+                <options>
+                    <option name="horizontal" value="horizontal" selected="true">
+                        <label translate="true">Horizontal</label>
+                    </option>
+                    <option name="vertical" value="vertical">
+                        <label translate="true">Vertical</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/tab.phtml" xsi:type="string">MageOS_Widgetkit::tab.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Tab\Preview</previewBlock>
+    </widget>
+
+    <!-- grid stacked component -->
+    <widget id="mageos_grid_stacked" class="MageOS\Widgetkit\Block\Widgets\GridStacked">
+        <label translate="true">MageOS Grid Stacked</label>
+        <description translate="true">MageOS grid stacked widget – full-width stacked rows, in 3 layout variants</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="v1" value="widget/hyva/grid-stacked-v1.phtml" selected="true">
+                        <label translate="true">V1 – Simple (1/2 image, 1/2 content)</label>
+                    </option>
+                    <option name="v2" value="widget/hyva/grid-stacked-v2.phtml">
+                        <label translate="true">V2 – 3 columns (image / title / content)</label>
+                    </option>
+                    <option name="v3" value="widget/hyva/grid-stacked-v3.phtml">
+                        <label translate="true">V3 – Sticky title, stacked items (alternate setting is ignored)</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_grid_stacked_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend. In template V3, this is shown in the sticky left column.</description>
+            </parameter>
+            <parameter name="mageos_grid_stacked_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_grid_stacked_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_grid_stacked_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend. In template V3, this is shown in the sticky left column.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+            <parameter name="mageos_grid_stacked_description_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Description additional CSS classes</label>
+                <description>Set custom CSS classes for description section</description>
+            </parameter>
+
+            <parameter name="mageos_grid_stacked_content_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="repeatable_grid_stacked_items" xsi:type="block" sort_order="21" required="false" visible="true">
+                <label translate="true">Grid stacked items</label>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\Grid\Item"/>
+            </parameter>
+
+            <parameter name="mageos_grid_stacked_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Grid Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_grid_stacked_alternate" sort_order="31" visible="true" xsi:type="select">
+                <label>Alternate image/content order per row</label>
+                <description>Ignored when template V3 is selected (item order never flips there).</description>
+                <options>
+                    <option name="0" value="0" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                    <option name="1" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_grid_stacked_content_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_grid_stacked_item_title_classes" sort_order="42" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_grid_stacked_item_content_classes" sort_order="44" visible="true" xsi:type="text">
+                <label>Content additional CSS classes</label>
+                <description>Set custom CSS classes for content section</description>
+            </parameter>
+            <parameter name="mageos_grid_stacked_item_content_container_classes" sort_order="46" visible="true" xsi:type="text">
+                <label>Content container additional CSS classes</label>
+                <description>Set custom CSS classes for the container wrapping both title and content</description>
+            </parameter>
+
+            <parameter name="mageos_grid_stacked_image_section_title" xsi:type="block" required="false" visible="true" sort_order="110">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Image</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_grid_stacked_image_loading" sort_order="111" visible="true" xsi:type="select">
+                <label>Loading</label>
+                <description>By default, images are lazy loaded. Enable eager loading for images in the initial viewport.</description>
+                <options>
+                    <option name="lazy" value="lazy" selected="true">
+                        <label translate="true">Lazy</label>
+                    </option>
+                    <option name="eager" value="eager">
+                        <label translate="true">Eager</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/grid-stacked-v1.phtml" xsi:type="string">MageOS_Widgetkit::grid-stacked-v1.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/grid-stacked-v2.phtml" xsi:type="string">MageOS_Widgetkit::grid-stacked-v2.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/grid-stacked-v3.phtml" xsi:type="string">MageOS_Widgetkit::grid-stacked-v3.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\GridStacked\Preview</previewBlock>
+    </widget>
+
+    <!-- countdown component -->
+    <widget id="mageos_countdown" class="MageOS\Widgetkit\Block\Widgets\Countdown">
+        <label translate="true">MageOS Countdown</label>
+        <description translate="true">MageOS countdown widget – counts down to a target date</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="default" value="widget/hyva/countdown.phtml" selected="true">
+                        <label translate="true">MageOS Hyvä Countdown Template</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_countdown_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_countdown_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_countdown_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for title section</description>
+            </parameter>
+            <parameter name="mageos_countdown_description" sort_order="13" visible="true" xsi:type="block">
+                <label>Description</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+
+            <parameter name="mageos_countdown_settings_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Settings</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_countdown_end" sort_order="22" visible="true" xsi:type="block">
+                <label>End time</label>
+                <description>The date/time the countdown reaches zero. Format: MM/DD/YYYY HH:MM, 24-hour clock, in the store's configured timezone (e.g. 12/31/2026 23:59 for December 31st 2026, one minute to midnight).</description>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\WidgetField\DateTime"/>
+            </parameter>
+
+            <parameter name="mageos_countdown_button_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Button</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_countdown_button_text" sort_order="31" visible="true" xsi:type="text">
+                <label>Button text</label>
+                <description>No button will appear if not specified.</description>
+            </parameter>
+            <parameter name="mageos_countdown_button_link" sort_order="32" visible="true" xsi:type="text">
+                <label>Button link</label>
+            </parameter>
+            <parameter name="mageos_countdown_button_target" sort_order="33" visible="true" xsi:type="select">
+                <label>Button link target</label>
+                <options>
+                    <option name="_self" value="_self" selected="true">
+                        <label translate="true">Self</label>
+                    </option>
+                    <option name="_blank" value="_blank">
+                        <label translate="true">Blank</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_countdown_finished_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Finished State</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_countdown_finished_content" sort_order="41" visible="true" xsi:type="block">
+                <label>Finished countdown content</label>
+                <description>Shown instead of the timer once the end time is reached (including directly at page load, if already expired).</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/countdown.phtml" xsi:type="string">MageOS_Widgetkit::countdown.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Countdown\Preview</previewBlock>
+    </widget>
+
+    <!-- banner component -->
+    <widget id="mageos_banner" class="MageOS\Widgetkit\Block\Widgets\Banner">
+        <label translate="true">MageOS Banner</label>
+        <description translate="true">MageOS banner widget – image + title/text/CTA in 5 layout variants</description>
+        <parameters>
+            <parameter name="template" sort_order="1" xsi:type="select" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="full-background" value="widget/hyva/banner-full-background.phtml" selected="true">
+                        <label translate="true">Full background – card centered over a full-bleed image</label>
+                    </option>
+                    <option name="overlay-right" value="widget/hyva/banner-overlay-right.phtml">
+                        <label translate="true">Partial overlay right – image left 3/4, card overlapping the right edge</label>
+                    </option>
+                    <option name="overlay-left" value="widget/hyva/banner-overlay-left.phtml">
+                        <label translate="true">Partial overlay left – image right 3/4, card overlapping the left edge</label>
+                    </option>
+                    <option name="hero-right" value="widget/hyva/banner-hero-right.phtml">
+                        <label translate="true">Hero right – image left half, content on a primary-color right half</label>
+                    </option>
+                    <option name="hero-left" value="widget/hyva/banner-hero-left.phtml">
+                        <label translate="true">Hero left – image right half, content on a primary-color left half</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_banner_title" sort_order="10" visible="true" xsi:type="text">
+                <label>Title</label>
+                <description>This field is visible on frontend.</description>
+            </parameter>
+            <parameter name="mageos_banner_title_type" sort_order="11" visible="true" xsi:type="select">
+                <label>Title Type</label>
+                <description>This field is visible on frontend.</description>
+                <options>
+                    <option name="h1" value="h1">
+                        <label translate="true">H1</label>
+                    </option>
+                    <option name="h2" value="h2" selected="true">
+                        <label translate="true">H2</label>
+                    </option>
+                    <option name="h3" value="h3">
+                        <label translate="true">H3</label>
+                    </option>
+                    <option name="h4" value="h4">
+                        <label translate="true">H4</label>
+                    </option>
+                    <option name="h5" value="h5">
+                        <label translate="true">H5</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="mageos_banner_title_classes" sort_order="12" visible="true" xsi:type="text">
+                <label>Title additional CSS classes</label>
+                <description>Set custom CSS classes for the title. Default is text-2xl.</description>
+                <value>text-2xl</value>
+            </parameter>
+            <parameter name="mageos_banner_content" sort_order="13" visible="true" xsi:type="block">
+                <label>Content</label>
+                <description>This field is visible on frontend.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Wysiwyg"/>
+            </parameter>
+            <parameter name="mageos_banner_content_classes" sort_order="14" visible="true" xsi:type="text">
+                <label>Content additional CSS classes</label>
+                <description>Set custom CSS classes for the content section</description>
+            </parameter>
+
+            <parameter name="mageos_banner_image_section_title" xsi:type="block" required="false" visible="true" sort_order="20">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Image</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_banner_image" sort_order="21" visible="true" xsi:type="block">
+                <label>Desktop Image</label>
+                <description>Image used on desktop, if mobile one is missing this image will be used for both viewports.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Image"/>
+            </parameter>
+            <parameter name="mageos_banner_image_alt" sort_order="22" visible="true" xsi:type="text">
+                <label>Image alt</label>
+                <description>Image alternative text</description>
+            </parameter>
+            <parameter name="mageos_banner_mobile_image" sort_order="23" visible="true" xsi:type="block">
+                <label>Mobile Image</label>
+                <description>Image used on mobile.</description>
+                <block class="MageOS\AdvancedWidget\Block\WidgetField\Image"/>
+            </parameter>
+            <parameter name="mageos_banner_image_loading" sort_order="24" visible="true" xsi:type="select">
+                <label>Loading</label>
+                <description>By default, images are lazy loaded. Enable eager loading for images in the initial viewport.</description>
+                <options>
+                    <option name="lazy" value="lazy" selected="true">
+                        <label translate="true">Lazy</label>
+                    </option>
+                    <option name="eager" value="eager">
+                        <label translate="true">Eager</label>
+                    </option>
+                </options>
+            </parameter>
+
+            <parameter name="mageos_banner_icon_section_title" xsi:type="block" required="false" visible="true" sort_order="30">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Icon</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_banner_icon" sort_order="31" visible="true" xsi:type="block">
+                <label>Icon</label>
+                <description>Optional Lucide icon shown above the title.</description>
+                <block class="MageOS\Widgetkit\Block\Adminhtml\Banner\IconField"/>
+            </parameter>
+            <parameter name="mageos_banner_icon_width" sort_order="32" visible="true" xsi:type="text">
+                <label>Icon width</label>
+                <description>Icon width in pixels. Leave empty to use the default (48).</description>
+            </parameter>
+            <parameter name="mageos_banner_icon_height" sort_order="33" visible="true" xsi:type="text">
+                <label>Icon height</label>
+                <description>Icon height in pixels. Leave empty to use the default (48).</description>
+            </parameter>
+
+            <parameter name="mageos_banner_button_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+                <description>
+                    <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Button</h3>]]></description>
+                <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>
+            </parameter>
+            <parameter name="mageos_banner_button_text" sort_order="41" visible="true" xsi:type="text">
+                <label>Button text</label>
+                <description>No button will appear if not specified.</description>
+            </parameter>
+            <parameter name="mageos_banner_button_link" sort_order="42" visible="true" xsi:type="text">
+                <label>Button link</label>
+            </parameter>
+            <parameter name="mageos_banner_button_target" sort_order="43" visible="true" xsi:type="select">
+                <label>Button link target</label>
+                <options>
+                    <option name="_self" value="_self" selected="true">
+                        <label translate="true">Self</label>
+                    </option>
+                    <option name="_blank" value="_blank">
+                        <label translate="true">Blank</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+        <previewTemplates>
+            <previewTemplate name="widget/hyva/banner-full-background.phtml" xsi:type="string">MageOS_Widgetkit::banner-full-background.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/banner-overlay-right.phtml" xsi:type="string">MageOS_Widgetkit::banner-overlay-right.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/banner-overlay-left.phtml" xsi:type="string">MageOS_Widgetkit::banner-overlay-left.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/banner-hero-right.phtml" xsi:type="string">MageOS_Widgetkit::banner-hero-right.phtml</previewTemplate>
+            <previewTemplate name="widget/hyva/banner-hero-left.phtml" xsi:type="string">MageOS_Widgetkit::banner-hero-left.phtml</previewTemplate>
+        </previewTemplates>
+        <previewBlock>MageOS\Widgetkit\Block\Adminhtml\Banner\Preview</previewBlock>
     </widget>
 
 </widgets>

@@ -1,0 +1,146 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Grid;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Grid $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items');
+
+$colsMobile  = (int)($params['mageos_grid_columns_mobile'] ?? 1);
+$colsTablet  = (int)($params['mageos_grid_columns_tablet'] ?? 2);
+$colsDesktop = (int)($params['mageos_grid_columns_desktop'] ?? 3);
+$gap         = $params['mageos_grid_gap'] ?? '4';
+
+$gridColsClasses = sprintf(
+    'grid-cols-%d md:grid-cols-%d lg:grid-cols-%d',
+    $colsMobile,
+    $colsTablet,
+    $colsDesktop
+);
+$gapClass = $gap !== '0' ? 'gap-' . $gap : '';
+$hasTitle = !empty($params['mageos_grid_title']);
+?>
+
+<div
+    class="grid <?= $escaper->escapeHtmlAttr($gridColsClasses) ?> <?= $escaper->escapeHtmlAttr($gapClass) ?>"
+    <?php if ($hasTitle): ?>
+    role="region"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_grid_title'])) ?>"
+    <?php endif; ?>
+>
+    <?php foreach ($items as $index => $item): ?>
+        <?php $item['count'] = $index; ?>
+        <?php
+        $gridCols = [];
+        if (isset($item['col_start_global']) && $item['col_start_global'] !== 'auto')
+            $gridCols[] = $item['col_start_global'];
+        if (isset($item['col_start_tablet']) && $item['col_start_tablet'] !== 'auto')
+            $gridCols[] = $item['col_start_tablet'];
+        if (isset($item['col_start_desktop']) && $item['col_start_desktop'] !== 'auto')
+            $gridCols[] = $item['col_start_desktop'];
+        if (isset($item['col_end_global']) && $item['col_end_global'] !== 'auto')
+            $gridCols[] = $item['col_end_global'];
+        if (isset($item['col_end_tablet']) && $item['col_end_tablet'] !== 'auto')
+            $gridCols[] = $item['col_end_tablet'];
+        if (isset($item['col_end_desktop']) && $item['col_end_desktop'] !== 'auto')
+            $gridCols[] = $item['col_end_desktop'];
+        ?>
+        <div class="grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full <?= implode(' ', $gridCols); ?>">
+            <?php
+            $loading = $item['count'] === 0
+                ? 'eager'
+                : ($params['mageos_grid_image_loading'] ?? 'lazy');
+
+            $mobileImage = $item['mobile_image'] ?? null;
+
+            $hasLink    = !empty($item['button_link']);
+            $linkTarget = $item['button_link_target'] ?? '_self';
+
+            // Title/content alignment is always left, content is always rendered below the media.
+            $itemTitleClass = trim('text-left ' . ($params['mageos_grid_item_title_classes'] ?? ''));
+            $itemContentClass = trim('text-left ' . ($params['mageos_grid_item_content_classes'] ?? ''));
+            $contentWrapperClass = trim($params['mageos_grid_item_content_container_classes'] ?? '');
+
+            $hasContent = !empty($item['title']) || !empty($item['content']);
+            ?>
+
+            <div class="block h-full">
+                <?php if ($hasLink): ?>
+                <a
+                    href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+                    target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+                    class="flex flex-col h-full"
+                    <?php if ($linkTarget === '_blank'): ?>
+                    rel="noopener noreferrer"
+                    <?php endif; ?>
+                >
+                <?php else: ?>
+                <div class="flex flex-col h-full">
+                <?php endif; ?>
+
+                    <?php if (!empty($item['image'])): ?>
+                    <picture class="block w-full">
+                        <?php if ($mobileImage): ?>
+                        <source
+                            media="(max-width: 768px)"
+                            srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                            type="image/jpeg"
+                        />
+                        <?php endif; ?>
+                        <img
+                            src="<?= $escaper->escapeUrl($item['image']) ?>"
+                            alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? '') ?>"
+                            class="w-full h-auto object-cover"
+                            <?php if ($loading === 'eager'): ?>
+                            loading="eager"
+                            fetchpriority="high"
+                            <?php else: ?>
+                            loading="lazy"
+                            <?php endif; ?>
+                        />
+                    </picture>
+                    <?php endif; ?>
+
+                    <?php if ($hasContent): ?>
+                    <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+                        <?php if (!empty($item['title'])): ?>
+                        <div class="<?= $itemTitleClass; ?>">
+                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($item['content'])): ?>
+                        <div class="<?= $itemContentClass; ?>">
+                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>
+                        <div class="p-2">
+                            <a
+                                href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+                                target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+                                class="btn btn-primary"
+                                <?php if ($linkTarget === '_blank'): ?>
+                                rel="noopener noreferrer"
+                                <?php endif; ?>
+                            >
+                                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+
+                <?php if ($hasLink): ?>
+                </a>
+                <?php else: ?>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>

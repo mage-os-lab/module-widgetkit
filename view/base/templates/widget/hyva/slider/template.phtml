@@ -1,0 +1,291 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Slider;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Slider $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params  = $this->getData('params');
+$items   = $this->getData('items');
+$uniqId  = uniqid();
+$sliderId = 'slider-' . $uniqId;
+
+$snapColumns = $params['mageos_slider_columns'] ?? 3;
+$snapColsClasses = 'md:[--snap-cols:' . $snapColumns . ']';
+
+$navVisibility = $params['mageos_slider_navigation_visibility'] ?? 'show';
+$slidenavVisibility = $params['mageos_slider_slidenav_visibility'] ?? 'show';
+?>
+
+<section
+    id="<?= $sliderId ?>"
+    class="snap-slider relative"
+    aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_slider_title'] ?? '') ?>"
+    data-slider-type="generic"
+    x-data="initSlider<?= $uniqId ?>()"
+    x-snap-slider.group-pager
+    @resize.window.debounce="calcPageSize"
+>
+    <a
+        href="#<?= $sliderId ?>-slider-end"
+        class="sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
+    ><?= $escaper->escapeHtml(__('Press to skip carousel')) ?></a>
+
+    <div class="items-center gap-4 mb-2 flex">
+        <?php if ($navVisibility !== 'hide'): ?>
+        <nav x-show="dotsNavigation"
+             class="flex-1 justify-start px-2 snap-pager"
+             aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
+            <template x-for="index in dotIndices" :key="index">
+                <button
+                    type="button"
+                    x-on:click="set(index)"
+                    class="snap-marker cursor-pointer"
+                    :aria-current="currentIndex === index ? 'true' : undefined"
+                    :aria-label="`<?= $escaper->escapeJs(__('Go to slide')) ?> ${index + 1} <?= $escaper->escapeJs(__('of')) ?> ${pageCount}`"
+                    x-cloak
+                ></button>
+            </template>
+        </nav>
+        <?php endif; ?>
+
+        <?php if ($slidenavVisibility !== 'hide'): ?>
+        <div class="flex shrink-0 gap-2 justify-end">
+            <button
+                type="button"
+                class="btn btn-secondary p-2"
+                aria-label="<?= $escaper->escapeHtml(__('Previous Slide')) ?>"
+                data-prev
+                x-bind:disabled="currentIndex === 0"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="m12 19-7-7 7-7M19 12H5"></path>
+                </svg>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary p-2"
+                aria-label="<?= $escaper->escapeHtml(__('Next Slide')) ?>"
+                data-next
+                x-bind:disabled="currentIndex >= pageCount - 1"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
+                     class="rtl:-rotate-180" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+        <?php endif; ?>
+    </div>
+
+    <div
+        class="snap-track <?= $snapColsClasses ?>"
+        data-track
+        tabindex="0"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="<?= !empty($params['mageos_slider_title']) ? $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_slider_title'])) : __('Image Slider') ?>"
+    >
+        <?php foreach ($items as $index => $item): ?>
+            <?php $item['count'] = $index; ?>
+            <div class="slider-item card card-interactive grow flex flex-col w-full">
+                <?php
+                $loading = $item['count'] === 0
+                    ? 'eager'
+                    : ($params['mageos_slider_image_loading'] ?? 'lazy');
+                $mobileImage = $item['mobile_image'] ?? null;
+                $hasLink    = !empty($item['button_link']) && empty($item['button']);
+                $linkTarget = $item['link_target'] ?? '_self';
+
+                // Title/content alignment is always left, content is always rendered below the media.
+                $itemTitleClass = trim('text-left ' . ($params['mageos_slider_item_title_classes'] ?? ''));
+                $itemContentClass = trim('text-left ' . ($params['mageos_slider_item_content_classes'] ?? ''));
+                $contentWrapperClass = trim($params['mageos_slider_item_content_container_classes'] ?? '');
+
+                $link = [
+                    'type' => 'a',
+                    'href' => $item['button_link'] ?? '',
+                    'class' => 'btn btn-primary',
+                    'aria-label' => \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'] ?? ''),
+                    'target' => $this->resolveExpression(['_blank {@button_link_target}'], $item)
+                ];
+
+                $hasContent = !empty($item['title']) || !empty($item['content']);
+                ?>
+
+                <div class="block">
+                    <?php if ($hasLink): ?>
+                    <a
+                        href="<?= $escaper->escapeUrl($item['button_link']) ?>"
+                        target="<?= $escaper->escapeHtmlAttr($linkTarget) ?>"
+                        class="flex flex-col"
+                        <?php if ($linkTarget === '_blank'): ?>
+                        rel="noopener noreferrer"
+                        <?php endif; ?>
+                    >
+                    <?php else: ?>
+                    <div class="flex flex-col">
+                    <?php endif; ?>
+
+                        <?php /**
+                         * aspect-square + overflow-hidden reserves the image's box before it
+                         * loads (h-auto alone leaves it height:0 until the image resolves,
+                         * which visibly collapses/re-expands the whole slide - and, since these
+                         * sit in a row together, the whole carousel - as each one loads).
+                         * object-cover (on the h-full img) crops arbitrary admin-uploaded
+                         * images to fit, same convention as grid-stacked's own v2 template.
+                         */ ?>
+                        <picture class="block w-full overflow-hidden" style="aspect-ratio: 1 / 1;">
+                            <?php if ($mobileImage): ?>
+                            <source
+                                media="(max-width: 768px)"
+                                srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                                type="image/jpeg"
+                            />
+                            <?php endif; ?>
+                            <img
+                                src="<?= $escaper->escapeUrl($item['image']) ?>"
+                                alt="<?= $escaper->escapeHtmlAttr($item['image_alt'] ?? '') ?>"
+                                class="w-full h-full object-cover"
+                                <?php if ($loading === 'eager'): ?>
+                                loading="eager"
+                                fetchpriority="high"
+                                <?php else: ?>
+                                loading="lazy"
+                                <?php endif; ?>
+                                role="group"
+                                aria-roledescription="slide"
+                            />
+                        </picture>
+
+                        <?php if ($hasContent): ?>
+                        <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+                            <?php if (!empty($item['title'])): ?>
+                            <div class="<?= $itemTitleClass; ?>">
+                                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if (!empty($item['content'])): ?>
+                            <div class="<?= $itemContentClass; ?>">
+                                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                            </div>
+                            <?php endif; ?>
+                            <?php if (!empty($item['button_link']) && !empty($item['button'])): ?>
+                            <div>
+                                <<?= $link['type']; ?>
+                                class="<?= $link['class']; ?>"
+                                <?php if ($link['type'] === 'a'): ?>
+                                    href="<?= $escaper->escapeUrl($link['href']); ?>"
+                                    aria-label="<?= $escaper->escapeHtmlAttr($link['aria-label']); ?>"
+                                    target="<?= $escaper->escapeHtmlAttr($link['target']); ?>"
+                                <?php endif; ?>>
+                                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>
+                            </<?= $link['type']; ?>>
+                            </div>
+                            <?php endif ?>
+                        </div>
+                        <?php endif; ?>
+
+                    <?php if ($hasLink): ?>
+                    </a>
+                    <?php else: ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <span id="<?= $sliderId ?>-slider-end" tabindex="-1"></span>
+</section>
+
+<script>
+    function initSlider<?= $uniqId ?>() {
+        return {
+            images: [
+                <?php foreach ($items as $index => $item): ?>
+                '<?= isset($item['image']) ? $escaper->escapeUrl($item['image']) : ''; ?>',
+                <?php endforeach; ?>
+            ],
+            slider: null,
+            loop: false,
+            dotsNavigation: true,
+            currentIndex: 0,
+            pageSize: <?= $snapColumns ?>,
+            totalItems: <?= count($items) ?>,
+            get pageCount() {
+                return Math.ceil(this.totalItems / this.pageSize);
+            },
+            get dotIndices() {
+                return Array.from({length: this.pageCount}, (_, i) => i);
+            },
+            init() {
+                this.$nextTick(() => {
+                    this.calcPageSize();
+                    this.slider = this.$el;
+                    const track = this.$el.querySelector('[data-track]');
+                    if (track) {
+                        let scrollTimer;
+                        track.addEventListener('scroll', () => {
+                            clearTimeout(scrollTimer);
+                            scrollTimer = setTimeout(() => this.updateCurrentIndex(), 150);
+                        }, { passive: true });
+                    }
+                });
+            },
+            updateCurrentIndex() {
+                const track = this.$el.querySelector('[data-track]');
+                if (!track || !track.children.length) return;
+                const firstSlide = track.children[0];
+                if (!firstSlide || firstSlide.offsetWidth === 0) return;
+                const lastPageIndex = Math.ceil(track.children.length / this.pageSize) - 1;
+                const maxScrollLeft = track.scrollWidth - track.clientWidth;
+                if (track.scrollLeft >= maxScrollLeft - 1) {
+                    // A trailing page shorter than pageSize never scrolls a
+                    // full page-width, so the division below undershoots it.
+                    this.currentIndex = lastPageIndex;
+                } else if (track.scrollLeft <= 1) {
+                    this.currentIndex = 0;
+                } else {
+                    this.currentIndex = Math.min(
+                        Math.round(track.scrollLeft / (firstSlide.offsetWidth * this.pageSize)),
+                        lastPageIndex
+                    );
+                }
+            },
+            calcPageSize() {
+                const track = this.$el.querySelector('[data-track]');
+                if (track) {
+                    const firstItem = track.querySelector('.slider-item');
+                    if (firstItem && firstItem.clientWidth > 0) {
+                        this.pageSize = Math.round(track.clientWidth / firstItem.clientWidth);
+                    }
+                }
+                // pageCount/dotIndices are derived from pageSize, so a resize that changes
+                // pageSize must also re-sync currentIndex or the pager desyncs from the
+                // actual scroll position (stale index under the new page grouping).
+                this.updateCurrentIndex();
+            },
+            set(index) {
+                this.currentIndex = index;
+                const track = this.slider.querySelector('[data-track]');
+                if (track) {
+                    const targetSlide = track.children[index * this.pageSize];
+                    if (targetSlide) {
+                        targetSlide.scrollIntoView({ block: 'nearest', inline: 'start' });
+                    }
+                }
+            },
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initSlider<?= $uniqId ?>', initSlider<?= $uniqId ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

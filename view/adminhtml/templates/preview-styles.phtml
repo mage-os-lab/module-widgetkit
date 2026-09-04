@@ -1,0 +1,14 @@
+<?php
+use MageOS\Widgetkit\Block\Adminhtml\PreviewStyles;
+use Magento\Framework\Escaper;
+
+/**
+ * @var PreviewStyles $block
+ * @var Escaper $escaper
+ */
+
+$previewStylesheetUrl = $block->getPreviewStylesheetUrl();
+?>
+<?php if ($previewStylesheetUrl): ?>
+<link rel="stylesheet" type="text/css" href="<?= $escaper->escapeUrl($previewStylesheetUrl); ?>" />
+<?php endif; ?>

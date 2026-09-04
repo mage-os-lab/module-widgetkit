@@ -1,0 +1,98 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Accordion;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Accordion $this
+ * @var HyvaCsp $hyvaCsp
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items') ?: [];
+$uniqId = uniqid();
+
+$defaultOpen = $params['mageos_accordion_default_open'] ?? 'none';
+$exclusive   = ($params['mageos_accordion_exclusive'] ?? '0') === '1';
+
+$defaultChevronIcon = <<<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+    <polyline points="6 9 12 15 18 9"></polyline>
+</svg>
+SVG;
+$icon = !empty($params['mageos_accordion_icon']) ? $params['mageos_accordion_icon'] : $defaultChevronIcon;
+
+$hasTitle = !empty($params['mageos_accordion_title']);
+?>
+
+<div
+    x-data="initAccordion<?= $uniqId; ?>"
+    class="accordion"
+    <?php if ($hasTitle): ?>
+    role="region"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_accordion_title'])) ?>"
+    <?php endif; ?>
+>
+    <?php foreach ($items as $index => $item): ?>
+        <?php
+        $titleTag = $item['title_tag'] ?? 'h3';
+        $panelId  = 'mageos-accordion-panel-' . $uniqId . '-' . $index;
+        $buttonId = 'mageos-accordion-trigger-' . $uniqId . '-' . $index;
+        ?>
+        <div class="accordion-item border-b border-gray-200">
+            <<?= $titleTag ?> class="accordion-header m-0">
+                <button
+                    type="button"
+                    id="<?= $escaper->escapeHtmlAttr($buttonId) ?>"
+                    class="accordion-trigger flex w-full items-center justify-between gap-4 py-4 text-left"
+                    x-on:click="toggle(<?= (int)$index ?>)"
+                    x-bind:aria-expanded="isOpen(<?= (int)$index ?>) ? 'true' : 'false'"
+                    aria-controls="<?= $escaper->escapeHtmlAttr($panelId) ?>"
+                >
+                    <span class="accordion-title text-xl"><?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'] ?? '')) ?></span>
+                    <span
+                        class="accordion-icon inline-block shrink-0 transition-transform duration-300"
+                        x-bind:class="{ 'rotate-180': isOpen(<?= (int)$index ?>) }"
+                        aria-hidden="true"
+                    ><?= /* @noEscape */ $icon ?></span>
+                </button>
+            </<?= $titleTag ?>>
+            <div
+                id="<?= $escaper->escapeHtmlAttr($panelId) ?>"
+                role="region"
+                aria-labelledby="<?= $escaper->escapeHtmlAttr($buttonId) ?>"
+                class="accordion-panel grid transition-[grid-template-rows] duration-300 ease-in-out"
+                x-bind:style="{ gridTemplateRows: isOpen(<?= (int)$index ?>) ? '1fr' : '0fr' }"
+            >
+                <div class="overflow-hidden">
+                    <div class="accordion-content pb-4">
+                        <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'] ?? '') ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<script>
+    function initAccordion<?= $uniqId; ?>() {
+        return {
+            openIndexes: <?= $defaultOpen === 'first' && count($items) > 0 ? '[0]' : '[]'; ?>,
+            exclusive: <?= $exclusive ? 'true' : 'false'; ?>,
+            isOpen(index) {
+                return this.openIndexes.includes(index);
+            },
+            toggle(index) {
+                if (this.isOpen(index)) {
+                    this.openIndexes = this.openIndexes.filter((i) => i !== index);
+                    return;
+                }
+                this.openIndexes = this.exclusive ? [index] : [...this.openIndexes, index];
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initAccordion<?= $uniqId; ?>', initAccordion<?= $uniqId; ?>), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

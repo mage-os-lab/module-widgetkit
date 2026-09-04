@@ -1,0 +1,86 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\Banner;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Banner $this
+ * @var Escaper $escaper
+ *
+ * Image left half, content right half in a bg-primary panel - a plain flex row with no gap
+ * class (flex's own default is gapless) and items-stretch (flex's own default align-items)
+ * makes both halves match the row's tallest side, so "same height as the image" falls out of
+ * ordinary flexbox layout with no JS needed.
+ */
+
+$params = $this->getData('params');
+
+$titleTag = $params['mageos_banner_title_type'] ?? 'h2';
+$title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_title'] ?? '');
+$titleClasses = $params['mageos_banner_title_classes'] ?? '';
+$content = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_content'] ?? '');
+$contentClasses = $params['mageos_banner_content_classes'] ?? '';
+$buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_button_text'] ?? '');
+$buttonLink = $params['mageos_banner_button_link'] ?? '';
+$buttonTarget = $params['mageos_banner_button_target'] ?? '_self';
+$hasButton = !empty($buttonText) && !empty($buttonLink);
+$icon = $params['mageos_banner_icon'] ?? '';
+$iconWidth = !empty($params['mageos_banner_icon_width']) ? (int)$params['mageos_banner_icon_width'] : null;
+$iconHeight = !empty($params['mageos_banner_icon_height']) ? (int)$params['mageos_banner_icon_height'] : null;
+$iconHtml = $this->renderIcon($icon, $iconWidth, $iconHeight);
+$image = $params['mageos_banner_image'] ?? '';
+$mobileImage = $params['mageos_banner_mobile_image'] ?? '';
+$imageAlt = $params['mageos_banner_image_alt'] ?? '';
+$imageLoading = $params['mageos_banner_image_loading'] ?? 'lazy';
+?>
+
+<div class="banner banner--hero-right flex flex-col md:flex-row items-stretch w-full">
+    <?php if (!empty($image)): ?>
+    <div class="w-full md:w-1/2">
+        <picture class="block w-full h-full">
+            <?php if ($mobileImage): ?>
+            <source media="(max-width: 768px)" srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>" type="image/jpeg" />
+            <?php endif; ?>
+            <img
+                src="<?= $escaper->escapeUrl($image) ?>"
+                alt="<?= $escaper->escapeHtmlAttr($imageAlt) ?>"
+                class="block w-full h-full min-h-[320px] object-cover"
+                <?php if ($imageLoading === 'eager'): ?>
+                loading="eager"
+                fetchpriority="high"
+                <?php else: ?>
+                loading="lazy"
+                <?php endif; ?>
+            />
+        </picture>
+    </div>
+    <?php endif; ?>
+
+    <div class="banner__content w-full md:w-1/2 bg-primary flex items-center justify-center text-center text-[var(--color-on-primary)] p-8">
+        <div>
+            <?php if ($iconHtml): ?>
+            <div class="mb-4 flex justify-center"><?= /* @noEscape */ $iconHtml ?></div>
+            <?php endif; ?>
+            <?php if (!empty($title)): ?>
+            <<?= $titleTag ?> class="<?= $escaper->escapeHtmlAttr($titleClasses) ?>"><?= $escaper->escapeHtml($title) ?></<?= $titleTag ?>>
+            <?php endif; ?>
+            <?php if (!empty($content)): ?>
+            <div class="<?= $escaper->escapeHtmlAttr($contentClasses) ?>"><?= /* @noEscape */ $content ?></div>
+            <?php endif; ?>
+            <?php if ($hasButton): ?>
+            <div class="mt-4">
+                <a
+                    href="<?= $escaper->escapeUrl($buttonLink) ?>"
+                    target="<?= $escaper->escapeHtmlAttr($buttonTarget) ?>"
+                    class="btn btn-tertiary"
+                    <?php if ($buttonTarget === '_blank'): ?>
+                    rel="noopener noreferrer"
+                    <?php endif; ?>
+                >
+                    <?= $escaper->escapeHtml($buttonText) ?>
+                </a>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>

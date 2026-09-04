@@ -1,0 +1,11 @@
+<?php
+/**
+ * "Full Aside" template variant. Unlike the default/full templates, the title and
+ * description are NOT rendered here: template-full-aside.phtml renders them itself, as the
+ * first slide in the carousel track - it slides away together with the rest of the items as
+ * you page forward, rather than being printed as a plain heading above the carousel.
+ */
+$this->setMainTemplate('MageOS_Widgetkit::widget/hyva/slider/template-full-aside.phtml');
+?>
+<?= $this->getChildHtml("previewAssets"); ?>
+<?= $this->renderMainTemplate(); ?>

@@ -6,8 +6,6 @@
         <referenceBlock name="require.js" template="MageOS_Widgetkit::page/js/require_js.phtml">
             <arguments>
                 <argument name="alpinejs_path" xsi:type="string">Hyva_Theme::js/alpine3.min.js</argument>
-                <argument name="twindjs_path" xsi:type="string">MageOS_Widgetkit::js/twind.min.js</argument>
-                <argument name="twindjs-sheet_path" xsi:type="string">MageOS_Widgetkit::js/twind/sheet.min.js</argument>
             </arguments>
         </referenceBlock>
     </body>

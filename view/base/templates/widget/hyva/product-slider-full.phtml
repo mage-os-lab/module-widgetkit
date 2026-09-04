@@ -1,0 +1,28 @@
+<?php
+use MageOS\Widgetkit\Block\Widgets\ProductSlider;
+use Magento\Framework\Escaper;
+
+/**
+ * @var ProductSlider $this
+ * @var Escaper $escaper
+ */
+
+$titleType            = $this->getData('mageos_product_slider_title_type');
+$titleCssClasses      = $this->getData('mageos_product_slider_title_classes');
+$descriptionCssClasses = $this->getData('mageos_product_slider_description_classes');
+?>
+<?= $this->getChildHtml("previewAssets"); ?>
+<?php if (!empty($this->getData('mageos_product_slider_title'))): ?>
+<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
+    <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_product_slider_title')); ?>
+</<?= $this->getData('mageos_product_slider_title_type'); ?>>
+<?php endif; ?>
+
+<?php if (!empty($this->getData('mageos_product_slider_description'))): ?>
+<div class="<?= $descriptionCssClasses; ?>">
+    <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_product_slider_description')); ?>
+</div>
+<?php endif; ?>
+
+<?php $this->setMainTemplate('MageOS_Widgetkit::widget/hyva/product-slider/template-full.phtml'); ?>
+<?= $this->renderMainTemplate(); ?>

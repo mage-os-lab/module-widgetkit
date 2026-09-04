@@ -1,0 +1,41 @@
+<?php
+
+use MageOS\Widgetkit\Block\Widgets\ProductGrid;
+use Magento\Framework\Escaper;
+
+/**
+ * @var ProductGrid $this
+ * @var Escaper $escaper
+ */
+
+$params = $this->getData('params');
+$items  = $this->getData('items');
+
+$colsMobile  = (int)($params['mageos_product_grid_columns_mobile'] ?? 1);
+$colsTablet  = (int)($params['mageos_product_grid_columns_tablet'] ?? 2);
+$colsDesktop = (int)($params['mageos_product_grid_columns_desktop'] ?? 3);
+$gap         = $params['mageos_product_grid_gap'] ?? '4';
+
+$gridColsClasses = sprintf(
+    'grid-cols-%d md:grid-cols-%d lg:grid-cols-%d',
+    $colsMobile,
+    $colsTablet,
+    $colsDesktop
+);
+$gapClass = $gap !== '0' ? 'gap-' . $gap : '';
+$hasTitle = !empty($params['mageos_product_grid_title']);
+?>
+
+<div
+    class="grid <?= $escaper->escapeHtmlAttr($gridColsClasses) ?> <?= $escaper->escapeHtmlAttr($gapClass) ?>"
+    <?php if ($hasTitle): ?>
+    role="region"
+    aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_product_grid_title'])) ?>"
+    <?php endif; ?>
+>
+    <?php foreach ($items as $item): ?>
+        <div class="grid-item w-full">
+            <?= $this->renderProductItem($item); ?>
+        </div>
+    <?php endforeach; ?>
+</div>

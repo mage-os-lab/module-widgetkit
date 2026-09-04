@@ -1,0 +1,32 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\Slider\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ *
+ * PageBuilder stage preview for the "Full" carousel template variant.
+ */
+$uniqId = uniqid();
+$titleCssClasses = $this->getData('mageos_slider_title_classes');
+$descriptionCssClasses = $this->getData('mageos_slider_description_classes');
+?>
+<div class="slider-widget">
+    <?= $this->getChildHtml("previewAssets"); ?>
+    <?php if (!empty($this->getData('mageos_slider_title'))): ?>
+        <<?= $this->getData('mageos_slider_title_type'); ?> class="<?= $titleCssClasses; ?>">
+            <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_slider_title')); ?>
+        </<?= $this->getData('mageos_slider_title_type'); ?>>
+    <?php endif; ?>
+    <?php if (!empty($this->getData('mageos_slider_description'))): ?>
+        <div class="<?= $descriptionCssClasses; ?>"><?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_slider_description')); ?></div>
+    <?php endif; ?>
+
+    <div id="widget<?= $uniqId; ?>">
+        <?php $this->setMainTemplate('MageOS_Widgetkit::widget/hyva/slider/template-full.phtml'); ?>
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>

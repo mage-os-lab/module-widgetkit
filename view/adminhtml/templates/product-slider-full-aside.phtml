@@ -1,0 +1,24 @@
+<?php
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use MageOS\Widgetkit\Block\Adminhtml\ProductSlider\Preview;
+use Magento\Framework\Escaper;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Preview $block
+ * @var Escaper $escaper
+ *
+ * PageBuilder stage preview for the "Full Aside" template variant. Title/description are
+ * rendered by template-full-aside.phtml itself (as the carousel's first slide), not here -
+ * see the frontend wrapper's own doc comment.
+ */
+$uniqId = uniqid();
+?>
+<div class="product-slider-widget">
+    <?= $this->getChildHtml("previewAssets"); ?>
+
+    <div id="widget<?= $uniqId; ?>">
+        <?php $this->setMainTemplate('MageOS_Widgetkit::widget/hyva/product-slider/template-full-aside.phtml'); ?>
+        <?= $this->renderMainTemplate(); ?>
+    </div>
+</div>
