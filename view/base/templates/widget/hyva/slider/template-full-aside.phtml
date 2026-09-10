@@ -33,7 +33,7 @@ $items    = $this->getData('items');
 $uniqId   = uniqid();
 $sliderId = 'slider-' . $uniqId;
 
-$titleType = $params['mageos_slider_title_type'] ?? 'h2';
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($params['mageos_slider_title_type'] ?? 'h2');
 $titleCssClasses = $params['mageos_slider_title_classes'] ?? '';
 $descriptionCssClasses = $params['mageos_slider_description_classes'] ?? '';
 
@@ -184,7 +184,7 @@ $trackPaddingCss = $hideControlsInitially
                     <?php endif; ?>
                     <?php if (!empty($params['mageos_slider_description'])): ?>
                     <div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses); ?>">
-                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_slider_description']); ?>
+                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($params['mageos_slider_description']); ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -244,11 +244,12 @@ $trackPaddingCss = $hideControlsInitially
                              * the h-full img) crops arbitrary admin-uploaded images to fit,
                              * same convention as grid-stacked's own v2 template.
                              */ ?>
-                            <picture class="block w-full overflow-hidden" style="aspect-ratio: 1 / 1;">
+                            <?php if (!empty($item['image'])): ?>
+                        <picture class="block w-full overflow-hidden" style="aspect-ratio: 1 / 1;">
                                 <?php if ($mobileImage): ?>
                                 <source
                                     media="(max-width: 768px)"
-                                    srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                                    srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                                     type="image/jpeg"
                                 />
                                 <?php endif; ?>
@@ -265,17 +266,18 @@ $trackPaddingCss = $hideControlsInitially
                                     <?php endif; ?>
                                 />
                             </picture>
+                        <?php endif; ?>
 
                             <?php if ($hasContent): ?>
                             <div class="w-full grow <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
                                 <?php if (!empty($item['title'])): ?>
-                                <div class="<?= $itemTitleClass; ?>">
+                                <div class="<?= $escaper->escapeHtmlAttr($itemTitleClass ?? ''); ?>">
                                     <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
                                 </div>
                                 <?php endif; ?>
                                 <?php if (!empty($item['content'])): ?>
-                                <div class="<?= $itemContentClass; ?>">
-                                    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                                <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                                    <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content'], !$hasLink); ?>
                                 </div>
                                 <?php endif; ?>
                                 <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>

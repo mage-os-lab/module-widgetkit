@@ -80,12 +80,12 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
                             <?php if ($mobileImage): ?>
                             <source
                                 media="(max-width: 768px)"
-                                srcset="<?= htmlspecialchars($mobileImage, ENT_QUOTES, 'UTF-8') ?>"
+                                srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                                 type="image/jpeg"
                             />
                             <?php endif; ?>
                             <img
-                                src="<?= $image['src']; ?>"
+                                src="<?= $escaper->escapeUrl($image['src']); ?>"
                                 alt="<?= htmlspecialchars($image['alt'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                                 class="absolute inset-0 h-full w-full object-cover"
                                 <?php if ($image['loading'] === 'eager'): ?>
@@ -114,28 +114,24 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
                         ], $params);
                         $hasLink = !empty($item['button_link']) && !empty($item['button']);
                         $itemTitle = \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title']);
-                        $itemContent = \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']);
-                        if ($hasLink) {
-                            $itemTitle = $this->stripTags($itemTitle);
-                            $itemContent = $this->stripTags($itemContent);
-                        }
+                        $itemContent = \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']);
                         // Default is Yes (card shown) - only an explicit "No" turns it off.
                         $useCard = ($item['use_card'] ?? 'true') !== 'false';
                         ?>
                         <div class="slide-content <?= $useCard ? 'card' : ''; ?> absolute left-1/2 -translate-x-1/2 bottom-8 w-full max-w-[80vw] md:top-1/2 md:bottom-auto md:-translate-y-1/2 md:min-w-lg text-left">
                             <?php if (!empty($itemTitle)): ?>
-                            <<?= $item['title_tag']; ?> class="<?= $titleClasses; ?>"><?= $itemTitle ?></<?= $item['title_tag']; ?>>
+                            <<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag']); ?> class="<?= $escaper->escapeHtmlAttr($titleClasses ?? ''); ?>"><?= $escaper->escapeHtml($itemTitle) ?></<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag']); ?>>
                             <?php endif; ?>
 
                             <?php if (!empty($itemContent)): ?>
-                            <div class="<?= $contentClasses; ?>"><?= $itemContent; ?></div>
+                            <div class="<?= $escaper->escapeHtmlAttr($contentClasses ?? ''); ?>"><?= $itemContent; ?></div>
                             <?php endif; ?>
 
                             <?php if ($hasLink): ?>
                             <div>
                                 <a
                                     class="btn btn-primary"
-                                    href="<?= $item['button_link']; ?>"
+                                    href="<?= $escaper->escapeUrl($item['button_link']); ?>"
                                     aria-label="<?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['button'])); ?>"
                                     target="<?= $this->resolveExpression(['_blank {@button_link_target}'], $item); ?>"
                                 >
@@ -150,7 +146,7 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
         </div>
 
         <?php if ($slidenavVisibility !== 'hide'): ?>
-        <div class="<?= $slidenavClass; ?> items-center px-4 gap-2">
+        <div class="<?= $escaper->escapeHtmlAttr($slidenavClass ?? ''); ?> items-center px-4 gap-2">
             <button type="button" @click="prev('button')" class="btn btn-secondary p-2 z-10"
                     x-bind:disabled="currentIndex === 0"
                     aria-label="<?= __('Previous Slide'); ?>" data-prev="">
@@ -175,7 +171,7 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
         x-cloak
         x-show="dotsNavigation"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>"
-        class="flex flex-wrap gap-3 <?= $navigationPositionClass; ?> py-4 px-2"
+        class="flex flex-wrap gap-3 <?= $escaper->escapeHtmlAttr($navigationPositionClass ?? ''); ?> py-4 px-2"
     >
         <?php
         $thumbnavWidth = (int)$params['mageos_slideshow_navigation_thumbnav_width'] ?? 100;
@@ -194,7 +190,7 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Go to slide %1', $index + 1)) ?>"
             >
                 <img
-                    src="<?= $thumbSrc; ?>"
+                    src="<?= $escaper->escapeUrl($thumbSrc); ?>"
                     alt=""
                     loading="eager"
                     width="<?= $thumbnavWidth; ?>"
@@ -205,7 +201,7 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
         <?php $index++; endforeach; ?>
     </nav>
     <?php else: ?>
-    <nav x-show="dotsNavigation" class="<?= $navigationPositionClass; ?> px-2 snap-pager"
+    <nav x-show="dotsNavigation" class="<?= $escaper->escapeHtmlAttr($navigationPositionClass ?? ''); ?> px-2 snap-pager"
          aria-label="<?= $escaper->escapeHtmlAttr(__('Slide navigation')) ?>">
         <?php
             $index = 0;
@@ -230,15 +226,15 @@ $slidenavClass = 'flex absolute top-0 left-0 mx-4 my-4';
         return {
             images: [
                 <?php foreach ($items as $index => $item): ?>
-                '<?= isset($item['image']) ? $escaper->escapeUrl($item['image']) : ''; ?>',
+                '<?= isset($item['image']) ? $escaper->escapeJs($item['image']) : ''; ?>',
                 <?php endforeach; ?>
             ],
             arrowsNavigation: true,
             dotsNavigation: true,
-            transition: '<?= $params['mageos_slideshow_transition']; ?>',
+            transition: '<?= $escaper->escapeJs($params['mageos_slideshow_transition'] ?? 'slide'); ?>',
             loop: false,
             autoplay: <?= (int)$params['mageos_slideshow_autoplay'] ? 'true' : 'false'; ?>,
-            autoplayDuration: <?= isset($params['mageos_slideshow_speed']) ? $params['mageos_slideshow_speed'] * 1000: 0; ?>,
+            autoplayDuration: <?= \MageOS\Widgetkit\Model\WidgetOutput::duration($params['mageos_slideshow_speed'] ?? 3); ?>,
             currentIndex: 0,
             autoplayInterval: null,
             autoplayProgress: 0,

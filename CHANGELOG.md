@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Fixed
+
+- Sanitize decoded WYSIWYG HTML and escape plain text, URLs, attributes and JavaScript values in storefront and preview templates. Validate heading tags and custom accordion SVGs.
+- Remove the CSS parser version conflict with Mage-OS 3.5. Preserve layered and nested preview CSS with browser scoping and stage-width container queries.
+- Resolve registered/inherited theme assets and isolate preview font sizing from Magento admin. Include source content, asset URL, locale and rendering configuration in stylesheet cache keys.
+- Render previews in the CMS editor's selected store and restore store/theme/locale state after failures, including nested renders.
+- Return product identities from outer widgets, filter disabled and individually hidden products, and keep repeated product rows independent without overwriting catalog attributes.
+- Apply validated product-grid placement and include column start/end utilities in both Tailwind configurations.
+- Reject impossible countdown dates and normalize invalid slideshow durations.
+- Preserve rich-text formatting, omit empty slider images, keep original marquee items accessible, and prevent nested card/CTA links.
+- Give slider sections unique configuration names.
+
+### Added
+
+- PHP unit tests, local Magento runtime checks, and browser fixtures for security and preview CSS behavior.
+
 ## 2.0.0
 ### Change of main logic
 - Changing the core logic: switching from Twind.js to compiling CSS previews using Sabberworm in PHP. 

@@ -307,7 +307,7 @@
                 </options>
             </parameter>
 
-            <parameter name="mageos_slider_content_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
+            <parameter name="mageos_slider_layout_section_title" xsi:type="block" required="false" visible="true" sort_order="40">
                 <description>
                     <![CDATA[<h3 style="margin: 40px 0px; text-align: center;">Content</h3>]]></description>
                 <block class="MageOS\AdvancedWidget\Block\Adminhtml\Renderer\Title"/>

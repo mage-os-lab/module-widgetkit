@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace MageOS\Widgetkit\Block\Widgets;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
@@ -23,6 +25,7 @@ use Magento\Review\Model\AppendSummaryDataFactory;
 class ProductWidget extends Template implements BlockInterface
 {
     protected ?LayoutInterface $productItemLayout = null;
+    private ?string $productItemLayoutContext = null;
 
     public function __construct(
         protected Conditions $conditionsHelper,
@@ -79,7 +82,10 @@ class ProductWidget extends Template implements BlockInterface
      */
     public function getProductItemLayout(): LayoutInterface
     {
-        if ($this->productItemLayout === null) {
+        $context = implode(':', [$this->_storeManager->getStore()->getId(), $this->viewDesign->getArea(),
+            $this->viewDesign->getDesignTheme()->getId()]);
+        if ($this->productItemLayout === null || $this->productItemLayoutContext !== $context) {
+            $this->productItemLayoutContext = $context;
             $isAdminhtml = $this->isAdminhtmlArea();
             $handle = $isAdminhtml ? $this->_adminhtmlCatalogListItemHandle : $this->_frontendCatalogListItemHandle;
 
@@ -155,9 +161,9 @@ class ProductWidget extends Template implements BlockInterface
 
                 if (!$this->isAdminhtmlArea() && $this->isHyvaWidget) {
                     $compareJSBlock = $this->getProductItemLayout()->getBlock('category.products.list.js.compare');
-                    $listItemBlockHtml .= $compareJSBlock->toHtml();
+                    $listItemBlockHtml .= ($compareJSBlock ? $compareJSBlock->toHtml() : '');
                     $wishlistJSBlock = $this->getProductItemLayout()->getBlock('category.products.list.js.wishlist');
-                    $listItemBlockHtml .= $wishlistJSBlock->toHtml();
+                    $listItemBlockHtml .= ($wishlistJSBlock ? $wishlistJSBlock->toHtml() : '');
                 }
 
                 return $listItemBlockHtml;
@@ -188,6 +194,11 @@ class ProductWidget extends Template implements BlockInterface
 
         $collection = $this->productCollectionFactory->create();
         $collection
+            ->setStoreId((int)$this->_storeManager->getStore()->getId())
+            ->addStoreFilter($this->_storeManager->getStore())
+            ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+            ->addAttributeToFilter('visibility', ['in' => [Visibility::VISIBILITY_IN_CATALOG,
+                Visibility::VISIBILITY_IN_SEARCH, Visibility::VISIBILITY_BOTH]])
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
@@ -213,8 +224,10 @@ class ProductWidget extends Template implements BlockInterface
             $product = $productsById[(int)$rawItem['product']] ?? null;
             unset($rawItem['product']);
             if ($product) {
-                foreach ($rawItem as $key => $data) {
-                    $product->setData($key, $data);
+                $product = clone $product;
+                // Repeatable row data must never overwrite catalog attributes such as price or name.
+                foreach (['col_start_global', 'col_start_tablet', 'col_start_desktop'] as $key) {
+                    $product->setData($key, $rawItem[$key] ?? 'auto');
                 }
                 $products[] = $product;
             }

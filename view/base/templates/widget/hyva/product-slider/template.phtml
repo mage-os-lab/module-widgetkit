@@ -87,7 +87,7 @@ $slidenavVisibility = $params['mageos_product_slider_slidenav_visibility'] ?? 's
     </div>
 
     <div
-        class="snap-track <?= $snapColsClasses ?>"
+        class="snap-track <?= $escaper->escapeHtmlAttr($snapColsClasses ?? '') ?>"
         data-track
         tabindex="0"
         role="region"

@@ -31,7 +31,8 @@ class PreviewThemeResolver
         protected BlockFactory $blockFactory,
         protected ScopeConfigInterface $scopeConfig,
         protected ThemeProviderInterface $themeProvider,
-        protected HyvaThemeChecker $hyvaThemeChecker
+        protected HyvaThemeChecker $hyvaThemeChecker,
+        protected \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
     }
 
@@ -40,10 +41,27 @@ class PreviewThemeResolver
      */
     public function getThemePath(): ?string
     {
-        $storeId = $this->getFirstAssignedStoreId();
+        $storeId = $this->getStoreId();
         $themePath = $storeId !== null ? $this->getHyvaChildThemePathForStore($storeId) : null;
 
         return $themePath ?? $this->config->getPreviewThemePath();
+    }
+
+    public function getStoreId(): int
+    {
+        $requested = $this->request->getParam('widgetkit_store_id');
+        $storeId = $requested !== null ? (int)$requested : $this->getFirstAssignedStoreId();
+        if ($storeId && $storeId > 0) {
+            try {
+                $store = $this->storeManager->getStore($storeId);
+                if ($store->isActive()) { return (int)$store->getId(); }
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                // Stale editor state falls back to the default storefront.
+            }
+        }
+        $store = $this->storeManager->getDefaultStoreView();
+        if (!$store) { throw new \RuntimeException('No default storefront is configured.'); }
+        return (int)$store->getId();
     }
 
     /**

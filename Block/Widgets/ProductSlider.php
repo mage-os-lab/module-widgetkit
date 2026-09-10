@@ -17,8 +17,21 @@ use Magento\Review\Block\Product\ReviewRenderer;
 use Magento\Review\Model\AppendSummaryDataFactory;
 use MageOS\Widgetkit\Block\Widgets\ProductWidget;
 
-class ProductSlider extends HyvaWidget implements BlockInterface
+class ProductSlider extends HyvaWidget implements BlockInterface, \Magento\Framework\DataObject\IdentityInterface
 {
+
+    /** Include selected IDs even when currently hidden, so making one visible invalidates the page. */
+    public function getIdentities(): array
+    {
+        $identities = [];
+        foreach ($this->getRepeatableField('repeatable_product_slider_items') as $row) {
+            $id = (int)($row['product'] ?? 0);
+            if ($id > 0) {
+                $identities[] = Product::CACHE_TAG . '_' . $id;
+            }
+        }
+        return array_values(array_unique($identities));
+    }
 
     /**
      * @param State $state
