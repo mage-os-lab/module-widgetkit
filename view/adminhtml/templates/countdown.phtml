@@ -12,10 +12,10 @@ use Magento\Framework\Escaper;
  * an illustrative, non-ticking mock of the running state so the admin can see the
  * configured title/description/button styling regardless of the actual dates.
  */
-$titleType = $block->getData('mageos_countdown_title_type') ?: 'h2';
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($block->getData('mageos_countdown_title_type') ?: 'h2');
 $titleCssClasses = $block->getData('mageos_countdown_title_classes');
 $title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_title'));
-$description = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_description'));
+$description = \MageOS\Widgetkit\Model\RichTextDecoder::html($block->getData('mageos_countdown_description'));
 $buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($block->getData('mageos_countdown_button_text'));
 $buttonLink = $block->getData('mageos_countdown_button_link');
 ?>

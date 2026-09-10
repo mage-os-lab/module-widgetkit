@@ -10,14 +10,14 @@ use Magento\Framework\Escaper;
  * @var Escaper $escaper
  */
 
-$titleType = $this->getData('mageos_countdown_title_type') ?: 'h2';
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($this->getData('mageos_countdown_title_type') ?: 'h2');
 $titleCssClasses = $this->getData('mageos_countdown_title_classes');
 $title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_title'));
-$description = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_description'));
+$description = \MageOS\Widgetkit\Model\RichTextDecoder::html($this->getData('mageos_countdown_description'));
 $buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_button_text'));
 $buttonLink = $this->getData('mageos_countdown_button_link');
 $buttonTarget = $this->getData('mageos_countdown_button_target') ?: '_self';
-$finishedContent = \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_countdown_finished_content'));
+$finishedContent = \MageOS\Widgetkit\Model\RichTextDecoder::html($this->getData('mageos_countdown_finished_content'));
 
 $isExpiredAtLoad = $this->isExpired();
 $endTimestampMs = (int)$this->getTimestamp('mageos_countdown_end') * 1000;

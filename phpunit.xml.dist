@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="Test/bootstrap.php" cacheResult="false" colors="true">
+    <testsuites><testsuite name="Widgetkit"><directory>Test/Unit</directory></testsuite></testsuites>
+</phpunit>

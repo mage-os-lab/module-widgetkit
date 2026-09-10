@@ -15,10 +15,10 @@ use Magento\Framework\Escaper;
 
 $params = $this->getData('params');
 
-$titleTag = $params['mageos_banner_title_type'] ?? 'h2';
+$titleTag = \MageOS\Widgetkit\Model\WidgetOutput::heading($params['mageos_banner_title_type'] ?? 'h2');
 $title = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_title'] ?? '');
 $titleClasses = $params['mageos_banner_title_classes'] ?? '';
-$content = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_content'] ?? '');
+$content = \MageOS\Widgetkit\Model\RichTextDecoder::html($params['mageos_banner_content'] ?? '');
 $contentClasses = $params['mageos_banner_content_classes'] ?? '';
 $buttonText = \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_banner_button_text'] ?? '');
 $buttonLink = $params['mageos_banner_button_link'] ?? '';
@@ -39,7 +39,7 @@ $imageLoading = $params['mageos_banner_image_loading'] ?? 'lazy';
     <div class="w-full md:w-1/2">
         <picture class="block w-full h-full">
             <?php if ($mobileImage): ?>
-            <source media="(max-width: 768px)" srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>" type="image/jpeg" />
+            <source media="(max-width: 768px)" srcset="<?= $escaper->escapeUrl($mobileImage) ?>" type="image/jpeg" />
             <?php endif; ?>
             <img
                 src="<?= $escaper->escapeUrl($image) ?>"

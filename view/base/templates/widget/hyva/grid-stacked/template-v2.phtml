@@ -36,12 +36,12 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
         <div class="grid-stacked-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col md:grid md:grid-cols-3 md:items-center gap-2 w-full">
 
             <?php if (!empty($item['image'])): ?>
-            <div class="<?= $imageOrderClass ?> w-full">
+            <div class="<?= $escaper->escapeHtmlAttr($imageOrderClass ?? '') ?> w-full">
                 <picture class="block w-full aspect-[10/16] overflow-hidden">
                     <?php if ($mobileImage): ?>
                     <source
                         media="(max-width: 768px)"
-                        srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                        srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                         type="image/jpeg"
                     />
                     <?php endif; ?>
@@ -62,17 +62,17 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
 
             <?php if (!empty($item['title'])): ?>
             <div class="md:order-2 w-full text-center">
-                <<?= $item['title_tag'] ?? 'h3' ?> class="text-3xl text-left">
+                <<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?> class="text-3xl text-left">
                     <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
-                </<?= $item['title_tag'] ?? 'h3' ?>>
+                </<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?>>
             </div>
             <?php endif; ?>
 
             <?php if (!empty($item['content']) || ($hasLink && !empty($item['button']))): ?>
-            <div class="<?= $contentOrderClass ?> w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
+            <div class="<?= $escaper->escapeHtmlAttr($contentOrderClass ?? '') ?> w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
                 <?php if (!empty($item['content'])): ?>
-                <div class="<?= $itemContentClass; ?>">
-                    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                    <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']); ?>
                 </div>
                 <?php endif; ?>
                 <?php if ($hasLink && !empty($item['button'])): ?>

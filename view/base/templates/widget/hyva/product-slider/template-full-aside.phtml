@@ -34,7 +34,7 @@ $items    = $this->getData('items');
 $uniqId   = uniqid();
 $sliderId = 'product-slider-' . $uniqId;
 
-$titleType = $params['mageos_product_slider_title_type'] ?? 'h2';
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($params['mageos_product_slider_title_type'] ?? 'h2');
 $titleCssClasses = $params['mageos_product_slider_title_classes'] ?? '';
 $descriptionCssClasses = $params['mageos_product_slider_description_classes'] ?? '';
 
@@ -173,7 +173,7 @@ $trackPaddingCss = $hideControlsInitially
                     <?php endif; ?>
                     <?php if (!empty($params['mageos_product_slider_description'])): ?>
                     <div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses); ?>">
-                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_product_slider_description']); ?>
+                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($params['mageos_product_slider_description']); ?>
                     </div>
                     <?php endif; ?>
                 </div>

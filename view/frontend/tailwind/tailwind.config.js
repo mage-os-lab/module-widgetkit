@@ -16,12 +16,12 @@ module.exports = {
       ...[1, 2, 3, 4, 5, 6].map((n) => `grid-cols-${n}`),
       ...[1, 2, 3, 4, 5, 6].map((n) => `md:grid-cols-${n}`),
       ...[1, 2, 3, 4, 5, 6].map((n) => `lg:grid-cols-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `col-start-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `md:col-start-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `lg:col-start-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `col-end-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `md:col-end-${n}`),
-      ...[1, 2, 3, 4, 5, 6].map((n) => `lg:col-end-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `col-start-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `md:col-start-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `lg:col-start-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `col-end-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `md:col-end-${n}`),
+      ...[1, 2, 3, 4, 5, 6, 7].map((n) => `lg:col-end-${n}`),
       // Grid gap classes
       ...[0, 1, 2, 4, 6, 8].map((n) => `gap-${n}`),
       // Grid Stacked v2 column-order classes

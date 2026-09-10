@@ -50,7 +50,12 @@ class Countdown extends Template implements BlockInterface
             new \DateTimeZone($this->timezone->getConfigTimezone())
         );
 
-        return $date instanceof \DateTime ? $date->getTimestamp() : null;
+        $errors = \DateTime::getLastErrors();
+        if (!$date || ($errors && ($errors['warning_count'] || $errors['error_count']))
+            || $date->format(DateTime::PHP_DATETIME_FORMAT) !== $value) {
+            return null;
+        }
+        return $date->getTimestamp();
     }
 
     /**

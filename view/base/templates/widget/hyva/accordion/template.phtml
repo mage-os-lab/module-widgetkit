@@ -22,7 +22,7 @@ $defaultChevronIcon = <<<'SVG'
     <polyline points="6 9 12 15 18 9"></polyline>
 </svg>
 SVG;
-$icon = !empty($params['mageos_accordion_icon']) ? $params['mageos_accordion_icon'] : $defaultChevronIcon;
+$icon = \MageOS\Widgetkit\Model\WidgetOutput::icon($params['mageos_accordion_icon'] ?? '', $defaultChevronIcon);
 
 $hasTitle = !empty($params['mageos_accordion_title']);
 ?>
@@ -37,7 +37,7 @@ $hasTitle = !empty($params['mageos_accordion_title']);
 >
     <?php foreach ($items as $index => $item): ?>
         <?php
-        $titleTag = $item['title_tag'] ?? 'h3';
+        $titleTag = \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3');
         $panelId  = 'mageos-accordion-panel-' . $uniqId . '-' . $index;
         $buttonId = 'mageos-accordion-trigger-' . $uniqId . '-' . $index;
         ?>
@@ -68,7 +68,7 @@ $hasTitle = !empty($params['mageos_accordion_title']);
             >
                 <div class="overflow-hidden">
                     <div class="accordion-content pb-4">
-                        <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'] ?? '') ?>
+                        <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content'] ?? '') ?>
                     </div>
                 </div>
             </div>

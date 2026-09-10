@@ -6,7 +6,7 @@ namespace MageOS\Widgetkit\Block\Adminhtml\Countdown;
 use Magento\Widget\Block\BlockInterface;
 use MageOS\Widgetkit\Block\Widgets\Countdown;
 
-class Preview extends Countdown implements BlockInterface
+class Preview extends Countdown implements BlockInterface, \MageOS\Widgetkit\Block\Adminhtml\PreviewInterface
 {
     public function getCacheKeyInfo(): array
     {

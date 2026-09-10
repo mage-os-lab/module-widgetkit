@@ -38,7 +38,7 @@ $hasTitle = !empty($params['mageos_information_grid_title']);
         <div class="information-grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full">
             <?php
             $linkTarget = $item['button_link_target'] ?? '_self';
-            $titleTag   = $item['title_tag'] ?? 'h3';
+            $titleTag   = \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3');
 
             // Title/content/icon are always centered - this widget is meant for a "feature
             // grid" layout (icon, heading, blurb, CTA - each stacked and centered), not a
@@ -67,13 +67,13 @@ $hasTitle = !empty($params['mageos_information_grid_title']);
                         </div>
                         <?php endif; ?>
                         <?php if (!empty($item['title'])): ?>
-                        <<?= $titleTag; ?> class="<?= $itemTitleClass; ?>">
+                        <<?= $titleTag; ?> class="<?= $escaper->escapeHtmlAttr($itemTitleClass ?? ''); ?>">
                             <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
                         </<?= $titleTag; ?>>
                         <?php endif; ?>
                         <?php if (!empty($item['content'])): ?>
-                        <div class="<?= $itemContentClass; ?>">
-                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                        <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                            <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']); ?>
                         </div>
                         <?php endif; ?>
                         <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>

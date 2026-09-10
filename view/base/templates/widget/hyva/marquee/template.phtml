@@ -28,13 +28,13 @@ $loop = $items ? [...$items, ...$items] : [];
     aria-label="<?= $escaper->escapeHtmlAttr($params['mageos_marquee_title'] ?? __('Marquee')) ?>"
 >
     <div class="marquee-track flex w-max items-center">
-        <?php foreach ($loop as $item): ?>
+        <?php foreach ($loop as $index => $item): ?>
             <?php
-            $titleTag = $item['title_tag'] ?? 'h3';
+            $titleTag = \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3');
             $hasTitle = !empty($item['title']);
             $hasContent = !empty($item['content']);
             ?>
-            <div class="marquee-item flex shrink-0 flex-col items-center justify-center text-center" aria-hidden="true">
+            <div class="marquee-item flex shrink-0 flex-col items-center justify-center text-center" <?php if ($index >= count($items)): ?>aria-hidden="true" inert<?php endif; ?>>
                 <?php if (!empty($item['image'])): ?>
                 <img
                     src="<?= $escaper->escapeUrl($item['image']) ?>"
@@ -48,7 +48,7 @@ $loop = $items ? [...$items, ...$items] : [];
                 <<?= $titleTag ?> class="marquee-item__title"><?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])) ?></<?= $titleTag ?>>
                 <?php endif; ?>
                 <?php if ($hasContent): ?>
-                <div class="marquee-item__content"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']) ?></div>
+                <div class="marquee-item__content"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']) ?></div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>

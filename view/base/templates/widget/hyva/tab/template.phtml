@@ -78,7 +78,7 @@ $hasTitle = !empty($params['mageos_tab_title']);
                 class="tab-panel py-4"
             >
                 <?php if (!empty($item['content'])): ?>
-                <div class="tab-panel__content card"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content']) ?></div>
+                <div class="tab-panel__content card"><?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']) ?></div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>

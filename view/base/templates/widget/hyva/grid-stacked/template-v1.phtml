@@ -35,7 +35,7 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
                     <?php if ($mobileImage): ?>
                     <source
                         media="(max-width: 768px)"
-                        srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                        srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                         type="image/jpeg"
                     />
                     <?php endif; ?>
@@ -57,13 +57,13 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
             <?php if ($hasContent): ?>
             <div class="w-full md:w-1/2 <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
                 <?php if (!empty($item['title'])): ?>
-                <<?= $item['title_tag'] ?? 'h3' ?> class="<?= $itemTitleClass; ?>">
+                <<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?> class="<?= $escaper->escapeHtmlAttr($itemTitleClass ?? ''); ?>">
                     <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
-                </<?= $item['title_tag'] ?? 'h3' ?>>
+                </<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?>>
                 <?php endif; ?>
                 <?php if (!empty($item['content'])): ?>
-                <div class="<?= $itemContentClass; ?>">
-                    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                    <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']); ?>
                 </div>
                 <?php endif; ?>
                 <?php if ($hasLink && !empty($item['button'])): ?>

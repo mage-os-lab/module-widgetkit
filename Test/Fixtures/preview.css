@@ -1,0 +1,16 @@
+@layer theme, base, utilities;
+@layer theme { :root, :host { --widgetkit-color: rgb(0, 128, 0); } }
+@layer base { html, :host { font-family: sans-serif; } }
+@layer utilities {
+    .layered { color: blue; }
+    .sized { font-size: 1.125rem; }
+    .nested { & strong { color: var(--widgetkit-color); } }
+    @supports (display: grid) {
+        @media (width >= 48rem) { .responsive { display: grid; } }
+    }
+    @media screen and (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+        .device { border-top: 3px solid red; }
+    }
+    .nested-media { @media (min-width: 768px) { display: flex; } }
+    .literal::before { content: "@media (min-width: 1px) { :root }"; }
+}
