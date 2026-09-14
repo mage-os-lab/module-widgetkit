@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.1.0
+### Updated
+- Compatibility with sabberworm/php-css-parser ^9.0 (required by Magento 2.4.9) while keeping ^8.7 support: replace the `__toString()` casts removed in 9.0 with `render(OutputFormat)`
+
 ## 2.0.0
 ### Change of main logic
 - Changing the core logic: switching from Twind.js to compiling CSS previews using Sabberworm in PHP. 
