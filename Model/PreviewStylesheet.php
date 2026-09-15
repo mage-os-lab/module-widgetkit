@@ -8,9 +8,12 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolverInterface;
 use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
 use Sabberworm\CSS\CSSList\AtRuleBlockList;
+use Sabberworm\CSS\OutputFormat;
 use Sabberworm\CSS\Parser as CssParser;
 use Sabberworm\CSS\Property\Selector;
 use Sabberworm\CSS\RuleSet\DeclarationBlock;
+use Sabberworm\CSS\Parsing\OutputException;
+use Sabberworm\CSS\Parsing\UnexpectedTokenException;
 
 /**
  * Serves widget previews a real, theme-accurate stylesheet: takes the configured theme's
@@ -180,6 +183,8 @@ class PreviewStylesheet
      * @param string $cacheFile
      * @param string $themePath
      * @return void
+     * @throws OutputException
+     * @throws UnexpectedTokenException
      */
     private function regenerate(string $sourceFile, string $cacheFile, string $themePath): void
     {
@@ -198,18 +203,19 @@ class PreviewStylesheet
             return;
         }
 
+        $outputFormat = OutputFormat::create();
         $default = '';
         $mobile = '';
 
         foreach ($document->getContents() as $item) {
             if ($item instanceof DeclarationBlock) {
                 if ($this->isDocumentLevelOnly($item)) {
-                    $preserved .= (string)$item;
+                    $preserved .= $item->render($outputFormat);
                     continue;
                 }
 
-                $default .= $this->rescope($item, self::SELECTOR_DEFAULT);
-                $mobile .= $this->rescope($item, self::SELECTOR_MOBILE);
+                $default .= $this->rescope($item, self::SELECTOR_DEFAULT, $outputFormat);
+                $mobile .= $this->rescope($item, self::SELECTOR_MOBILE, $outputFormat);
                 continue;
             }
 
@@ -223,9 +229,9 @@ class PreviewStylesheet
                         continue;
                     }
                     if ($hasMax && !$hasMin) {
-                        $mobile .= $this->rescope($inner, self::SELECTOR_MOBILE);
+                        $mobile .= $this->rescope($inner, self::SELECTOR_MOBILE, $outputFormat);
                     } else {
-                        $default .= $this->rescope($inner, self::SELECTOR_DEFAULT);
+                        $default .= $this->rescope($inner, self::SELECTOR_DEFAULT, $outputFormat);
                     }
                 }
                 continue;
@@ -238,8 +244,8 @@ class PreviewStylesheet
                     if (!$inner instanceof DeclarationBlock) {
                         continue;
                     }
-                    $innerDefault .= $this->rescope($inner, self::SELECTOR_DEFAULT);
-                    $innerMobile .= $this->rescope($inner, self::SELECTOR_MOBILE);
+                    $innerDefault .= $this->rescope($inner, self::SELECTOR_DEFAULT, $outputFormat);
+                    $innerMobile .= $this->rescope($inner, self::SELECTOR_MOBILE, $outputFormat);
                 }
                 if ($innerDefault !== '') {
                     $default .= '@supports ' . $item->atRuleArgs() . " {{$innerDefault}}\n";
@@ -247,7 +253,7 @@ class PreviewStylesheet
                 }
                 continue;
             }
-            $preserved .= (string)$item;
+            $preserved .= $item->render($outputFormat);
         }
 
         file_put_contents($cacheFile, $preserved . "\n" . $default . "\n" . $mobile);
@@ -282,9 +288,12 @@ class PreviewStylesheet
      *
      * @param DeclarationBlock $block
      * @param string $wrapperSelector
+     * @param OutputFormat $outputFormat
      * @return string
+     * @throws OutputException
+     * @throws UnexpectedTokenException
      */
-    private function rescope(DeclarationBlock $block, string $wrapperSelector): string
+    private function rescope(DeclarationBlock $block, string $wrapperSelector, OutputFormat $outputFormat): string
     {
         $clone = clone $block;
         $selectors = [];
@@ -293,6 +302,6 @@ class PreviewStylesheet
         }
         $clone->setSelectors($selectors);
 
-        return (string)$clone;
+        return $clone->render($outputFormat);
     }
 }
