@@ -3,20 +3,20 @@
  * Render slider component for Hyvä theme - "Full" carousel template variant.
  * See widget/hyva/slider/template-full.phtml for the actual carousel markup.
  */
-$titleType = $this->getData('mageos_slider_title_type');
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($this->getData('mageos_slider_title_type'));
 $titleCssClasses = $this->getData('mageos_slider_title_classes');
 $descriptionCssClasses = $this->getData('mageos_slider_description_classes');
 ?>
 <?= $this->getChildHtml("previewAssets"); ?>
 <?php if (!empty($this->getData('mageos_slider_title'))): ?>
-<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
-    <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_slider_title')); ?>
-</<?= $this->getData('mageos_slider_title_type'); ?>>
+<<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses ?? ''); ?>">
+    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_slider_title'))); ?>
+</<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($this->getData('mageos_slider_title_type')); ?>>
 <?php endif; ?>
 
 <?php if (!empty($this->getData('mageos_slider_description'))): ?>
-<div class="<?= $descriptionCssClasses; ?>">
-    <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_slider_description')); ?>
+<div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses ?? ''); ?>">
+    <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($this->getData('mageos_slider_description')); ?>
 </div>
 <?php endif; ?>
 

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.2.0
+- Sanitize decoded rich text with HTML Purifier, escape values for their output context, and validate heading tags, custom SVGs, placement classes and slideshow duration.
+- Fix "Save as Template" failing with `Attempting to parse an unsupported color function "oklch"`: downgrade oklch()/color-mix() colors in the admin widget preview stylesheet to legacy rgb()/rgba(), since PageBuilder's bundled html2canvas can't parse CSS Color 4 syntax. Only the cached admin/preview copy is touched — the storefront's own compiled theme CSS keeps its original wide-gamut colors. 
+- Render previews using the CMS editor's selected store, with environment cleanup after nested renders and exceptions.
+- Add product cache identities, filter disabled and individually hidden products, preserve independent repeated rows, and fix placement utilities, invalid countdown dates, empty images, nested links and marquee accessibility.
+Thanks to Matt MacDougall (@mattmacrocket) for PR #14, the basis for this release's rich-text sanitization, preview-rendering, and product/countdown fixes.
+
 ## 2.1.0
 ### Updated
 - Compatibility with sabberworm/php-css-parser ^9.0 (required by Magento 2.4.9) while keeping ^8.7 support: replace the `__toString()` casts removed in 9.0 with `render(OutputFormat)`

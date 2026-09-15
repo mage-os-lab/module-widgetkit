@@ -6,6 +6,7 @@ namespace MageOS\Widgetkit\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolverInterface;
 use Magento\Framework\UrlInterface;
+use MageOS\Widgetkit\Model\Css\ModernColorDowngrader;
 use Psr\Log\LoggerInterface;
 use Sabberworm\CSS\CSSList\AtRuleBlockList;
 use Sabberworm\CSS\OutputFormat;
@@ -20,6 +21,13 @@ use Sabberworm\CSS\Parsing\UnexpectedTokenException;
  * already-compiled Tailwind CSS (web/css/styles.css) and rewrites it so it responds to
  * PageBuilder's simulated viewport toggle (a CSS class, not a real media query) instead
  * of @media queries.
+ *
+ * The cached copy this produces is also downgraded from CSS Color 4 syntax (oklch(),
+ * color-mix()) to legacy rgb()/rgba() via ModernColorDowngrader, since the html2canvas
+ * build bundled with Magento_PageBuilder can't parse those and throws when an admin
+ * generates a template thumbnail ("Save as Template"). The theme's real, storefront-facing
+ * styles.css is only ever read here, never modified, so live visitors keep the original
+ * wide-gamut colors.
  */
 class PreviewStylesheet
 {
@@ -36,7 +44,8 @@ class PreviewStylesheet
         protected DirectoryList $directoryList,
         protected UrlInterface $urlBuilder,
         protected LocaleResolverInterface $localeResolver,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
+        protected ModernColorDowngrader $modernColorDowngrader
     ) {
     }
 
@@ -256,7 +265,9 @@ class PreviewStylesheet
             $preserved .= $item->render($outputFormat);
         }
 
-        file_put_contents($cacheFile, $preserved . "\n" . $default . "\n" . $mobile);
+        $finalCss = $this->modernColorDowngrader->downgrade($preserved . "\n" . $default . "\n" . $mobile);
+
+        file_put_contents($cacheFile, $finalCss);
     }
 
     /**

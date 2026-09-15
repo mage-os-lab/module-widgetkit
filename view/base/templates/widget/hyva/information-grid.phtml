@@ -1,18 +1,18 @@
 <?php
-$titleType = $this->getData('mageos_information_grid_title_type');
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($this->getData('mageos_information_grid_title_type'));
 $titleCssClasses = $this->getData('mageos_information_grid_title_classes');
 $descriptionCssClasses = $this->getData('mageos_information_grid_description_classes');
 ?>
 <?= $this->getChildHtml("previewAssets"); ?>
 <?php if (!empty($this->getData('mageos_information_grid_title'))): ?>
-<<?= $titleType ?> class="<?= $titleCssClasses; ?>">
-    <?= /* @noEscape */ \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_information_grid_title')); ?>
-</<?= $this->getData('mageos_information_grid_title_type'); ?>>
+<<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses ?? ''); ?>">
+    <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_information_grid_title'))); ?>
+</<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($this->getData('mageos_information_grid_title_type')); ?>>
 <?php endif; ?>
 
 <?php if (!empty($this->getData('mageos_information_grid_description'))): ?>
-<div class="<?= $descriptionCssClasses; ?>">
-    <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($this->getData('mageos_information_grid_description')); ?>
+<div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses ?? ''); ?>">
+    <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($this->getData('mageos_information_grid_description')); ?>
 </div>
 <?php endif; ?>
 

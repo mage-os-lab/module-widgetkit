@@ -36,21 +36,9 @@ $hasTitle = !empty($params['mageos_grid_title']);
     <?php foreach ($items as $index => $item): ?>
         <?php $item['count'] = $index; ?>
         <?php
-        $gridCols = [];
-        if (isset($item['col_start_global']) && $item['col_start_global'] !== 'auto')
-            $gridCols[] = $item['col_start_global'];
-        if (isset($item['col_start_tablet']) && $item['col_start_tablet'] !== 'auto')
-            $gridCols[] = $item['col_start_tablet'];
-        if (isset($item['col_start_desktop']) && $item['col_start_desktop'] !== 'auto')
-            $gridCols[] = $item['col_start_desktop'];
-        if (isset($item['col_end_global']) && $item['col_end_global'] !== 'auto')
-            $gridCols[] = $item['col_end_global'];
-        if (isset($item['col_end_tablet']) && $item['col_end_tablet'] !== 'auto')
-            $gridCols[] = $item['col_end_tablet'];
-        if (isset($item['col_end_desktop']) && $item['col_end_desktop'] !== 'auto')
-            $gridCols[] = $item['col_end_desktop'];
+        $gridCols = \MageOS\Widgetkit\Model\WidgetOutput::gridClasses($item);
         ?>
-        <div class="grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full <?= implode(' ', $gridCols); ?>">
+        <div class="grid-item <?php if ($item['use_card'] === "true"): ?>card card-interactive<?php endif; ?> flex flex-col w-full <?= $escaper->escapeHtmlAttr($gridCols); ?>">
             <?php
             $loading = $item['count'] === 0
                 ? 'eager'
@@ -58,7 +46,7 @@ $hasTitle = !empty($params['mageos_grid_title']);
 
             $mobileImage = $item['mobile_image'] ?? null;
 
-            $hasLink    = !empty($item['button_link']);
+            $hasLink    = !empty($item['button_link']) && empty($item['button']);
             $linkTarget = $item['button_link_target'] ?? '_self';
 
             // Title/content alignment is always left, content is always rendered below the media.
@@ -88,7 +76,7 @@ $hasTitle = !empty($params['mageos_grid_title']);
                         <?php if ($mobileImage): ?>
                         <source
                             media="(max-width: 768px)"
-                            srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                            srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                             type="image/jpeg"
                         />
                         <?php endif; ?>
@@ -109,13 +97,13 @@ $hasTitle = !empty($params['mageos_grid_title']);
                     <?php if ($hasContent): ?>
                     <div class="w-full <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
                         <?php if (!empty($item['title'])): ?>
-                        <div class="<?= $itemTitleClass; ?>">
+                        <div class="<?= $escaper->escapeHtmlAttr($itemTitleClass ?? ''); ?>">
                             <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
                         </div>
                         <?php endif; ?>
                         <?php if (!empty($item['content'])): ?>
-                        <div class="<?= $itemContentClass; ?>">
-                            <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                        <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                            <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content'], !$hasLink); ?>
                         </div>
                         <?php endif; ?>
                         <?php if (!empty($item['button']) && !empty($item['button_link'])): ?>

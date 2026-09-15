@@ -13,3 +13,5 @@
 @source inline("lg:grid-cols-{1,2,3,4,5,6}");
 @source inline("gap-{0,1,2,4,6,8}");
 @source inline("{,md:}order-{1,2,3}");
+
+@source inline("{,md:,lg:}col-{start,end}-{1,2,3,4,5,6,7}");

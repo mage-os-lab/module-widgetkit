@@ -34,7 +34,7 @@ $hasTitle = !empty($params['mageos_product_grid_title']);
     <?php endif; ?>
 >
     <?php foreach ($items as $item): ?>
-        <div class="grid-item w-full">
+        <div class="grid-item w-full <?= $escaper->escapeHtmlAttr(\MageOS\Widgetkit\Model\WidgetOutput::gridClasses($item->getData())) ?>">
             <?= $this->renderProductItem($item); ?>
         </div>
     <?php endforeach; ?>

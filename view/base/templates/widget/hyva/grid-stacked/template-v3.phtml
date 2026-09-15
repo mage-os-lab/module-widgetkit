@@ -16,7 +16,7 @@ use Magento\Framework\Escaper;
 $params = $this->getData('params');
 $items  = $this->getData('items') ?: [];
 
-$titleType = $params['mageos_grid_stacked_title_type'] ?? 'h2';
+$titleType = \MageOS\Widgetkit\Model\WidgetOutput::heading($params['mageos_grid_stacked_title_type'] ?? 'h2');
 $titleCssClasses = $params['mageos_grid_stacked_title_classes'] ?? '';
 $descriptionCssClasses = $params['mageos_grid_stacked_description_classes'] ?? '';
 
@@ -30,12 +30,12 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
         <div class="md:sticky md:top-[150px]">
             <?php if (!empty($params['mageos_grid_stacked_title'])): ?>
             <<?= $titleType ?> class="<?= $escaper->escapeHtmlAttr($titleCssClasses); ?>">
-                <?= /* @noEscape */ $params['mageos_grid_stacked_title']; ?>
+                <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_grid_stacked_title'])); ?>
             </<?= $titleType ?>>
             <?php endif; ?>
             <?php if (!empty($params['mageos_grid_stacked_description'])): ?>
             <div class="<?= $escaper->escapeHtmlAttr($descriptionCssClasses); ?>">
-                <?= \MageOS\Widgetkit\Model\RichTextDecoder::decode($params['mageos_grid_stacked_description']); ?>
+                <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($params['mageos_grid_stacked_description']); ?>
             </div>
             <?php endif; ?>
         </div>
@@ -57,7 +57,7 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
                         <?php if ($mobileImage): ?>
                         <source
                             media="(max-width: 768px)"
-                            srcset="<?= $escaper->escapeHtmlAttr($mobileImage) ?>"
+                            srcset="<?= $escaper->escapeUrl($mobileImage) ?>"
                             type="image/jpeg"
                         />
                         <?php endif; ?>
@@ -74,13 +74,13 @@ $contentWrapperClass = trim($params['mageos_grid_stacked_item_content_container_
                 <?php if ($hasContent): ?>
                 <div class="w-full md:w-1/2 <?= $escaper->escapeHtmlAttr($contentWrapperClass); ?>">
                     <?php if (!empty($item['title'])): ?>
-                    <<?= $item['title_tag'] ?? 'h3' ?> class="<?= $itemTitleClass; ?>">
+                    <<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?> class="<?= $escaper->escapeHtmlAttr($itemTitleClass ?? ''); ?>">
                         <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['title'])); ?>
-                    </<?= $item['title_tag'] ?? 'h3' ?>>
+                    </<?= \MageOS\Widgetkit\Model\WidgetOutput::heading($item['title_tag'] ?? 'h3') ?>>
                     <?php endif; ?>
                     <?php if (!empty($item['content'])): ?>
-                    <div class="<?= $itemContentClass; ?>">
-                        <?= $escaper->escapeHtml(\MageOS\Widgetkit\Model\RichTextDecoder::decode($item['content'])); ?>
+                    <div class="<?= $escaper->escapeHtmlAttr($itemContentClass ?? ''); ?>">
+                        <?= \MageOS\Widgetkit\Model\RichTextDecoder::html($item['content']); ?>
                     </div>
                     <?php endif; ?>
                     <?php if ($hasLink && !empty($item['button'])): ?>
